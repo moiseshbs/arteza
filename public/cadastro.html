@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arteza</title>
+    <link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+    <section>
+        <div class="areaImagem">
+
+        </div>
+        <div class="areaForm">
+            <div class="formulario">
+                <h1>Junte-se ao Arteza!</h1>
+
+                <div class="doisInputs">
+                    <div>
+                        <p>Nome</p>
+                        <input type="text" id="input_nome" oninput="validarCampos()">
+                    </div>
+
+                    <div>
+                        <p>Username</p>
+                        <input type="text" id="input_username" oninput="validarCampos()">
+                    </div>
+                </div>
+                     
+                <div>
+                    <p>Email</p>
+                    <input type="email" id="input_email" oninput="validarCampos()">
+                </div>
+
+                <div>
+                    <p>Senha</p>
+                    <input type="password" id="input_senha" oninput="validarCampos()">
+                </div>
+        
+                <button onclick="validarCampos()">Criar conta</button>
+    
+                <span>Já possui uma conta? <a href="login.html"><b>Entrar</b></a></span>
+            </div>
+        </div>
+    </section>
+</body>
+</html>
+
+<script src="js/script.js"></script>
