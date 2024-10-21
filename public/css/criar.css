@@ -1,0 +1,113 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: #fff;
+}
+
+.container {
+    height: 100%;
+    width: 95%;
+    margin: auto;
+}
+
+.gambiarra {
+    height: 15vh;
+}
+
+section {
+    height: 85vh;
+}
+
+section .areaCabecalho {
+    height: 15%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.areaCabecalho h1 {
+    font-weight: bold;
+    font-size: 2rem;
+}
+
+.areaCabecalho .botoesCabecalho {
+    display: flex;
+    gap: 25px;
+}
+
+.botoesCabecalho .btn {
+    height: 50px;
+    width: 150px;
+    border-radius: 25px;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.btnCancelar {
+    border: solid 2px #979797;
+    background-color: transparent;
+}
+
+.btnPublicar {
+    border: none;
+    color: #fff;
+    background-color: #5E4889;
+}
+
+section .areaConteudo {
+    height: 85%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.areaConteudo .container {
+    width: 100%;
+    height: 90%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.areaConteudo .areaImagem {
+    background-color: #ffffff;
+    width: 60%;
+    height: 95%;
+    border-radius: 10px;
+    border: dashed 2px #979797;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.areaImagem input[type="file"] {
+    display: none;
+}
+  
+.custom-file-upload {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    cursor: pointer;
+}
+
+.custom-file-upload i {
+    font-size: 2.5rem;
+}
+
+
+
+.areaConteudo .areaForm {
+    width: 35%;
+    height: 95%;
+    background-color: aqua;
+}

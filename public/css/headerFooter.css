@@ -1,0 +1,56 @@
+header {
+    width: 100%;
+    height: 15vh;
+    background-color: #fff;
+
+    position: fixed;
+    z-index: 1;
+}
+
+header .container {
+    width: 95%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header .container div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+header .container .criar a{
+    display: flex;
+    gap: 10px;
+}
+header .container i {
+    font-size: 1.3rem;
+}
+
+header .container input {
+    height: 50px;
+    width: 400px;
+    border-radius: 25px;
+    font-size: 1.1rem;
+    padding-left: 5px;
+    border-top: solid 1px #000;
+    border-bottom: solid 4px #000;
+    border-right: solid 4px #000;
+    border-left: solid 1px #000;
+}
+
+header .container .perfil {
+    gap: 25px;
+}
+
+header .container .fotoPerfil {
+    height: 50px;
+    width: 50px;
+    border-radius: 100%;
+    background-color: blue;
+}
+
+header .container .nav {
+    gap: 50px;
+}
