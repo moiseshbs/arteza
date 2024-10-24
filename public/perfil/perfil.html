@@ -23,9 +23,7 @@
             <h2>Arteza</h2>
 
             <div class="nav">
-                <a href="../index.html">
-                    <h3>INICIO</h3>
-                </a>
+                <h3>INICIO</h3>
                 <h3>EXPLORAR</h3>
 
                 <input type="text" placeholder="Pesquisar">
@@ -51,23 +49,23 @@
     <main>
         <section class="areaPerfil">
             <div class="areaBanner">
-                
-            </div>
-
-            <div class="areaInfoUser">
                 <div class="areaFotoPerfil">
                     <img src="../assets/fotoPerfil/2.PNG" alt="" class="fotoPerfil">
                 </div>
-                <h1>Moises Henry</h1>
+            </div>
 
-                <span id="username">moiseshxs</span>
+            <div class="areaInfoUser">
+                <h1>Gabriel Souza</h1>
+
+                <span id="username">gblsouza</span>
 
                 <div class="areaSeguindo">
                     <span><span id="span_numSeguidor">0</span> seguidores</span>
                     <span>0 seguindo</span>
                 </div>
 
-                <a href="editar.html"><button id="btn_follow">Editar Perfil</button></a>
+                <button onclick="follow()" id="btn_follow">Seguir</button>
+                <button onclick="unfollow()" id="btn_unfollow" style="display: none;">Unfollow</button>
             </div>
         </section>
 

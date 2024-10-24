@@ -105,9 +105,22 @@ section .areaConteudo {
     font-size: 2.5rem;
 }
 
-
-
 .areaConteudo .areaForm {
     width: 35%;
     height: 95%;
+}
+
+#areaTags {
+    display: flex;
+    width: 100%;
+    margin-top: 10px;
+    gap: 10px;
+}
+
+.btnTag {
+    height: 30px;
+    width: fit-content;
+    padding: 0 25px;
+    background-color: #5E4889;
+    border: none;
 }
