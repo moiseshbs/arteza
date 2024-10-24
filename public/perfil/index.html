@@ -7,6 +7,14 @@
     <link rel="stylesheet" href="../css/perfil.css">
     <link rel="stylesheet" href="../css/feed.css">
     <link rel="stylesheet" href="../css/headerFooter.css">
+    <link rel="stylesheet" href="../css/style.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+        rel="stylesheet">
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
 <body>
@@ -37,8 +45,9 @@
     <main>
         <section class="areaPerfil">
             <div class="areaBanner">
+                <img src="" alt="" class="capa">
                 <div class="areaFotoPerfil">
-
+                    <img src="../assets/fotoPerfil/2.PNG" alt="" class="fotoPerfil">
                 </div>
             </div>
 
@@ -61,24 +70,24 @@
             <div class="container">
                 <div class="areaCard">
                     <div class="areaImagem" onclick="contarVisualizacao()">
-
+                        <img src="../assets/publicacao/6.jpg" class="imgPublicacao">
                     </div>
-
+    
                     <div class="infosCard">
                         <div class="ladoEsq">
                             <div class="areaFotoPerfil"></div>
                             <span>Moises Henry</span>
                         </div>
-
+    
                         <div class="areaNumPublicacao">
                             <div>
                                 <div onclick="contarLike()" id="div_like">
                                     <i class="bi bi-heart"></i>
                                     <span id="span_like">0</span>
                                 </div>
-
+    
                                 <div onclick="removerLike()" id="div_deslike" style="display: none;">
-                                    <i class="bi bi-heart-fill" style="color: red;"></i>
+                                    <i class="bi bi-heart-fill curtida"></i>
                                     <span id="span_deslike">0</span>
                                 </div>
                             </div>
@@ -92,7 +101,7 @@
 
                 <div class="areaCard">        
                     <div class="areaImagem">
-
+                        <img src="../assets/publicacao/5.jpg" class="imgPublicacao">
                     </div>
 
                     <div class="infosCard">
@@ -103,7 +112,7 @@
 
                         <div class="areaNumPublicacao">
                             <div>
-                                <i class="bi bi-heart-fill"></i>
+                                <i class="bi bi-heart-fill curtida"></i>
                                 <span>77</span>
                             </div>
                             <div>
@@ -116,7 +125,7 @@
 
                 <div class="areaCard">
                     <div class="areaImagem">
-
+                        <img src="../assets/publicacao/7.jpg" class="imgPublicacao">
                     </div>
 
                     <div class="infosCard">
@@ -127,7 +136,7 @@
 
                         <div class="areaNumPublicacao">
                             <div>
-                                <i class="bi bi-heart-fill"></i>
+                                <i class="bi bi-heart-fill curtida"></i>
                                 <span>77</span>
                             </div>
                             <div>
