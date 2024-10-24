@@ -29,7 +29,6 @@ body {
 .areaPerfil .areaBanner {
     height: 45%;
     width: 100%;
-    background-color: #e70303;
     display: flex;
     justify-content: center;
     align-items: end;

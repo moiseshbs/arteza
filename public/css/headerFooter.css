@@ -54,3 +54,8 @@ header .container .fotoPerfil {
 header .container .nav {
     gap: 50px;
 }
+
+header a {
+    text-decoration: none;
+    color: #000;
+}

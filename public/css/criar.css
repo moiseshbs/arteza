@@ -51,6 +51,7 @@ section .areaCabecalho {
 .btnCancelar {
     border: solid 2px #979797;
     background-color: transparent;
+    color: #000;
 }
 
 .btnPublicar {
@@ -109,5 +110,4 @@ section .areaConteudo {
 .areaConteudo .areaForm {
     width: 35%;
     height: 95%;
-    background-color: aqua;
 }
