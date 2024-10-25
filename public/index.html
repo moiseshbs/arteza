@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,6 +17,7 @@
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
+
 <body>
     <header>
         <div class="container">
@@ -34,16 +36,48 @@
     </header>
 
     <section class="areaExplorar">
-        <div>
-            <h1>
-                EXPLORE,<br>CRIE E<br>COMPARTILHE<br>ARTE
-            </h1>
-        </div>
+        <div class="overlay">
+            <div>
+                <img src="assets/componentes/home.png" class="imgHome" alt="">
+            </div>
 
-        <div>
-            <a href="cadastro.html">
-                <img src="assets/publicacao/1.jpg" class="imgBtn">
-            </a>
+            <div>
+                <a href="cadastro.html">
+                    <img src="assets/componentes/botao.png" class="imgBtn">
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section class="areaBeneficios">
+        <div class="container">
+            <div class="cardBeneficio">
+                <div class="esq">
+                    <div class="iconCard"></div>
+                    <h1>CRIE SEM MODERAÇÃO</h1>
+                </div>
+                <div class="dir">
+                    <p>O que você está sentindo agora?<br>Expresse no quadro!</p>
+                </div>
+            </div>
+            <div class="cardBeneficio">
+                <div class="esq">
+                    <div class="iconCard"></div>
+                    <h1>COMPARTILHE COM TODOS</h1>
+                </div>
+                <div class="dir">
+                    <p>Todo mundo deveria ver do que você é capaz! Compartilhe com eles!</p>
+                </div>
+            </div>
+            <div class="cardBeneficio">
+                <div class="esq">
+                    <div class="iconCard"></div>
+                    <h1>EXPLORE OS HORIZONTES</h1>
+                </div>
+                <div class="dir">
+                    <p>Aprecie o trabalho de outras pessoas e busque inspirações.</p>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -176,7 +210,7 @@
                     </div>
                 </div>
             </div>
-                        <div class="areaCard">
+            <div class="areaCard">
                 <div class="areaImagem">
                     <img src="assets/publicacao/6.jpg" class="imgPublicacao">
                 </div>
@@ -201,7 +235,7 @@
                     </div>
                 </div>
             </div>
-            
+
 
         </div>
     </section>
@@ -210,6 +244,7 @@
 
     </footer>
 </body>
+
 </html>
 
 <script src="js/navScroll.js"></script>
