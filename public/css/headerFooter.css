@@ -46,7 +46,10 @@ header .container input {
     border-radius: 25px;
     font-size: 1.1rem;
     padding-left: 5px;
-        
+    border-left: 2px solid #000;
+    border-top: 2px solid #000;
+    border-right: 2px solid #000;
+    border-bottom: 5px solid #000;
     
 }
 
@@ -68,4 +71,37 @@ header .container .nav {
 header a {
     text-decoration: none;
     color: #000;
+}
+
+footer {
+    height: 40vh;
+    width: 100%;
+    background-color: #211F22;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 50px;
+    gap: 25px;
+}
+
+footer .areaNav {
+    height: 35%;
+    width: 50%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+footer .areaInfos {
+    height: 65%;
+    display: flex;
+    gap: 50px;
+    color: #FFF;
+}
+
+footer a {
+    text-decoration: none;
+    color: #fff;
+    font-weight: bold;
 }

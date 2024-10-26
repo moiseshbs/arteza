@@ -113,7 +113,7 @@
 }
 
 .areaExplorar .imgHome {
-    height: 350px;
+    height: 400px;
 }
 
 .areaExplorar .imgBtn {
@@ -134,8 +134,8 @@
     align-items: center;
 }
 
-.cardBeneficio {
-    height: 170px;
+.card {
+    height: 150px;
     width: 100%;
     background-color: #fff;
     border-left: 2px solid #000;
@@ -145,9 +145,10 @@
     border-radius: 20px;
     display: flex;   
     align-items: center;
+    box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.150);
 }
 
-.cardBeneficio .esq {
+.card .esq {
     width: 40%;
     height: 80%;
     display: flex;
@@ -157,26 +158,74 @@
     border-right: solid 1px #0000009a
 }
 
-.cardBeneficio .esq h1 {
+.card .esq h1 {
     font-size: 2rem;
     width: 50%;
 }
 
-.cardBeneficio .esq .iconCard {
-    width: 125px;
-    height: 125px;
+.card .esq .iconCard {
+    width: 100px;
+    height: 100px;
     background-color: #F1E2D5;
 }
 
-.cardBeneficio .dir {
+.card .dir {
     width: 60%;
     height: 100%;
     display: flex;
     justify-content: start;
     align-items: center;
-    font-size: 1.8rem;
+    font-size: 1.4rem;
 }
 
 .dir p{
     margin: 0 20px;
+}
+
+.areaSobre {
+    height: 90vh;
+    width: 100%;
+    margin-bottom: 50px;
+}
+
+.areaSobre .container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.areaSobre .areaCardSobre {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.areaSobre .card {
+    height: 250px;
+    width: 73%;
+    border-radius: 0;
+}
+
+.areaSobre .cardFoto {
+    width: 250px;
+    height: 250px;
+    background-color: #5E4889;
+}
+
+.areaCardFoto {
+    height: 250px;
+    width: 250px;
+}
+
+.areaCardFoto .iconsRede {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    height: 30%;
+    font-size: 2.5rem;
+}
+
+.areaCardFoto .cardFoto {
+    height: 70%;
 }

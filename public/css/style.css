@@ -32,6 +32,7 @@ textarea {
     margin-top: 5px;
     padding: 5px;
     font-size: 0.9rem;
+    resize: none;
 }
 
 button {
