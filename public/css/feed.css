@@ -210,7 +210,6 @@
 .areaSobre .cardFoto {
     width: 250px;
     height: 250px;
-    background-color: #5E4889;
 }
 
 .areaCardFoto {
@@ -228,4 +227,108 @@
 
 .areaCardFoto .cardFoto {
     height: 70%;
+}
+.gambiarra {
+    height: 15vh;
+}
+.areaPublicacao {
+    height: 85vh;
+}
+
+.areaPublicacao .container {
+    width: 95%;
+    display: flex;
+}
+
+.areaTituloPubli {
+    height: 100%;
+    width: 70%;
+}
+
+.cabecalhoPublicacao {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    height: 15%;
+}
+
+.cabecalhoPublicacao i {
+    font-size: 2rem;
+    margin-right: 15px;
+}
+
+.areaImgPublicacao {
+    height: 85%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.areaImgPublicacao img {
+    height: 95%;
+    max-width: 98%;
+    border-radius: 10px;
+    object-fit: contain;
+}
+
+.areaInfoComentarios {
+    width: 30%;
+    height: 100%;
+    border-left: 1px solid #0000005b;
+}
+
+.areaComentario {
+    height: 60%;
+    width: 100%;
+}
+
+.inputComentario {
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.inputComentario input {
+    width: 90%;
+}
+
+.areaInfoComentarios .areaInfo {
+    height: 40%;
+}
+
+.areaInfoComentarios .areaInfo .infosUser{
+    height: 25%;
+    width: 100%;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    gap: 25px;
+}
+
+.infosUser .fotoPerfil {
+    height: 40px;
+    width: 40px;
+    margin-left: 25px;
+}
+
+.areaInfoComentarios .areaInfo .areaDescricao{
+    height: 45%;
+    width: 100%;
+}
+
+.areaDescricao p {
+    margin: 0 10px;
+}
+
+.areaInfoComentarios .areaInfo .areaOpcoes {
+    height: 30%;
+    width: 100%;
+    border-top: 1px solid #0000005b;
+    border-bottom: 1px solid #0000005b;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    font-size: 1.2rem;
 }
