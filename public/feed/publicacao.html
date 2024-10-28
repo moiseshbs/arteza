@@ -40,7 +40,9 @@
         <div class="container">
             <div class="areaTituloPubli">
                 <div class="cabecalhoPublicacao">
-                    <i class="bi bi-arrow-left"></i>
+                    <a href="feed.html">
+                        <i class="bi bi-arrow-left"></i>
+                    </a>
                     <h1>R0-Z3</h1>
                 </div>
                 <div class="areaImgPublicacao">
@@ -58,9 +60,14 @@
                         <p>Desenho feito em XXXX para que </p>
                     </div>
                     <div class="areaOpcoes">
-                        <div>
+                        <div onclick="contarLike()" id="div_like">
                             <i class="bi bi-heart"></i>
-                            <span>77</span>
+                            <span id="span_like">0</span>
+                        </div>
+
+                        <div onclick="removerLike()" id="div_deslike" style="display: none;">
+                            <i class="bi bi-heart-fill curtida"></i>
+                            <span id="span_deslike">0</span>
                         </div>
 
                         <div>
@@ -69,8 +76,8 @@
                         </div>
 
                         <div>
-                            <i class="bi bi-eye"></i>
-                            <span>77</span>
+                            <i class="bi bi-eye-fill"></i>
+                            <span id="span_visualizacao">0</span>
                         </div>
                     </div>
                 </div>
@@ -88,3 +95,5 @@
 </body>
 
 </html>
+
+<script src="../js/publicacao.js"></script>

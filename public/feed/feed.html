@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Arteza</title>
 
-    <link rel="stylesheet" href="css/feed.css">
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/headerFooter.css">
+    <link rel="stylesheet" href="../css/feed.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/headerFooter.css">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -24,91 +24,38 @@
             <h2>Arteza</h2>
 
             <div class="nav">
+                <h3>INICIO</h3>
+                <h3>EXPLORAR</h3>
+
                 <input type="text" placeholder="Pesquisar">
             </div>
 
             <div class="perfil">
-                <a href="login.html">
-                    <h3>LOGIN</h3>
+                <div class="criar">
+                    <a href="../perfil/criar.html">
+                        <i class="bi bi-plus-circle"></i>
+                        <h3>CRIAR</h3>
+                    </a>
+                </div>
+
+                <a href="../perfil/meuPerfil.html">
+                    <div class="fotoPerfil">
+
+                    </div>
                 </a>
             </div>
         </div>
     </header>
 
-    <section class="areaExplorar">
-        <div class="overlay">
-            <div>
-                <img src="assets/componentes/testeInicio.png" class="imgHome" alt="">
-            </div>
-
-            <div>
-                <a href="cadastro.html">
-                    <img src="assets/componentes/botao.png" class="imgBtn">
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <section class="areaBeneficios">
-        <div class="container">
-            <div class="card">
-                <div class="esq">
-                    <div class="iconCard"></div>
-                    <h1>CRIE SEM MODERAÇÃO</h1>
-                </div>
-                <div class="dir">
-                    <p>O que você está sentindo agora?<br>Expresse no quadro!</p>
-                </div>
-            </div>
-            <div class="card">
-                <div class="esq">
-                    <div class="iconCard"></div>
-                    <h1>COMPARTILHE COM TODOS</h1>
-                </div>
-                <div class="dir">
-                    <p>Todo mundo deveria ver do que você é capaz! Compartilhe com eles!</p>
-                </div>
-            </div>
-            <div class="card">
-                <div class="esq">
-                    <div class="iconCard"></div>
-                    <h1>EXPLORE OS HORIZONTES</h1>
-                </div>
-                <div class="dir">
-                    <p>Aprecie o trabalho de outras pessoas e busque inspirações.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="areaSobre">
-        <div class="container">
-            <div class="areaCardSobre">
-                <div class="card"></div>
-                <div class="card cardFoto"></div>
-            </div>
-
-            <div class="areaCardSobre">
-                <div class="areaCardFoto">
-                    <div class="iconsRede">
-                        <i class="bi bi-github"></i>
-                        <i class="bi bi-linkedin"></i>
-                    </div>
-                    <div class="card cardFoto"></div>
-                </div>
-                <div class="card">
-
-                </div>
-            </div>
-        </div>
-    </section>
-
+    <div class="gambiarra"></div>
     <section class="areaPublicacoes">
         <div class="container" style="margin-top: 100px;">
             <div class="areaCard">
-                <div class="areaImagem">
-                    <img src="assets/publicacao/1.jpg" class="imgPublicacao">
-                </div>
+                <a href="publicacao.html" onclick="contarVisualizacao()">
+                    <div class="areaImagem">
+                        <img src="../assets/publicacao/4.jpg" class="imgPublicacao">
+                    </div>
+                </a>
 
                 <div class="infosCard">
                     <div class="ladoEsq">
@@ -118,35 +65,14 @@
 
                     <div class="areaNumPublicacao">
                         <div>
-                            <div id="div_like">
-                                <i class="bi bi-heart"></i>
-                                <span id="span_like">77</span>
-                            </div>
-                        </div>
-                        <div>
-                            <i class="bi bi-eye-fill"></i>
-                            <span id="span_visualizacao">124</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="areaCard">
-                <div class="areaImagem">
-                    <img src="assets/publicacao/5.jpg" class="imgPublicacao">
-                </div>
-
-                <div class="infosCard">
-                    <div class="ladoEsq">
-                        <div class="areaFotoPerfil"></div>
-                        <span>Moises Henry</span>
-                    </div>
-
-                    <div class="areaNumPublicacao">
-                        <div>
-                            <div id="div_like">
+                            <div onclick="contarLike()" id="div_like">
                                 <i class="bi bi-heart"></i>
                                 <span id="span_like">0</span>
+                            </div>
+                                
+                            <div onclick="removerLike()" id="div_deslike" style="display: none;">
+                                <i class="bi bi-heart-fill curtida"></i>
+                                <span id="span_deslike">0</span>
                             </div>
                         </div>
                         <div>
@@ -159,7 +85,7 @@
 
             <div class="areaCard">
                 <div class="areaImagem">
-                    <img src="assets/publicacao/6.jpg" class="imgPublicacao">
+                    <img src="../assets/publicacao/5.jpg" class="imgPublicacao">
                 </div>
 
                 <div class="infosCard">
@@ -170,21 +96,47 @@
 
                     <div class="areaNumPublicacao">
                         <div>
-                            <div id="div_like">
+                            <div >
                                 <i class="bi bi-heart"></i>
                                 <span id="span_like">0</span>
                             </div>
                         </div>
                         <div>
                             <i class="bi bi-eye-fill"></i>
-                            <span id="span_visualizacao">0</span>
+                            <span>0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="areaCard">
+                <div class="areaImagem">
+                    <img src="../assets/publicacao/6.jpg" class="imgPublicacao">
+                </div>
+
+                <div class="infosCard">
+                    <div class="ladoEsq">
+                        <div class="areaFotoPerfil"></div>
+                        <span>Moises Henry</span>
+                    </div>
+
+                    <div class="areaNumPublicacao">
+                        <div>
+                            <div >
+                                <i class="bi bi-heart"></i>
+                                <span id="span_like">0</span>
+                            </div>
+                        </div>
+                        <div>
+                            <i class="bi bi-eye-fill"></i>
+                            <span>0</span>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="areaCard">
                 <div class="areaImagem">
-                    <img src="assets/publicacao/6.jpg" class="imgPublicacao">
+                    <img src="../assets/publicacao/6.jpg" class="imgPublicacao">
                 </div>
 
                 <div class="infosCard">
@@ -195,21 +147,21 @@
 
                     <div class="areaNumPublicacao">
                         <div>
-                            <div id="div_like">
+                            <div >
                                 <i class="bi bi-heart"></i>
                                 <span id="span_like">0</span>
                             </div>
                         </div>
                         <div>
                             <i class="bi bi-eye-fill"></i>
-                            <span id="span_visualizacao">0</span>
+                            <span>0</span>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="areaCard">
                 <div class="areaImagem">
-                    <img src="assets/publicacao/6.jpg" class="imgPublicacao">
+                    <img src="../assets/publicacao/6.jpg" class="imgPublicacao">
                 </div>
 
                 <div class="infosCard">
@@ -220,21 +172,21 @@
 
                     <div class="areaNumPublicacao">
                         <div>
-                            <div id="div_like">
+                            <div >
                                 <i class="bi bi-heart"></i>
                                 <span id="span_like">0</span>
                             </div>
                         </div>
                         <div>
                             <i class="bi bi-eye-fill"></i>
-                            <span id="span_visualizacao">0</span>
+                            <span>0</span>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="areaCard">
                 <div class="areaImagem">
-                    <img src="assets/publicacao/6.jpg" class="imgPublicacao">
+                    <img src="../assets/publicacao/6.jpg" class="imgPublicacao">
                 </div>
 
                 <div class="infosCard">
@@ -245,27 +197,23 @@
 
                     <div class="areaNumPublicacao">
                         <div>
-                            <div id="div_like">
+                            <div >
                                 <i class="bi bi-heart"></i>
                                 <span id="span_like">0</span>
                             </div>
                         </div>
                         <div>
                             <i class="bi bi-eye-fill"></i>
-                            <span id="span_visualizacao">0</span>
+                            <span>0</span>
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <div class="areaBtnVerMais">
-                <button>Encontre mais</button>
             </div>
 
             <div class="areaScrollCategorias">
                 <div>
                     <div class="card">
-    
+
                     </div>
                     <p>Rascunho</p>
                 </div>
@@ -301,4 +249,5 @@
 
 </html>
 
-<script src="js/navScroll.js"></script>
+<script src="../js/navScroll.js"></script>
+<script src="../js/publicacao.js"></script>

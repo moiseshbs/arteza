@@ -1,0 +1,25 @@
+body {
+    background-color: #000;
+    color: #fff;
+}
+
+.gambiarra {
+    height: 15vh;
+}
+
+section {
+    height: 85vh;
+}
+
+section .areaCabecalho {
+    height: 15%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.areaCabecalho h1 {
+    font-weight: bold;
+    font-size: 2rem;
+}

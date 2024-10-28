@@ -4,6 +4,12 @@
     margin: auto;
 }
 
+#div_like, #div_deslike {
+    cursor: pointer;
+}
+
+
+
 .areaPublicacoes {
     width: 100%;
     display: flex;
@@ -228,6 +234,41 @@
 .areaCardFoto .cardFoto {
     height: 70%;
 }
+
+/* VER MAIS */
+.areaBtnVerMais {
+    height: 150px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.areaBtnVerMais button {
+    height: 70px;
+    width: 300px;
+    border-radius: 50px;
+    color: #F2C94E;
+}
+
+.areaScrollCategorias {
+    height: 250px;
+    width: 100%;
+    background-color: #F2C94E;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.areaScrollCategorias .card {
+    width: 230px;
+    height: 180px;
+    background-color: #7b7b7b;
+    margin-bottom: 10px;
+}
+
+/* PUBLICAÇÃO */
 .gambiarra {
     height: 15vh;
 }
