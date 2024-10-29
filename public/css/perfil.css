@@ -87,3 +87,16 @@ body {
     height: 100%;
     object-fit: cover;
 }
+
+.btnDash {
+    height: 50px !important;
+    width: 50px !important;
+    background-color: #211F22 !important;
+}
+
+.fotoPerfil {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 100%;
+}

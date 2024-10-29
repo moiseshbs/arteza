@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Arteza</title>
     <link rel="stylesheet" href="../css/perfil.css">
-    <link rel="stylesheet" href="../css/feed.css">
+    <link rel="stylesheet" href="../css/cards.css">
     <link rel="stylesheet" href="../css/headerFooter.css">
     <link rel="stylesheet" href="../css/style.css">
 
@@ -67,89 +67,77 @@
                     <span>0 seguindo</span>
                 </div>
 
-                <a href="editar.html"><button id="btn_follow">Editar Perfil</button></a>
+                <div>
+                    <a href="editar.html"><button id="btn_follow">Editar Perfil</button></a>
+                    <a href="dashboard.html"><button class="btnDash"><i class="bi bi-activity"></i></button></a>
+                </div>
             </div>
         </section>
 
-        <section class="areaPublicacoes">
-            <div class="container">
-                <div class="areaCard">
-                    <div class="areaImagem" onclick="contarVisualizacao()">
-                        <img src="../assets/publicacao/6.jpg" class="imgPublicacao">
-                    </div>
+        <section class="areaCards">
+            <div class="pin_container">
     
-                    <div class="infosCard">
-                        <div class="ladoEsq">
-                            <div class="areaFotoPerfil"></div>
-                            <span>Moises Henry</span>
-                        </div>
-    
-                        <div class="areaNumPublicacao">
+                <div class="card card_small">
+                    <a href="../feed/publicacao.html">
+                        <img src="../assets/publicacao/1.jpg" alt="">
+                    </a>
+                    <div class="info">
+                        <div class="options">
                             <div>
-                                <div onclick="contarLike()" id="div_like">
+                                <div onclick="contarLike()" id="div_like" class="like">
                                     <i class="bi bi-heart"></i>
                                     <span id="span_like">0</span>
                                 </div>
     
-                                <div onclick="removerLike()" id="div_deslike" style="display: none;">
+                                <div onclick="removerLike()" id="div_deslike" class="deslike" style="display: none;">
                                     <i class="bi bi-heart-fill curtida"></i>
                                     <span id="span_deslike">0</span>
                                 </div>
                             </div>
+    
                             <div>
-                                <i class="bi bi-eye-fill"></i>
-                                <span id="span_visualizacao">0</span>
+                                <i class="bi bi-chat"></i>
+                                <span>77</span>
+                            </div>
+    
+                            <div>
+                                <i class="bi bi-eye"></i>
+                                <span>77</span>
                             </div>
                         </div>
+    
+                        <a href="../perfil/perfil.html">
+                            <div class="infoUser">
+                                <div class="areaFotoPerfil">
+                                    <img src="../assets/fotoPerfil/2.png" alt="">
+                                </div>
+                                <h2>Moises Henry</h2>
+    
+                            </div>
+                        </a>
                     </div>
                 </div>
-
-                <div class="areaCard">        
-                    <div class="areaImagem">
-                        <img src="../assets/publicacao/5.jpg" class="imgPublicacao">
-                    </div>
-
-                    <div class="infosCard">
-                        <div class="ladoEsq">
-                            <div class="areaFotoPerfil"></div>
-                            <span>Moises Henry</span>
-                        </div>
-
-                        <div class="areaNumPublicacao">
-                            <div>
-                                <i class="bi bi-heart-fill curtida"></i>
-                                <span>77</span>
-                            </div>
-                            <div>
-                                <i class="bi bi-eye-fill"></i>
-                                <span>77</span>
-                            </div>
-                        </div>
-                    </div>
+    
+                <div class="card card_medium">
+                    <img src="../assets/publicacao/3.jpg" alt="">
                 </div>
-
-                <div class="areaCard">
-                    <div class="areaImagem">
-                        <img src="../assets/publicacao/7.jpg" class="imgPublicacao">
-                    </div>
-
-                    <div class="infosCard">
-                        <div class="ladoEsq">
-                            <div class="areaFotoPerfil"></div>
-                            <span>Moises Henry</span>
-                        </div>
-
-                        <div class="areaNumPublicacao">
-                            <div>
-                                <i class="bi bi-heart-fill curtida"></i>
-                                <span>77</span>
-                            </div>
-                            <div>
-                                <i class="bi bi-eye-fill"></i>
-                                <span>77</span>
-                            </div>
-                        </div>
-                    </div>
+                <div class="card card_large">
+                    <img src="../assets/publicacao/4.jpg" alt="">
+                </div>
+                <div class="card card_small">
+                    <img src="../assets/publicacao/5.jpg" alt="">
+                </div>
+                <div class="card card_medium">
+                    <img src="../assets/publicacao/6.jpg" alt="">
+                </div>
+                <div class="card card_large">
+                    <img src="../assets/publicacao/7.jpg" alt="">
+                </div>
+                <div class="card card_large">
+                    <img src="../assets/publicacao/8.jpg" alt="">
+                </div>
+                <div class="card card_large">
+                    <img src="../assets/publicacao/9.jpg" alt="">
                 </div>
             </div>
         </section>
