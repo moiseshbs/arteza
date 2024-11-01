@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="css/login.css">
     <link rel="stylesheet" href="css/style.css">
 
+    <script src="./js/sessao.js"></script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -24,7 +26,7 @@
 
                 <div>
                     <p>Username</p>
-                    <input type="text">
+                    <input type="text" id="input_username">
                 </div>
                      
                 <div>
@@ -32,10 +34,10 @@
                         <p>Senha</p>
                         <a href="#"><span>Esqueceu?</span></a>
                     </div>
-                    <input type="text">
+                    <input type="text" id="input_senha">
                 </div>
         
-                <button>Login</button>
+                <button onclick="entrar()">Login</button>
     
                 <span>Não possui uma conta? <a href="cadastro.html"><b>Cadastrar</b></a></span>
             </div>
@@ -43,3 +45,65 @@
     </section>
 </body>
 </html>
+
+<script>
+    function entrar() {
+        var usernameVar = input_username.value;
+        var senhaVar = input_senha.value;
+
+        if (usernameVar == "" || senhaVar == "") {
+            finalizarAguardar();
+            return false;
+        }
+        else {
+            setInterval(5000)
+        }
+
+        console.log("FORM LOGIN: ", usernameVar);
+        console.log("FORM SENHA: ", senhaVar);
+
+        fetch("/usuarios/autenticar", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                usernameServer: usernameVar,
+                senhaServer: senhaVar
+            })
+        }).then(function (resposta) {
+            console.log("ESTOU NO THEN DO entrar()!")
+
+            if (resposta.ok) {
+                console.log(resposta);
+                
+                resposta.json().then(json => {
+                    console.log(json);
+                    console.log(JSON.stringify(json));
+                    sessionStorage.ID_USUARIO = json.idUsuario;
+                    sessionStorage.EMAIL_USUARIO = json.email;
+                    sessionStorage.NOME_USUARIO = json.nome;
+                    sessionStorage.USERNAME_USUARIO = json.username;
+
+                    setTimeout(function () {
+                        window.location = "./feed/feed.html";
+                    }, 1000); // apenas para exibir o loading
+
+                });
+
+            } else {
+                console.log("Houve um erro ao tentar realizar o login!");
+
+                resposta.text().then(texto => {
+                    console.error(texto);
+                    finalizarAguardar(texto);
+                });
+            }
+
+        }).catch(function (erro) {
+            console.log(erro);
+        })
+
+        return false;
+    }
+</script>

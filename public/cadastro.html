@@ -1,9 +1,13 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Arteza</title>
+
+    <script src="js/sessao.js"></script>
+
     <link rel="stylesheet" href="css/login.css">
     <link rel="stylesheet" href="css/style.css">
 
@@ -13,6 +17,7 @@
         href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
         rel="stylesheet">
 </head>
+
 <body>
     <section>
         <div class="areaImagem">
@@ -25,32 +30,136 @@
                 <div class="doisInputs">
                     <div>
                         <p>Nome</p>
-                        <input type="text" id="input_nome" oninput="validarCampos()">
+                        <input type="text" id="input_nome">
                     </div>
 
                     <div>
                         <p>Username</p>
-                        <input type="text" id="input_username" oninput="validarCampos()">
+                        <input type="text" id="input_username">
                     </div>
                 </div>
-                     
+
                 <div>
                     <p>Email</p>
-                    <input type="email" id="input_email" oninput="validarCampos()">
+                    <input type="email" id="input_email">
                 </div>
 
                 <div>
                     <p>Senha</p>
-                    <input type="password" id="input_senha" oninput="validarCampos()">
+                    <input type="password" id="input_senha">
                 </div>
-        
-                <button onclick="validarCampos()">Criar conta</button>
-    
+
+                <button onclick="cadastrar()">Criar conta</button>
+
                 <span>Já possui uma conta? <a href="login.html"><b>Entrar</b></a></span>
             </div>
         </div>
     </section>
 </body>
+
 </html>
 
-<script src="js/script.js"></script>
+<script>
+    let listaUsernamesCadastrados = [];
+
+    function cadastrar() {
+        // variaveis vindo do formulario de cadastro
+        var nomeVar = input_nome.value;
+        var usernameVar = input_username.value;
+        var emailVar = input_email.value;
+        var senhaVar = input_senha.value;
+
+        // bordas de erro e acerto no input
+        var bordaVerde = 'solid 1px green';
+        var bordaVermelha = 'solid 1px red';
+
+        // validações
+        input_username.value = usernameVar.replaceAll(' ', '');
+        input_email.value = emailVar.replaceAll(' ', '');
+        input_senha.value = senhaVar.replaceAll(' ', '');
+
+        var emailArroba = emailVar.includes('@');
+        var tamNome = nomeVar.length;
+        var tamUsername = usernameVar.length;
+        var tamSenha = senhaVar.length;
+
+        if (
+            nomeVar == "" ||
+            emailVar == "" ||
+            usernameVar == "" ||
+            senhaVar == ""
+        ) {
+            input_email.style.border = bordaVermelha;
+            input_nome.style.border = bordaVermelha;
+            input_username.style.border = bordaVermelha;
+            input_senha.style.border = bordaVermelha;
+
+            finalizarAguardar();
+            return false;
+        } else if (!emailArroba) {
+            input_email.style.border = bordaVermelha;
+
+            finalizarAguardar();
+            return false;
+        } else if (tamNome <= 0) {
+            input_nome.style.border = bordaVermelha;
+
+            finalizarAguardar();
+            return false;
+        } else if (tamUsername <= 0) {
+            input_username.style.border = bordaVermelha;
+
+            finalizarAguardar();
+            return false;
+        } else if (tamSenha < 8) {
+            input_senha.style.border = bordaVermelha;
+
+            finalizarAguardar();
+            return false;
+        } else {
+            input_senha.style.border = bordaVerde;
+            setInterval(5000);
+        }
+
+        // enviando o valor da input
+        fetch("/usuarios/cadastrar", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                nomeServer: nomeVar,
+                emailServer: emailVar,
+                usernameServer: usernameVar,
+                senhaServer: senhaVar,
+            }),
+        })
+            .then(function (resposta) {
+                console.log("resposta: ", resposta);
+
+                if (resposta.ok) {
+                    input_email.style.border = bordaVerde;
+                    input_nome.style.border = bordaVerde;
+                    input_username.style.border = bordaVerde;
+                    input_senha.style.border = bordaVerde;
+
+                    console.log("Cadastro realizado com sucesso! Redirecionando para tela de Login...");
+
+                    setTimeout(() => {
+                        window.location = "login.html";
+                    }, "2000");
+
+                    limparFormulario();
+                    finalizarAguardar();
+                } else {
+                    throw "Houve um erro ao tentar realizar o cadastro!";
+                }
+            })
+            .catch(function (resposta) {
+                console.log(`#ERRO: ${resposta}`);
+                finalizarAguardar();
+            });
+
+        return false;
+    }
+</script>

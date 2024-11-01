@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Arteza</title>
 
+    <script src="../js/sessao.js"></script>
+
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/headerFooter.css">
     <link rel="stylesheet" href="../css/cards.css">
@@ -18,7 +20,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
 
-<body>
+<body onload="validarSessao(), atualizarFeed()">
     <header>
         <div class="container">
             <h2>Arteza</h2>
@@ -50,7 +52,12 @@
     <div class="gambiarra"></div>
 
     <section class="areaCards">
-        <div class="pin_container">
+        <div class="div-results">
+            <div id="feed_container" class="feed-container">
+            </div>
+        </div>
+
+        <!-- <div class="pin_container">
 
             <div class="card card_small">
                 <a href="publicacao.html">
@@ -114,7 +121,7 @@
             <div class="card card_large">
                 <img src="../assets/publicacao/9.jpg" alt="">
             </div>
-        </div>
+        </div> -->
     </section>
 
     <footer>
@@ -148,3 +155,68 @@
 
 <script src="../js/navScroll.js"></script>
 <script src="../js/publicacao.js"></script>
+
+<script>
+    function atualizarFeed() {
+        fetch("/publicacoes/listar").then(function (resposta) {
+            if (resposta.ok) {
+                if (resposta.status == 204) {
+                    var feed = document.getElementById("feed_container");
+                    var mensagem = document.createElement("span");
+                    mensagem.innerHTML = "Nenhum resultado encontrado."
+                    feed.appendChild(mensagem);
+                    throw "Nenhum resultado encontrado!!";
+                }
+
+                resposta.json().then(function (resposta) {
+                    console.log("Dados recebidos: ", JSON.stringify(resposta));
+
+                    var feed = document.getElementById("feed_container");
+                    feed.innerHTML = "";
+
+                    for (let i = 0; i < resposta.length; i++) {
+                        var publicacao = resposta[i];
+
+                        //criando e manipulando elementos do HTML via JavaScript
+                        var divPublicacao = document.createElement("div");
+                        var spanID = document.createElement("span");
+                        var spanTitulo = document.createElement("span");
+                        var spanNome = document.createElement("span");
+                        var divDescricao = document.createElement("div");
+                        var divButtons = document.createElement("div");
+                        var imgPublicacao = document.createElement("img");
+
+                        spanID.innerHTML = "ID: <b>" + publicacao.idPublicacao + "</b>";
+                        spanTitulo.innerHTML = "Título: <b>" + publicacao.titulo + "</b>";
+                        spanNome.innerHTML = "Autor: <b>" + publicacao.username + "</b>";
+                        divDescricao.innerHTML = "Descrição: <b>" + publicacao.descricao + "</b>";
+                        imgPublicacao.src = `../assets/publicacao/${publicacao.imgPublicacao}`;
+
+                        divPublicacao.className = "publicacao";
+                        spanTitulo.id = "inputNumero" + publicacao.idPublicacao;
+                        spanNome.className = "publicacao-nome";
+                        spanTitulo.className = "publicacao-titulo";
+                        divDescricao.className = "publicacao-descricao";
+
+                        divButtons.className = "div-buttons"
+
+                        divPublicacao.appendChild(spanID);
+                        divPublicacao.appendChild(spanNome);
+                        divPublicacao.appendChild(spanTitulo);
+                        divPublicacao.appendChild(divDescricao);
+                        divPublicacao.appendChild(divButtons);
+                        divPublicacao.appendChild(imgPublicacao);
+                        feed.appendChild(divPublicacao);
+                    }
+
+                    finalizarAguardar();
+                });
+            } else {
+                throw ('Houve um erro na API!');
+            }
+        }).catch(function (resposta) {
+            console.error(resposta);
+            finalizarAguardar();
+        });
+    }
+</script>

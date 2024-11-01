@@ -18,10 +18,10 @@ function tags() {
     input_tag.value = '';
 }
 
-const fileInput = document.getElementById('fileInput');
+const foto = document.getElementById('foto');
 const preview = document.getElementById('preview');
 
-fileInput.addEventListener('change', function() {
+foto.addEventListener('change', function() {
     const file = this.files[0];
     if (file) {
         const reader = new FileReader();

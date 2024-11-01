@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Arteza</title>
+
+    <script src="../js/sessao.js"></script>
 
     <link rel="stylesheet" href="../css/criar.css">
     <link rel="stylesheet" href="../css/headerFooter.css">
@@ -17,7 +20,8 @@
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
-<body>
+
+<body onload="validarSessao()">
     <header>
         <div class="container">
             <h2>Arteza</h2>
@@ -46,47 +50,93 @@
 
                     <div class="botoesCabecalho">
                         <a href="meuPerfil.html"><button class="btn btnCancelar">Cancelar</button></a>
-                        <a href="#"><button class="btn btnPublicar">Publicar</button></a>
+                        <button class="btn btnPublicar" onclick="publicar()">Publicar</button>
                     </div>
                 </div>
 
                 <div class="areaConteudo">
                     <div class="container">
                         <div class="areaImagem">
-                            <label for="fileInput" class="custom-file-upload" id="btnEscolherImg">
+                            <label for="foto" class="custom-file-upload" id="btnEscolherImg">
                                 <i class="bi bi-upload"></i>
                             </label>
 
                             <img id="preview" src="" alt="Prévia da Imagem" class="imgPrevia">
-                            <input id="fileInput" type="file" accept="image/*" />
-                        
+                            <input id="foto" name="foto" type="file" accept="image/*" />
+
                         </div>
-    
-                        <div class="areaForm">
+
+                        <form class="areaForm" id="form_postagem" method="post" onsubmit="return publicar()">
                             <div>
                                 <p>Título</p>
-                                <input type="text">
+                                <input type="text" name="titulo" id="input_titulo">
                             </div>
                             <div>
                                 <p>Descrição</p>
-                                <textarea name="" id=""></textarea>
+                                <textarea name="descricao" id="input_desc"></textarea>
                             </div>
                             <div>
                                 <p>Procure tags (<span id="span_qtdTags">0</span>)</p>
                                 <input id="input_tag" onkeypress="verificarEnter(event)"></input>
                             </div>
-                            
+
                             <div id="areaTags">
 
                             </div>
-                        </div>
+                        </form>
+
                     </div>
                 </div>
             </div>
         </section>
     </main>
 </body>
+
 </html>
 
-<script src="../js/script.js"></script>
 <script src="../js/criar.js"></script>
+
+<script>
+    function publicar() {
+        var tituloVar = input_titulo.value;
+        var descricaoVar = input_desc.value;
+
+        const formData = new FormData();
+        formData.append('foto', foto.files[0]);
+        formData.append('titulo', tituloVar);
+        formData.append('descricao', descricaoVar);
+
+        var idUsuario = sessionStorage.ID_USUARIO;
+
+        if (tituloVar == "" || descricaoVar == "") {
+            return false;
+        } else {
+            fetch(`/publicacoes/publicar/${idUsuario}`, {
+                method: "POST",
+                body: formData,
+            }).then(function (resposta) {
+                console.log("resposta: ", resposta);
+
+                if (resposta.ok) {
+                    console.log("Publicação realizado com sucesso! Redirecionando para tela de publicação...");
+
+                    setTimeout(() => {
+                        window.location = "../feed/publicacao.html";
+                    }, "2000");
+
+                    limparFormulario();
+                    finalizarAguardar();
+                } else {
+                    throw "Houve um erro ao tentar realizar o cadastro!";
+                }
+            })
+                .catch(function (resposta) {
+                    console.log(`#ERRO: ${resposta}`);
+                    finalizarAguardar();
+                });
+
+            return false;
+        }
+
+    }
+</script>
