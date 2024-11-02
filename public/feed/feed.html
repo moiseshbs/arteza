@@ -23,7 +23,7 @@
 <body onload="validarSessao(), atualizarFeed()">
     <header>
         <div class="container">
-            <h2>Arteza</h2>
+            <img src="../assets/componentes/logo.png" style="max-height: 100%; width: 150px;" alt="Arteza logo">
 
             <div class="nav">
                 <h3>INICIO</h3>
@@ -193,7 +193,7 @@
 
                         feed_teste.innerHTML += `
                             <div class="card ${estilo}">
-                                <a href="publicacao.html" class="click" onclick="publicacao(${publicacao.idPublicacao})">
+                                <a class="click" onclick="publicacao(${publicacao.idPublicacao})">
                                     <img src="../assets/publicacao/${publicacao.imgPublicacao}" alt="Publicação">
                                 </a>
                                 <div class="info">

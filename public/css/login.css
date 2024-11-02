@@ -14,6 +14,16 @@ section .areaImagem {
     height: 100%;
     width: 30%;
     background-color: #ff0;
+    background-size: cover;
+    background-position: right;
+}
+
+.login {
+    background-image: url('../assets/publicacao/3.jpg');
+}
+
+.cadastro {
+    background-image: url('../assets/publicacao/5.jpg');
 }
 
 section .areaForm {
@@ -70,7 +80,7 @@ section .areaForm {
     border-radius: 25px;
     border-top: solid 1px #000;
     border-bottom: solid 4px #000;
-    border-right: solid 4px #000;
+    border-right: solid 1px #000;
     border-left: solid 1px #000;
     cursor: pointer;
 }
