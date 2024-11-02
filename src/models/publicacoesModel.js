@@ -82,11 +82,11 @@ function listarPorUsuario(idUsuario) {
         FROM publicacao AS p
             INNER JOIN usuario AS u 
                 ON p.fkUsuario = u.idUsuario
-            JOIN curtida AS l
+            LEFT JOIN curtida AS l
                 ON l.fkPublicacao = p.idPublicacao
-            JOIN comentario AS c
+            LEFT JOIN comentario AS c
                 ON c.fkPublicacao = p.idPublicacao
-            JOIN visualizacao AS v
+            LEFT JOIN visualizacao AS v
                 ON v.fkPublicacao = p.idPublicacao
             WHERE u.idUsuario = ${idUsuario}
         GROUP BY 
@@ -97,7 +97,50 @@ function listarPorUsuario(idUsuario) {
             p.dtPublicacao,
             p.titulo, 
             u.idUsuario, 
-            u.username;
+            u.username
+            ORDER BY p.dtPublicacao DESC;
+    `;
+    console.log("Executando a instrução SQL: \n" + instrucaoSql);
+    return database.executar(instrucaoSql);
+}
+
+function listarPorId(idPublicacao) {
+    console.log("ACESSEI O AVISO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function listarPorId()");
+    var instrucaoSql = `
+        SELECT
+            p.idPublicacao, 
+            p.fkUsuario, 
+            p.imgPublicacao, 
+            p.descricao, 
+            p.dtPublicacao,
+            p.titulo, 
+            u.idUsuario,
+            u.nome,
+            u.username,
+            u.imgPerfil,
+            COUNT(l.fkPublicacao) AS curtida,
+            COUNT(c.idComentario) AS comentario,
+            COUNT(v.idVisualizacao) AS visualizacao
+        FROM publicacao AS p
+            INNER JOIN usuario AS u 
+                ON p.fkUsuario = u.idUsuario
+            LEFT JOIN curtida AS l
+                ON l.fkPublicacao = p.idPublicacao
+            LEFT JOIN comentario AS c
+                ON c.fkPublicacao = p.idPublicacao
+            LEFT JOIN visualizacao AS v
+                ON v.fkPublicacao = p.idPublicacao
+            WHERE p.idPublicacao = ${idPublicacao}
+        GROUP BY 
+            p.idPublicacao, 
+            p.fkUsuario, 
+            p.imgPublicacao, 
+            p.descricao, 
+            p.dtPublicacao,
+            p.titulo, 
+            u.idUsuario, 
+            u.username,
+            u.imgPerfil;
     `;
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
     return database.executar(instrucaoSql);
@@ -151,6 +194,7 @@ function descurtir(idPublicacao, idUsuario) {
 module.exports = {
     listar,
     listarPorUsuario,
+    listarPorId,
     pesquisarDescricao,
     publicar,
     editar,

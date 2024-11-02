@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/headerFooter.css">
 
+    <script src="../js/sessao.js"></script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -18,7 +20,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
 
-<body>
+<body onload="validarSessao(), atualizarFeed()">
     <header>
         <div class="container">
             <h2>Arteza</h2>
@@ -43,10 +45,10 @@
                     <a href="feed.html">
                         <i class="bi bi-arrow-left"></i>
                     </a>
-                    <h1>R0-Z3</h1>
+                    <h1 id="h1_titulo">R0-Z3</h1>
                 </div>
-                <div class="areaImgPublicacao">
-                    <img src="../assets/publicacao/1.jpg" alt="Publicação">
+                <div class="areaImgPublicacao" id="id_imgPublicacao">
+                    
                 </div>
             </div>
 
@@ -54,25 +56,25 @@
                 <div class="areaInfo">
                     <div class="infosUser">
                         <img src="../assets/fotoPerfil/2.png" alt="" class="fotoPerfil">
-                        <h3>Moises Henry</h3>
+                        <h3 id="user_nome">Moises Henry</h3>
                     </div>
                     <div class="areaDescricao">
-                        <p>Desenho feito em XXXX para que </p>
+                        <p id="p_descricao">Desenho feito em XXXX para que </p>
                     </div>
                     <div class="areaOpcoes">
-                        <div onclick="contarLike()" id="div_like">
+                        <div onclick="curtir()" id="div_like">
                             <i class="bi bi-heart"></i>
                             <span id="span_like">0</span>
                         </div>
 
-                        <div onclick="removerLike()" id="div_deslike" style="display: none;">
+                        <div onclick="descurtir()" id="div_deslike" style="display: none;">
                             <i class="bi bi-heart-fill curtida"></i>
                             <span id="span_deslike">0</span>
                         </div>
 
                         <div>
                             <i class="bi bi-chat"></i>
-                            <span>77</span>
+                            <span id="span_comentario">77</span>
                         </div>
 
                         <div>
@@ -97,3 +99,136 @@
 </html>
 
 <script src="../js/publicacao.js"></script>
+
+<script>
+    function atualizarFeed() {
+        fetch(`/publicacoes/listarID/${sessionStorage.ID_PUBLICACAO}`).then(function (resposta) {
+            if (resposta.ok) {
+                if (resposta.status == 204) {
+                    var feed = document.getElementById("feed_teste");
+                    var mensagem = document.createElement("span");
+                    mensagem.innerHTML = "Nenhum resultado encontrado."
+                    feed.appendChild(mensagem);
+                    throw "Nenhum resultado encontrado!!";
+                }
+
+                resposta.json().then(function (resposta) {
+                    console.log("Dados recebidos: ", JSON.stringify(resposta));
+
+                    for (let i = 0; i < resposta.length; i++) {
+                        var publicacao = resposta[i];
+                    }
+
+                    user_nome.innerText = `${publicacao.username}`;
+                    p_descricao.innerText = `${publicacao.descricao}`;
+                    h1_titulo.innerText = `${publicacao.titulo}`;
+
+                    span_like.innerText = `${publicacao.curtida}`;
+                    span_comentario.innerText = `${publicacao.comentario}`;
+                    span_visualizacao.innerText = `${publicacao.visualizacao}`;
+                    
+                    id_imgPublicacao.innerHTML = `
+                    <img src="../assets/publicacao/${publicacao.imgPublicacao}" alt="Publicação">
+                    `;
+
+                    finalizarAguardar();
+                });
+            } else {
+                throw ('Houve um erro na API!');
+            }
+        }).catch(function (resposta) {
+            console.error(resposta);
+            finalizarAguardar();
+        });
+    }
+    
+    function curtir(idPublicacao) {
+        var idUsuario = sessionStorage.ID_USUARIO;
+
+        fetch(`/publicacoes/curtir/${sessionStorage.ID_PUBLICACAO}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                idUsuarioServer: idUsuario,
+                idPublicacaoServer: sessionStorage.ID_PUBLICACAO,
+            }),
+        })
+            .then(function (resposta) {
+                console.log("Resposta: ", resposta);
+
+                if (resposta.ok) {
+                    console.log("Curtida realizada com sucesso pelo usuario" + sessionStorage.getItem("USERNAME_USUARIO"));
+
+                    like(idPublicacao);
+
+                    var spanDeslike = document.getElementById(`span_deslike`);
+                    var spanLike = document.getElementById(`span_like`);
+                    spanLike.innerText = Number(spanLike.innerText) + 1;
+                    spanDeslike.innerText = Number(spanLike.innerText);
+                } else {
+                    throw "Houve um erro ao tentar curtir a publicação!";
+                }
+            })
+            .catch(function (erro) {
+                console.log(`#ERRO: ${erro}`);
+            });
+
+        return false;
+    }
+
+    function descurtir(idPublicacao) {
+        var idUsuario = sessionStorage.ID_USUARIO;
+
+        fetch(`/publicacoes/descurtir/${sessionStorage.ID_PUBLICACAO}`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                idUsuarioServer: idUsuario,
+                idPublicacaoServer: sessionStorage.ID_PUBLICACAO,
+            }),
+        })
+            .then(function (resposta) {
+                console.log("Resposta: ", resposta);
+
+                if (resposta.ok) {
+                    console.log("descurtida realizada com sucesso pelo usuario" + sessionStorage.getItem("USERNAME_USUARIO"));
+
+                    deslike(idPublicacao);
+
+                    var spanDeslike = document.getElementById(`span_deslike`);
+                    var spanLike = document.getElementById(`span_like`);
+                    spanDeslike.innerText = Number(spanDeslike.innerText) - 1;
+                    spanLike.innerText = Number(spanDeslike.innerText);
+                } else {
+                    throw "Houve um erro ao tentar descurtir a publicação!";
+                }
+            })
+            .catch(function (erro) {
+                console.log(`#ERRO: ${erro}`);
+            });
+
+        return false;
+    }
+
+    function like(idPublicacao) {
+        var divLike = document.getElementById(`div_like`);
+        var divDeslike = document.getElementById(`div_deslike`);
+
+        divLike.style.display = 'none';
+        divDeslike.style.display = 'block';
+    }
+
+    function deslike(idPublicacao) {
+        var divLike = document.getElementById(`div_like`);
+        var divDeslike = document.getElementById(`div_deslike`);
+
+        divLike.style.display = 'block';
+        divDeslike.style.display = 'none';
+    }
+
+
+</script>

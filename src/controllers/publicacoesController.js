@@ -39,6 +39,31 @@ function listarPorUsuario(req, res) {
         );
 }
 
+function listarPorId(req, res) {
+    var idPublicacao = req.params.idPublicacao;
+
+    publicacaoModel.listarPorId(idPublicacao)
+        .then(
+            function (resultado) {
+                if (resultado.length > 0) {
+                    res.status(200).json(resultado);
+                } else {
+                    res.status(204).send("Nenhum resultado encontrado!");
+                }
+            }
+        )
+        .catch(
+            function (erro) {
+                console.log(erro);
+                console.log(
+                    "Houve um erro ao buscar os avisos: ",
+                    erro.sqlMessage
+                );
+                res.status(500).json(erro.sqlMessage);
+            }
+        );
+}
+
 function pesquisarDescricao(req, res) {
     var descricao = req.params.descricao;
 
@@ -170,6 +195,7 @@ function descurtir(req, res) {
 module.exports = {
     listar,
     listarPorUsuario,
+    listarPorId,
     pesquisarDescricao,
     publicar,
     editar,

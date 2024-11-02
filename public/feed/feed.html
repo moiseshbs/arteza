@@ -159,7 +159,6 @@
 
 <script>
     function atualizarFeed() {
-
         fetch("/publicacoes/listar").then(function (resposta) {
             if (resposta.ok) {
                 if (resposta.status == 204) {
@@ -194,7 +193,7 @@
 
                         feed_teste.innerHTML += `
                             <div class="card ${estilo}">
-                                <a href="publicacao.html" class="click">
+                                <a href="publicacao.html" class="click" onclick="publicacao(${publicacao.idPublicacao})">
                                     <img src="../assets/publicacao/${publicacao.imgPublicacao}" alt="Publicação">
                                 </a>
                                 <div class="info">
@@ -351,7 +350,7 @@
             idUsuarioVar = idUsuarioPublicacao;
         }
 
-        fetch(`/usuarios/perfil/${idUsuarioVar}`, {
+        fetch(`/publicacoes/listar/${idUsuarioVar}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -366,6 +365,33 @@
                     window.location = "../perfil/perfil.html";
                 } else {
                     throw "Houve um erro ao tentar buscar usuario!";
+                }
+            })
+            .catch(function (erro) {
+                console.log(`#ERRO: ${erro}`);
+            });
+
+        return false;
+    }
+
+    function publicacao(idPublicacao) {
+        sessionStorage.ID_PUBLICACAO = idPublicacao;
+
+        fetch(`/publicacoes/listarID/${sessionStorage.ID_PUBLICACAO}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            }
+        })
+            .then(function (resposta) {
+                console.log("Resposta: ", resposta);
+
+                if (resposta.ok) {
+                    console.log("Publicacao encontrado com sucesso!");
+
+                    window.location = "../feed/publicacao.html";
+                } else {
+                    throw "Houve um erro ao tentar buscar Publicacao!";
                 }
             })
             .catch(function (erro) {
