@@ -128,11 +128,52 @@ function deletar(req, res) {
         );
 }
 
+function curtir(req, res) {
+    var idPublicacao = req.body.idPublicacaoServer;
+    var idUsuario = req.body.idUsuarioServer;
+    
+    publicacaoModel.curtir(idPublicacao, idUsuario)
+        .then(
+            function (resultado) {
+                res.json(resultado);
+            }
+        )
+        .catch(
+            function (erro) {
+                console.log(erro);
+                console.log("Houve um erro ao curtir o post: ", erro.sqlMessage);
+                res.status(500).json(erro.sqlMessage);
+                console.log(idUsuario)
+            }
+        );
+}
+
+function descurtir(req, res) {
+    var idPublicacao = req.body.idPublicacaoServer;
+    var idUsuario = req.body.idUsuarioServer;
+
+    publicacaoModel.descurtir(idPublicacao, idUsuario)
+        .then(
+            function (resultado) {
+                res.json(resultado);
+            }
+        )
+        .catch(
+            function (erro) {
+                console.log(erro);
+                console.log("Houve um erro ao descurtir o post: ", erro.sqlMessage);
+                res.status(500).json(erro.sqlMessage);
+            }
+        );
+}
+
 module.exports = {
     listar,
     listarPorUsuario,
     pesquisarDescricao,
     publicar,
     editar,
-    deletar
+    deletar,
+    curtir,
+    descurtir,
 }

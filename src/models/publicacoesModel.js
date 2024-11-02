@@ -11,10 +11,28 @@ function listar() {
             p.dtPublicacao,
             p.titulo, 
             u.idUsuario, 
-            u.username 
+            u.username,
+            COUNT(l.fkPublicacao) AS curtida,
+            COUNT(c.idComentario) AS comentario,
+            COUNT(v.idVisualizacao) AS visualizacao
         FROM publicacao AS p
             INNER JOIN usuario AS u 
-                ON p.fkUsuario = u.idUsuario;
+                ON p.fkUsuario = u.idUsuario
+            LEFT JOIN curtida AS l
+                ON l.fkPublicacao = p.idPublicacao
+            LEFT JOIN comentario AS c
+                ON c.fkPublicacao = p.idPublicacao
+            LEFT JOIN visualizacao AS v
+                ON v.fkPublicacao = p.idPublicacao
+        GROUP BY 
+            p.idPublicacao, 
+            p.fkUsuario, 
+            p.imgPublicacao, 
+            p.descricao, 
+            p.dtPublicacao,
+            p.titulo, 
+            u.idUsuario, 
+            u.username;
     `;
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
     return database.executar(instrucaoSql);
@@ -89,11 +107,31 @@ function deletar(idAviso) {
     return database.executar(instrucaoSql);
 }
 
+function curtir(idPublicacao, idUsuario) {
+    console.log("ACESSEI O PUBLICACAO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function publicar(): ", idPublicacao, idUsuario);
+    var instrucaoSql = `
+        INSERT INTO curtida (fkPublicacao, fkUsuario) VALUES ('${idPublicacao}', '${idUsuario}');
+    `;
+    console.log("Executando a instrução SQL: \n" + instrucaoSql);
+    return database.executar(instrucaoSql);
+}
+
+function descurtir(idPublicacao, idUsuario) {
+    console.log("ACESSEI O PUBLICACAO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function publicar(): ", idPublicacao, idUsuario);
+    var instrucaoSql = `
+        DELETE FROM curtida WHERE fkPublicacao = '${idPublicacao}' AND fkUsuario = '${idUsuario}';
+    `;
+    console.log("Executando a instrução SQL: \n" + instrucaoSql);
+    return database.executar(instrucaoSql);
+}
+
 module.exports = {
     listar,
     listarPorUsuario,
     pesquisarDescricao,
     publicar,
     editar,
-    deletar
+    deletar,
+    curtir,
+    descurtir
 }

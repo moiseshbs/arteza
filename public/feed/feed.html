@@ -52,10 +52,11 @@
     <div class="gambiarra"></div>
 
     <section class="areaCards">
-        <div class="div-results">
-            <div id="feed_container" class="feed-container">
-            </div>
+
+        <div class="pin_container" id="feed_teste">
+
         </div>
+
 
         <!-- <div class="pin_container">
 
@@ -161,7 +162,7 @@
         fetch("/publicacoes/listar").then(function (resposta) {
             if (resposta.ok) {
                 if (resposta.status == 204) {
-                    var feed = document.getElementById("feed_container");
+                    var feed = document.getElementById("feed_teste");
                     var mensagem = document.createElement("span");
                     mensagem.innerHTML = "Nenhum resultado encontrado."
                     feed.appendChild(mensagem);
@@ -171,42 +172,67 @@
                 resposta.json().then(function (resposta) {
                     console.log("Dados recebidos: ", JSON.stringify(resposta));
 
-                    var feed = document.getElementById("feed_container");
+                    var feed = document.getElementById("feed_teste");
                     feed.innerHTML = "";
+
+                    var aleatorio = 0;
+                    var estilo = ``;
 
                     for (let i = 0; i < resposta.length; i++) {
                         var publicacao = resposta[i];
 
-                        //criando e manipulando elementos do HTML via JavaScript
-                        var divPublicacao = document.createElement("div");
-                        var spanID = document.createElement("span");
-                        var spanTitulo = document.createElement("span");
-                        var spanNome = document.createElement("span");
-                        var divDescricao = document.createElement("div");
-                        var divButtons = document.createElement("div");
-                        var imgPublicacao = document.createElement("img");
+                        aleatorio = parseInt(Math.random() * 3 + 1);
 
-                        spanID.innerHTML = "ID: <b>" + publicacao.idPublicacao + "</b>";
-                        spanTitulo.innerHTML = "Título: <b>" + publicacao.titulo + "</b>";
-                        spanNome.innerHTML = "Autor: <b>" + publicacao.username + "</b>";
-                        divDescricao.innerHTML = "Descrição: <b>" + publicacao.descricao + "</b>";
-                        imgPublicacao.src = `../assets/publicacao/${publicacao.imgPublicacao}`;
+                        if (aleatorio == 1) {
+                            estilo = `card_small`;
+                        } else if (aleatorio == 2) {
+                            estilo = `card_medium`;
+                        } else {
+                            estilo = `card_large`;
+                        }
 
-                        divPublicacao.className = "publicacao";
-                        spanTitulo.id = "inputNumero" + publicacao.idPublicacao;
-                        spanNome.className = "publicacao-nome";
-                        spanTitulo.className = "publicacao-titulo";
-                        divDescricao.className = "publicacao-descricao";
+                        feed_teste.innerHTML += `
+                            <div class="card ${estilo}">
+                                <a href="publicacao.html" class="click">
+                                    <img src="../assets/publicacao/${publicacao.imgPublicacao}" alt="Publicação">
+                                </a>
+                                <div class="info">
+                                    <div class="options">
+                                        <div>
+                                            <div onclick="curtir(${publicacao.idPublicacao})" id="div_like_${publicacao.idPublicacao}" class="like">
+                                                <i class="bi bi-heart"></i>
+                                                <span id="span_like_${publicacao.idPublicacao}">${publicacao.curtida}</span>
+                                            </div>
 
-                        divButtons.className = "div-buttons"
+                                            <div onclick="descurtir(${publicacao.idPublicacao})" id="div_deslike_${publicacao.idPublicacao}" class="deslike">
+                                                <i class="bi bi-heart-fill curtida"></i>
+                                                <span id="span_deslike_${publicacao.idPublicacao}">${publicacao.curtida}</span>
+                                            </div>
+                                        </div>
 
-                        divPublicacao.appendChild(spanID);
-                        divPublicacao.appendChild(spanNome);
-                        divPublicacao.appendChild(spanTitulo);
-                        divPublicacao.appendChild(divDescricao);
-                        divPublicacao.appendChild(divButtons);
-                        divPublicacao.appendChild(imgPublicacao);
-                        feed.appendChild(divPublicacao);
+                                        <div>
+                                            <i class="bi bi-chat"></i>
+                                            <span>${publicacao.comentario}</span>
+                                        </div>
+
+                                        <div>
+                                            <i class="bi bi-eye"></i>
+                                            <span>${publicacao.visualizacao}</span>
+                                        </div>
+                                    </div>
+
+                                    <a href="../perfil/perfil.html">
+                                        <div class="infoUser">
+                                            <div class="areaFotoPerfil">
+                                                <img src="../assets/fotoPerfil/2.png" alt="">
+                                            </div>
+                                            <h2>${publicacao.username}</h2>
+
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        `;
                     }
 
                     finalizarAguardar();
@@ -218,5 +244,94 @@
             console.error(resposta);
             finalizarAguardar();
         });
+    }
+
+    function curtir(idPublicacao) {
+        sessionStorage.ID_PUBLICACAO = idPublicacao;
+        var idUsuario = sessionStorage.ID_USUARIO;
+
+        fetch(`/publicacoes/curtir/${sessionStorage.getItem("ID_PUBLICACAO")}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                idUsuarioServer: idUsuario,
+                idPublicacaoServer: idPublicacao,
+            }),
+        })
+            .then(function (resposta) {
+                console.log("Resposta: ", resposta);
+
+                if (resposta.ok) {
+                    console.log("Curtida realizada com sucesso pelo usuario" + sessionStorage.getItem("USERNAME_USUARIO"));
+
+                    like(idPublicacao);
+
+                    var spanDeslike = document.getElementById(`span_deslike_${idPublicacao}`);
+                    var spanLike = document.getElementById(`span_like_${idPublicacao}`);
+                    spanLike.innerText = Number(spanLike.innerText) + 1;
+                    spanDeslike.innerText = Number(spanLike.innerText);
+                } else {
+                    throw "Houve um erro ao tentar curtir a publicação!";
+                }
+            })
+            .catch(function (erro) {
+                console.log(`#ERRO: ${erro}`);
+            });
+
+        return false;
+    }
+
+    function descurtir(idPublicacao) {
+        sessionStorage.ID_PUBLICACAO = idPublicacao;
+        var idUsuario = sessionStorage.ID_USUARIO;
+
+        fetch(`/publicacoes/descurtir/${sessionStorage.getItem("ID_PUBLICACAO")}`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                idUsuarioServer: idUsuario,
+                idPublicacaoServer: idPublicacao,
+            }),
+        })
+            .then(function (resposta) {
+                console.log("Resposta: ", resposta);
+
+                if (resposta.ok) {
+                    console.log("descurtida realizada com sucesso pelo usuario" + sessionStorage.getItem("USERNAME_USUARIO"));
+
+                    deslike(idPublicacao);
+                    var spanDeslike = document.getElementById(`span_deslike_${idPublicacao}`);
+                    var spanLike = document.getElementById(`span_like_${idPublicacao}`);
+                    spanDeslike.innerText = Number(spanDeslike.innerText) - 1;
+                    spanLike.innerText = Number(spanDeslike.innerText);
+                } else {
+                    throw "Houve um erro ao tentar descurtir a publicação!";
+                }
+            })
+            .catch(function (erro) {
+                console.log(`#ERRO: ${erro}`);
+            });
+
+        return false;
+    }
+
+    function like(idPublicacao) {
+        var divLike = document.getElementById(`div_like_${idPublicacao}`);
+        var divDeslike = document.getElementById(`div_deslike_${idPublicacao}`);
+
+        divLike.style.display = 'none';
+        divDeslike.style.display = 'block';
+    }
+
+    function deslike(idPublicacao) {
+        var divLike = document.getElementById(`div_like_${idPublicacao}`);
+        var divDeslike = document.getElementById(`div_deslike_${idPublicacao}`);
+
+        divLike.style.display = 'block';
+        divDeslike.style.display = 'none';
     }
 </script>

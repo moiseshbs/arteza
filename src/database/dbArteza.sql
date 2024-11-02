@@ -8,7 +8,7 @@ CREATE TABLE usuario (
     email VARCHAR(45),
     senha VARCHAR(45),
     imgPerfil VARCHAR(255),
-    dtCadastro TIMESTAMP DEFAULT CURRENT_TIMES
+    dtCadastro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE publicacao (
@@ -16,18 +16,17 @@ CREATE TABLE publicacao (
     fkUsuario INT,
     imgPublicacao VARCHAR(255),
     descricao VARCHAR(45),
-    dtPublicacao TIMESTAMP DEFAULT CURRENT_TIMES,
+    dtPublicacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	titulo VARCHAR(45),
     PRIMARY KEY (idPublicacao, fkUsuario),
     FOREIGN KEY (fkUsuario) REFERENCES usuario(idUsuario)
 );
 
 CREATE TABLE curtida (
-	idCurtida INT AUTO_INCREMENT,
     fkPublicacao INT,
     fkUsuario INT,
-    dtCurtida TIMESTAMP DEFAULT CURRENT_TIMES,
-    PRIMARY KEY (idCurtida, fkPublicacao, fkUsuario),
+    dtCurtida TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (fkPublicacao, fkUsuario),
     FOREIGN KEY (fkPublicacao) REFERENCES publicacao(idPublicacao),
     FOREIGN KEY (fkUsuario) REFERENCES usuario(idUsuario)
 );
@@ -37,7 +36,7 @@ CREATE TABLE comentario (
     fkPublicacao INT,
     fkUsuario INT,
     comentario VARCHAR(45),
-    dtComentario TIMESTAMP DEFAULT CURRENT_TIMES,
+    dtComentario TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (idComentario, fkPublicacao, fkUsuario),
 	FOREIGN KEY (fkPublicacao) REFERENCES publicacao(idPublicacao),
     FOREIGN KEY (fkUsuario) REFERENCES usuario(idUsuario)
@@ -47,7 +46,7 @@ CREATE TABLE visualizacao (
 	idVisualizacao INT AUTO_INCREMENT,
     fkPublicacao INT,
     fkUsuario INT,
-    dtVisualizacao TIMESTAMP DEFAULT CURRENT_TIMES,
+    dtVisualizacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (idVisualizacao, fkPublicacao, fkUsuario),
 	FOREIGN KEY (fkPublicacao) REFERENCES publicacao(idPublicacao),
     FOREIGN KEY (fkUsuario) REFERENCES usuario(idUsuario)
