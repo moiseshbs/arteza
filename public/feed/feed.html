@@ -40,7 +40,7 @@
                     </a>
                 </div>
 
-                <a href="../perfil/meuPerfil.html">
+                <a id="header_imgPerfil">
                     <div class="fotoPerfil">
 
                     </div>
@@ -159,6 +159,7 @@
 
 <script>
     function atualizarFeed() {
+
         fetch("/publicacoes/listar").then(function (resposta) {
             if (resposta.ok) {
                 if (resposta.status == 204) {
@@ -221,7 +222,7 @@
                                         </div>
                                     </div>
 
-                                    <a href="../perfil/perfil.html">
+                                    <a onclick="perfil(${publicacao.idUsuario})">
                                         <div class="infoUser">
                                             <div class="areaFotoPerfil">
                                                 <img src="../assets/fotoPerfil/2.png" alt="">
@@ -234,6 +235,8 @@
                             </div>
                         `;
                     }
+
+                    header_imgPerfil.setAttribute("onclick", `perfil(${sessionStorage.ID_USUARIO})`);
 
                     finalizarAguardar();
                 });
@@ -333,5 +336,42 @@
 
         divLike.style.display = 'block';
         divDeslike.style.display = 'none';
+    }
+
+    function perfil(idUsuario) {
+        sessionStorage.ID_USUARIOPUBLICACAO = idUsuario;
+        
+        var idUsuarioPublicacao = idUsuario;
+        var idUsuarioLogado = sessionStorage.ID_USUARIO;
+        var idUsuarioVar;
+
+        if (idUsuarioPublicacao == idUsuarioLogado) {
+            idUsuarioVar = idUsuarioLogado;
+        } else {
+            idUsuarioVar = idUsuarioPublicacao;
+        }
+
+        fetch(`/usuarios/perfil/${idUsuarioVar}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            }
+        })
+            .then(function (resposta) {
+                console.log("Resposta: ", resposta);
+
+                if (resposta.ok) {
+                    console.log("Usuario encontrado com sucesso!");
+
+                    window.location = "../perfil/perfil.html";
+                } else {
+                    throw "Houve um erro ao tentar buscar usuario!";
+                }
+            })
+            .catch(function (erro) {
+                console.log(`#ERRO: ${erro}`);
+            });
+
+        return false;
     }
 </script>

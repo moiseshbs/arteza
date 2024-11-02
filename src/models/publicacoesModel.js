@@ -24,15 +24,16 @@ function listar() {
                 ON c.fkPublicacao = p.idPublicacao
             LEFT JOIN visualizacao AS v
                 ON v.fkPublicacao = p.idPublicacao
-        GROUP BY 
-            p.idPublicacao, 
-            p.fkUsuario, 
-            p.imgPublicacao, 
-            p.descricao, 
-            p.dtPublicacao,
-            p.titulo, 
-            u.idUsuario, 
-            u.username;
+                GROUP BY 
+                p.idPublicacao, 
+                p.fkUsuario, 
+                p.imgPublicacao, 
+                p.descricao, 
+                p.dtPublicacao,
+                p.titulo, 
+                u.idUsuario, 
+                u.username
+                ORDER BY p.dtPublicacao DESC;
     `;
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
     return database.executar(instrucaoSql);
@@ -62,19 +63,41 @@ function pesquisarDescricao(texto) {
 function listarPorUsuario(idUsuario) {
     console.log("ACESSEI O AVISO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function listarPorUsuario()");
     var instrucaoSql = `
-        SELECT 
-            a.id AS idAviso,
-            a.titulo,
-            a.descricao,
-            a.fk_usuario,
-            u.id AS idUsuario,
+        SELECT
+            p.idPublicacao, 
+            p.fkUsuario, 
+            p.imgPublicacao, 
+            p.descricao, 
+            p.dtPublicacao,
+            p.titulo, 
+            u.idUsuario,
             u.nome,
+            u.username,
             u.email,
-            u.senha
-        FROM aviso a
-            INNER JOIN usuario u
-                ON a.fk_usuario = u.id
-        WHERE u.id = ${idUsuario};
+            u.senha,
+            u.imgPerfil,
+            COUNT(l.fkPublicacao) AS curtida,
+            COUNT(c.idComentario) AS comentario,
+            COUNT(v.idVisualizacao) AS visualizacao
+        FROM publicacao AS p
+            INNER JOIN usuario AS u 
+                ON p.fkUsuario = u.idUsuario
+            JOIN curtida AS l
+                ON l.fkPublicacao = p.idPublicacao
+            JOIN comentario AS c
+                ON c.fkPublicacao = p.idPublicacao
+            JOIN visualizacao AS v
+                ON v.fkPublicacao = p.idPublicacao
+            WHERE u.idUsuario = ${idUsuario}
+        GROUP BY 
+            p.idPublicacao, 
+            p.fkUsuario, 
+            p.imgPublicacao, 
+            p.descricao, 
+            p.dtPublicacao,
+            p.titulo, 
+            u.idUsuario, 
+            u.username;
     `;
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
     return database.executar(instrucaoSql);

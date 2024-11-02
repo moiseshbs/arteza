@@ -3,10 +3,12 @@ function validarSessao() {
     var username = sessionStorage.USERNAME_USUARIO;
     var nome = sessionStorage.NOME_USUARIO;
 
-    var b_usuario = document.getElementById("b_usuario");
+    var user_nome = document.getElementById("user_nome");
+    var user_username = document.getElementById("user_username");
 
     if (username != null && nome != null) {
-        //b_usuario.innerHTML = nome;
+        // user_nome.innerHTML = nome;
+        // user_username.innerHTML = username;
     } else {
         window.location = "../login.html";
     }
