@@ -217,6 +217,15 @@ function comentar(idPublicacao, idUsuario, comentario) {
     return database.executar(instrucaoSql);
 }
 
+function visualizar(idPublicacao, idUsuario) {
+    console.log("ACESSEI O PUBLICACAO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function publicar(): ", idPublicacao, idUsuario);
+    var instrucaoSql = `
+        INSERT INTO visualizacao (fkPublicacao, fkUsuario) VALUES ('${idPublicacao}', '${idUsuario}');
+    `;
+    console.log("Executando a instrução SQL: \n" + instrucaoSql);
+    return database.executar(instrucaoSql);
+}
+
 module.exports = {
     listar,
     listarPorUsuario,
@@ -228,5 +237,6 @@ module.exports = {
     curtir,
     descurtir,
     comentar,
-    listarComentario
+    listarComentario,
+    visualizar
 }

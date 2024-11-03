@@ -156,7 +156,7 @@ function deletar(req, res) {
 function curtir(req, res) {
     var idPublicacao = req.body.idPublicacaoServer;
     var idUsuario = req.body.idUsuarioServer;
-    
+
     publicacaoModel.curtir(idPublicacao, idUsuario)
         .then(
             function (resultado) {
@@ -243,6 +243,24 @@ function listarComentario(req, res) {
         );
 }
 
+function visualizar(req, res) {
+    var idPublicacao = req.params.idPublicacao;
+    var idUsuario = req.body.idUsuarioServer;
+
+    publicacaoModel.visualizar(idPublicacao, idUsuario)
+        .then(
+            function (resultado) {
+                res.json(resultado);
+            }
+        )
+        .catch(
+            function (erro) {
+                console.log(erro);
+                console.log("Houve um erro ao realizar o visualização: ", erro.sqlMessage);
+                res.status(500).json(erro.sqlMessage);
+            }
+        );
+}
 
 
 module.exports = {
@@ -256,5 +274,6 @@ module.exports = {
     curtir,
     descurtir,
     comentar,
-    listarComentario
+    listarComentario,
+    visualizar
 }

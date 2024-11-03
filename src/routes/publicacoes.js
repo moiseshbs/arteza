@@ -54,4 +54,9 @@ router.get("/listarComentario/:idPublicacao", function (req, res) {
     publicacaoController.listarComentario(req, res);
 });
 
+//rota de visualizacao
+router.post("/visualizar/:idPublicacao", function (req, res) {
+    publicacaoController.visualizar(req, res);
+});
+
 module.exports = router;
