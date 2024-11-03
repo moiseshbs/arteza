@@ -25,23 +25,20 @@
             <img src="../assets/componentes/logo.png" style="max-height: 100%; width: 150px;" alt="Arteza logo">
 
             <div class="nav">
-                <h3>INICIO</h3>
-                <h3>EXPLORAR</h3>
-
                 <input type="text" placeholder="Pesquisar">
             </div>
 
             <div class="perfil">
                 <div class="criar">
-                    <a href="criar.html">
+                    <a href="./criar.html">
                         <i class="bi bi-plus-circle"></i>
                         <h3>CRIAR</h3>
                     </a>
                 </div>
 
-                <a href="meuPerfil.html">
+                <a id="header_imgPerfil">
                     <div class="fotoPerfil">
-                    
+
                     </div>
                 </a>
             </div>
@@ -95,20 +92,7 @@
             <a href="">PERFIL</a>
         </div>
         <div class="areaInfos">
-            <div>
-                <p><b>São Paulo</b></p>
-                <p>R.Haddock Lobo, 595</p>
-                <p>Cerqueira César</p>
-                <p>CEP 01414-001</p>
-            </div>
-            <div>
-                <p><b>Contatos</b></p>
-                <p>moises.santos@sptech.school</p>
-                <p>moiseshxs</p>
-            </div>
-            <div>
-                <p><b>© 2024 Arteza</b></p>
-            </div>
+            <img src="../assets/componentes/logow.png" style="height: 30px; width: auto;" alt="Arteza logo">
         </div>
     </footer>
 </body>
@@ -156,7 +140,7 @@
 
                         feed_teste.innerHTML += `
                             <div class="card ${estilo}">
-                                <a href="publicacao.html" class="click">
+                                <a class="click" onclick="publicacao(${publicacao.idPublicacao})">
                                     <img src="../assets/publicacao/${publicacao.imgPublicacao}" alt="Publicação">
                                 </a>
                                 <div class="info">
@@ -311,6 +295,61 @@
 
         divLike.style.display = 'block';
         divDeslike.style.display = 'none';
+    }
+
+    function publicacao(idPublicacao) {
+        sessionStorage.ID_PUBLICACAO = idPublicacao;
+
+        fetch(`/publicacoes/listarID/${sessionStorage.ID_PUBLICACAO}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            }
+        })
+            .then(function (resposta) {
+                console.log("Resposta: ", resposta);
+
+                if (resposta.ok) {
+                    console.log("Publicacao encontrado com sucesso!");
+                    visualizar();
+                    window.location = "../feed/publicacao.html";
+                } else {
+                    throw "Houve um erro ao tentar buscar Publicacao!";
+                }
+            })
+            .catch(function (erro) {
+                console.log(`#ERRO: ${erro}`);
+            });
+
+        return false;
+    }
+
+    function visualizar(idPublicacao) {
+        var idUsuarioVar = sessionStorage.ID_USUARIO;
+
+        fetch(`/publicacoes/visualizar/${sessionStorage.ID_PUBLICACAO}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                idUsuarioServer: idUsuarioVar,
+            }),
+        })
+            .then(function (resposta) {
+                console.log("Resposta: ", resposta);
+
+                if (resposta.ok) {
+                    console.log("Visualização realizada com sucesso pelo usuario " + sessionStorage.getItem("USERNAME_USUARIO"));
+                } else {
+                    throw "Houve um erro ao tentar visualizar a publicação!";
+                }
+            })
+            .catch(function (erro) {
+                console.log(`#ERRO: ${erro}`);
+            });
+
+        return false;
     }
 
 </script>

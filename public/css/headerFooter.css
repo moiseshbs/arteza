@@ -74,7 +74,7 @@ header a {
 }
 
 footer {
-    height: 40vh;
+    height: 32vh;
     width: 100%;
     background-color: #211F22;
     display: flex;
@@ -85,18 +85,19 @@ footer {
 }
 
 footer .areaNav {
-    height: 35%;
+    height: 60%;
     width: 50%;
     display: flex;
     justify-content: space-around;
     align-items: center;
+    border-bottom: 1px solid #fff;
 }
 
 footer .areaInfos {
-    height: 65%;
+    height: 40%;
     display: flex;
-    gap: 50px;
-    color: #FFF;
+    justify-content: center;
+    align-items: center;
 }
 
 footer a {

@@ -27,9 +27,6 @@
             <img src="../assets/componentes/logo.png" style="max-height: 100%; width: 150px;" alt="Arteza logo">
 
             <div class="nav">
-                <h3>INICIO</h3>
-                <h3>EXPLORAR</h3>
-
                 <input type="text" placeholder="Pesquisar">
             </div>
 
@@ -121,7 +118,7 @@
                     console.log("Publicação realizado com sucesso! Redirecionando para tela de publicação...");
 
                     setTimeout(() => {
-                        window.location = "../feed/feed.html";
+                        history.back();
                     }, "2000");
 
                     limparFormulario();

@@ -26,7 +26,7 @@
             <img src="../assets/componentes/logo.png" style="max-height: 100%; width: 150px;" alt="Arteza logo">
 
             <div class="nav">
-                <input type="text" placeholder="Pesquisar">
+                <input type="text" placeholder="Pesquisar" id="input_pesquisa" oninput="pesquisar()">
             </div>
 
             <div class="perfil">
@@ -62,20 +62,7 @@
             <a href="">PERFIL</a>
         </div>
         <div class="areaInfos">
-            <div>
-                <p><b>São Paulo</b></p>
-                <p>R.Haddock Lobo, 595</p>
-                <p>Cerqueira César</p>
-                <p>CEP 01414-001</p>
-            </div>
-            <div>
-                <p><b>Contatos</b></p>
-                <p>moises.santos@sptech.school</p>
-                <p>moiseshxs</p>
-            </div>
-            <div>
-                <p><b>© 2024 Arteza</b></p>
-            </div>
+            <img src="../assets/componentes/logow.png" style="height: 30px; width: auto;" alt="Arteza logo">
         </div>
     </footer>
 </body>
@@ -268,7 +255,7 @@
 
     function perfil(idUsuario) {
         sessionStorage.ID_USUARIOPUBLICACAO = idUsuario;
-        
+
         var idUsuarioPublicacao = idUsuario;
         var idUsuarioLogado = sessionStorage.ID_USUARIO;
         var idUsuarioVar;
@@ -358,4 +345,38 @@
         return false;
     }
 
+    function pesquisar() {
+        var textoServer = input_pesquisa.value;
+
+        if (textoServer.length > 0) {
+            fetch(`/pesquisas/pesquisar/${textoServer}`)
+                .then(function (resposta) {
+                    if (resposta.ok) {
+                        if (resposta.status == 204) {
+                            // var listaComentario = document.getElementById("listaComentario_teste");
+                            // var mensagem = document.createElement("span");
+                            // mensagem.innerHTML = "Nenhum feedback."
+                            // listaComentario.appendChild(mensagem);
+                            // throw "Nenhum feedback!!";
+                        }
+
+                        resposta.json().then(function (resposta) {
+                            console.log("Dados recebidos: ", JSON.stringify(resposta));
+
+                            for (let i = 0; i < resposta.length; i++) {
+                                var pesquisa = resposta[i];
+                                // Adicione o que deseja fazer com cada 'pesquisa' aqui
+                            }
+
+                            finalizarAguardar();
+                        });
+                    } else {
+                        throw ('Houve um erro na API!');
+                    }
+                }).catch(function (resposta) {
+                    console.error(resposta);
+                    finalizarAguardar();
+                });
+        }
+    }
 </script>
