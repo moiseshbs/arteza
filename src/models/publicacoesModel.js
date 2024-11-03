@@ -12,9 +12,9 @@ function listar() {
             p.titulo, 
             u.idUsuario, 
             u.username,
-            COUNT(l.fkPublicacao) AS curtida,
-            COUNT(c.idComentario) AS comentario,
-            COUNT(v.idVisualizacao) AS visualizacao
+            COUNT(DISTINCT l.qtdCurtida) AS curtida,
+            COUNT(DISTINCT c.idComentario) AS comentario,
+            COUNT(DISTINCT v.idVisualizacao) AS visualizacao
         FROM publicacao AS p
             INNER JOIN usuario AS u 
                 ON p.fkUsuario = u.idUsuario
@@ -76,9 +76,9 @@ function listarPorUsuario(idUsuario) {
             u.email,
             u.senha,
             u.imgPerfil,
-            COUNT(l.fkPublicacao) AS curtida,
-            COUNT(c.idComentario) AS comentario,
-            COUNT(v.idVisualizacao) AS visualizacao
+            COUNT(DISTINCT l.qtdCurtida) AS curtida,
+            COUNT(DISTINCT c.idComentario) AS comentario,
+            COUNT(DISTINCT v.idVisualizacao) AS visualizacao
         FROM publicacao AS p
             INNER JOIN usuario AS u 
                 ON p.fkUsuario = u.idUsuario
@@ -118,9 +118,9 @@ function listarPorId(idPublicacao) {
             u.nome,
             u.username,
             u.imgPerfil,
-            COUNT(l.fkPublicacao) AS curtida,
-            COUNT(c.idComentario) AS comentario,
-            COUNT(v.idVisualizacao) AS visualizacao
+            COUNT(DISTINCT l.qtdCurtida) AS curtida,
+            COUNT(DISTINCT c.idComentario) AS comentario,
+            COUNT(DISTINCT v.idVisualizacao) AS visualizacao
         FROM publicacao AS p
             INNER JOIN usuario AS u 
                 ON p.fkUsuario = u.idUsuario
@@ -141,6 +141,23 @@ function listarPorId(idPublicacao) {
             u.idUsuario, 
             u.username,
             u.imgPerfil;
+    `;
+    console.log("Executando a instrução SQL: \n" + instrucaoSql);
+    return database.executar(instrucaoSql);
+}
+
+function listarComentario(idPublicacao) {
+    console.log("ACESSEI O AVISO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function listarComentario()");
+    var instrucaoSql = `
+        SELECT
+            c.comentario,
+            c.dtComentario,
+            u.username,
+            u.imgPerfil
+        FROM comentario AS c
+            JOIN usuario AS u
+                ON c.fkUsuario = u.idUsuario
+            WHERE c.fkPublicacao = '${idPublicacao}';
     `;
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
     return database.executar(instrucaoSql);
@@ -191,6 +208,15 @@ function descurtir(idPublicacao, idUsuario) {
     return database.executar(instrucaoSql);
 }
 
+function comentar(idPublicacao, idUsuario, comentario) {
+    console.log("ACESSEI O PUBLICACAO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function comentar(): ", idPublicacao, idUsuario, comentario);
+    var instrucaoSql = `
+        INSERT INTO comentario (fkPublicacao, fkUsuario, comentario) VALUES ('${idPublicacao}', '${idUsuario}', '${comentario}');
+    `;
+    console.log("Executando a instrução SQL: \n" + instrucaoSql);
+    return database.executar(instrucaoSql);
+}
+
 module.exports = {
     listar,
     listarPorUsuario,
@@ -200,5 +226,7 @@ module.exports = {
     editar,
     deletar,
     curtir,
-    descurtir
+    descurtir,
+    comentar,
+    listarComentario
 }

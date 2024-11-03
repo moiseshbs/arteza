@@ -19,11 +19,11 @@ section .areaImagem {
 }
 
 .login {
-    background-image: url('../assets/publicacao/3.jpg');
+    background-image: url('../assets/publicacao/exemplos/3.jpg');
 }
 
 .cadastro {
-    background-image: url('../assets/publicacao/5.jpg');
+    background-image: url('../assets/publicacao/exemplos/5.jpg');
 }
 
 section .areaForm {

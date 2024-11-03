@@ -39,10 +39,19 @@ router.delete("/deletar/:idPublicacao", function (req, res) {
 // rotas para curtida
 router.post("/curtir/:idPublicacao", function (req, res) {
     publicacaoController.curtir(req, res);
-})
+});
 
 router.delete("/descurtir/:idPublicacao", function (req, res) {
     publicacaoController.descurtir(req, res);
+});
+
+//rotas de comentario
+router.post("/comentar/:idPublicacao", function (req, res) {
+    publicacaoController.comentar(req, res);
 })
+
+router.get("/listarComentario/:idPublicacao", function (req, res) {
+    publicacaoController.listarComentario(req, res);
+});
 
 module.exports = router;

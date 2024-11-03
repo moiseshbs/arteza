@@ -23,6 +23,7 @@ CREATE TABLE publicacao (
 );
 
 CREATE TABLE curtida (
+    qtdCurtida INT AUTO_INCREMENT UNIQUE,
     fkPublicacao INT,
     fkUsuario INT,
     dtCurtida TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

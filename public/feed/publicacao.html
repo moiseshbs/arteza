@@ -20,7 +20,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
 
-<body onload="validarSessao(), atualizarFeed()">
+<body onload="validarSessao(), atualizarFeed(), atualizarComentario()">
     <header>
         <div class="container">
             <img src="../assets/componentes/logo.png" style="max-height: 100%; width: 150px;" alt="Arteza logo">
@@ -30,8 +30,17 @@
             </div>
 
             <div class="perfil">
-                <a href="login.html">
-                    <h3>LOGIN</h3>
+                <div class="criar">
+                    <a href="../perfil/criar.html">
+                        <i class="bi bi-plus-circle"></i>
+                        <h3>CRIAR</h3>
+                    </a>
+                </div>
+
+                <a id="header_imgPerfil">
+                    <div class="fotoPerfil">
+
+                    </div>
                 </a>
             </div>
         </div>
@@ -48,7 +57,7 @@
                     <h1 id="h1_titulo">R0-Z3</h1>
                 </div>
                 <div class="areaImgPublicacao" id="id_imgPublicacao">
-                    
+
                 </div>
             </div>
 
@@ -85,10 +94,11 @@
                 </div>
                 <div class="areaComentario">
                     <div class="inputComentario">
-                        <input type="text" placeholder="Dê um feedback!">
+                        <input type="text" id="input_comentario" placeholder="Dê um feedback!">
+                        <button onclick="comentar()">comentar</button>
                     </div>
                     <div class="scrollComentarios">
-
+                        <div id="listaComentario_teste"></div>
                     </div>
                 </div>
             </div>
@@ -115,18 +125,18 @@
                 resposta.json().then(function (resposta) {
                     console.log("Dados recebidos: ", JSON.stringify(resposta));
 
-                    for (let i = 0; i < resposta.length; i++) {
-                        var publicacao = resposta[i];
-                    }
+
+                    var publicacao = resposta[0];
 
                     user_nome.innerText = `${publicacao.username}`;
                     p_descricao.innerText = `${publicacao.descricao}`;
                     h1_titulo.innerText = `${publicacao.titulo}`;
 
                     span_like.innerText = `${publicacao.curtida}`;
+                    span_deslike.innerText = `${publicacao.curtida}`;
                     span_comentario.innerText = `${publicacao.comentario}`;
                     span_visualizacao.innerText = `${publicacao.visualizacao}`;
-                    
+
                     id_imgPublicacao.innerHTML = `
                     <img src="../assets/publicacao/${publicacao.imgPublicacao}" alt="Publicação">
                     `;
@@ -141,7 +151,82 @@
             finalizarAguardar();
         });
     }
-    
+
+    function atualizarComentario() {
+        fetch(`/publicacoes/listarComentario/${sessionStorage.ID_PUBLICACAO}`).then(function (resposta) {
+            if (resposta.ok) {
+                if (resposta.status == 204) {
+                    var listaComentario = document.getElementById("listaComentario_teste");
+                    var mensagem = document.createElement("span");
+                    mensagem.innerHTML = "Nenhum feedback."
+                    listaComentario.appendChild(mensagem);
+                    throw "Nenhum feedback!!";
+                }
+
+                resposta.json().then(function (resposta) {
+                    console.log("Dados recebidos: ", JSON.stringify(resposta));
+
+                    for (let i = 0; i < resposta.length; i++) {
+                        var comentario = resposta[i];
+
+                        listaComentario_teste.innerHTML += `
+                            <p>${comentario.comentario}</p>
+                        `;
+                    }
+
+                    finalizarAguardar();
+                });
+            } else {
+                throw ('Houve um erro na API!');
+            }
+        }).catch(function (resposta) {
+            console.error(resposta);
+            finalizarAguardar();
+        });
+    }
+
+    function comentar() {
+        // variaveis vindo do formulario de cadastro
+        var comentarioVar = input_comentario.value;
+
+        if (comentarioVar == "") {
+            finalizarAguardar();
+            return false;
+        } else {
+            setInterval(5000);
+        }
+
+        // enviando o valor da input
+        fetch(`/publicacoes/comentar/${sessionStorage.ID_PUBLICACAO}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                idUsuarioServer: sessionStorage.ID_USUARIO,
+                comentarioServer: comentarioVar
+            }),
+        })
+            .then(function (resposta) {
+                console.log("resposta: ", resposta);
+
+                if (resposta.ok) {
+                    console.log("Comentario realizado com sucesso!");
+
+                    limparFormulario();
+                    finalizarAguardar();
+                } else {
+                    throw "Houve um erro ao tentar comentar!";
+                }
+            })
+            .catch(function (resposta) {
+                console.log(`#ERRO: ${resposta}`);
+                finalizarAguardar();
+            });
+
+        return false;
+    }
+
     function curtir(idPublicacao) {
         var idUsuario = sessionStorage.ID_USUARIO;
 
@@ -168,6 +253,11 @@
                     spanLike.innerText = Number(spanLike.innerText) + 1;
                     spanDeslike.innerText = Number(spanLike.innerText);
                 } else {
+                    if (resposta.status == 500) {
+                        console.log("voce ja curtiu!")
+
+                        like();
+                    }
                     throw "Houve um erro ao tentar curtir a publicação!";
                 }
             })
@@ -201,7 +291,12 @@
 
                     var spanDeslike = document.getElementById(`span_deslike`);
                     var spanLike = document.getElementById(`span_like`);
-                    spanDeslike.innerText = Number(spanDeslike.innerText) - 1;
+                    var valorSpanDeslike = Number(spanDeslike.innerText);
+                    if (valorSpanDeslike <= 0) {
+                        spanDeslike.innerText = 0;
+                    } else {
+                        spanDeslike.innerText = valorSpanDeslike - 1;
+                    }
                     spanLike.innerText = Number(spanDeslike.innerText);
                 } else {
                     throw "Houve um erro ao tentar descurtir a publicação!";
