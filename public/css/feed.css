@@ -329,10 +329,17 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    gap: 10px;
 }
 
 .inputComentario input {
-    width: 90%;
+    width: 70%;
+    margin-left: 10px;
+}
+
+.inputComentario button {
+    width: 30%;
+    font-size: 18px;
 }
 
 .areaInfoComentarios .areaInfo {
@@ -372,4 +379,43 @@
     justify-content: space-around;
     align-items: center;
     font-size: 1.2rem;
+}
+
+.comentario {
+    height: fit-content;
+    width: 95%;
+    margin: auto;
+    border-bottom: solid 1px #0000005b;
+    display: flex;
+    padding: 15px 0;
+    justify-content: center;
+    align-items: center;
+}
+
+.comentario .areaFotoPerfil {
+    width: 20%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.areaFotoPerfil .fotoPerfil {
+    height: 40px;
+    width: 40px;
+    background-color: #5E4889;
+}
+
+
+.comentario .contComentario {
+    height: 100%;
+    width: 80%;
+}
+
+.contComentario h4, span {
+    margin-left: 10px;
+}
+
+.scrollComentarios {
+    overflow-y: auto;
+    height: 250px;
 }

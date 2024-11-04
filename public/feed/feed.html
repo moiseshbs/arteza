@@ -83,78 +83,78 @@
                     mensagem.innerHTML = "Nenhum resultado encontrado."
                     feed.appendChild(mensagem);
                     throw "Nenhum resultado encontrado!!";
-                }
+                } else {
+                    resposta.json().then(function (resposta) {
+                        // console.log("Dados recebidos: ", JSON.stringify(resposta));
 
-                resposta.json().then(function (resposta) {
-                    console.log("Dados recebidos: ", JSON.stringify(resposta));
+                        var feed = document.getElementById("feed_teste");
+                        feed.innerHTML = "";
 
-                    var feed = document.getElementById("feed_teste");
-                    feed.innerHTML = "";
+                        var aleatorio = 0;
+                        var estilo = ``;
 
-                    var aleatorio = 0;
-                    var estilo = ``;
+                        for (let i = 0; i < resposta.length; i++) {
+                            var publicacao = resposta[i];
 
-                    for (let i = 0; i < resposta.length; i++) {
-                        var publicacao = resposta[i];
+                            aleatorio = parseInt(Math.random() * 3 + 1);
 
-                        aleatorio = parseInt(Math.random() * 3 + 1);
+                            if (aleatorio == 1) {
+                                estilo = `card_small`;
+                            } else if (aleatorio == 2) {
+                                estilo = `card_medium`;
+                            } else {
+                                estilo = `card_large`;
+                            }
 
-                        if (aleatorio == 1) {
-                            estilo = `card_small`;
-                        } else if (aleatorio == 2) {
-                            estilo = `card_medium`;
-                        } else {
-                            estilo = `card_large`;
+                            feed_teste.innerHTML += `
+                                                <div class="card ${estilo}">
+                                                    <a class="click" onclick="publicacao(${publicacao.idPublicacao})">
+                                                        <img src="../assets/publicacao/${publicacao.imgPublicacao}" alt="Publicação">
+                                                    </a>
+                                                    <div class="info">
+                                                        <div class="options">
+                                                            <div>
+                                                                <div onclick="curtir(${publicacao.idPublicacao})" id="div_like_${publicacao.idPublicacao}" class="like">
+                                                                    <i class="bi bi-heart"></i>
+                                                                    <span id="span_like_${publicacao.idPublicacao}">${publicacao.curtida}</span>
+                                                                </div>
+                    
+                                                                <div onclick="descurtir(${publicacao.idPublicacao})" id="div_deslike_${publicacao.idPublicacao}" class="deslike">
+                                                                    <i class="bi bi-heart-fill curtida"></i>
+                                                                    <span id="span_deslike_${publicacao.idPublicacao}">${publicacao.curtida}</span>
+                                                                </div>
+                                                            </div>
+                    
+                                                            <div>
+                                                                <i class="bi bi-chat"></i>
+                                                                <span>${publicacao.comentario}</span>
+                                                            </div>
+                    
+                                                            <div>
+                                                                <i class="bi bi-eye"></i>
+                                                                <span>${publicacao.visualizacao}</span>
+                                                            </div>
+                                                        </div>
+                    
+                                                        <a onclick="perfil(${publicacao.idUsuario})">
+                                                            <div class="infoUser">
+                                                                <div class="areaFotoPerfil">
+                                                                    <img src="../assets/fotoPerfil/2.png" alt="">
+                                                                </div>
+                                                                <h2>${publicacao.username}</h2>
+                    
+                                                            </div>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            `;
                         }
 
-                        feed_teste.innerHTML += `
-                            <div class="card ${estilo}">
-                                <a class="click" onclick="publicacao(${publicacao.idPublicacao})">
-                                    <img src="../assets/publicacao/${publicacao.imgPublicacao}" alt="Publicação">
-                                </a>
-                                <div class="info">
-                                    <div class="options">
-                                        <div>
-                                            <div onclick="curtir(${publicacao.idPublicacao})" id="div_like_${publicacao.idPublicacao}" class="like">
-                                                <i class="bi bi-heart"></i>
-                                                <span id="span_like_${publicacao.idPublicacao}">${publicacao.curtida}</span>
-                                            </div>
+                        header_imgPerfil.setAttribute("onclick", `perfil(${sessionStorage.ID_USUARIO})`);
 
-                                            <div onclick="descurtir(${publicacao.idPublicacao})" id="div_deslike_${publicacao.idPublicacao}" class="deslike">
-                                                <i class="bi bi-heart-fill curtida"></i>
-                                                <span id="span_deslike_${publicacao.idPublicacao}">${publicacao.curtida}</span>
-                                            </div>
-                                        </div>
-
-                                        <div>
-                                            <i class="bi bi-chat"></i>
-                                            <span>${publicacao.comentario}</span>
-                                        </div>
-
-                                        <div>
-                                            <i class="bi bi-eye"></i>
-                                            <span>${publicacao.visualizacao}</span>
-                                        </div>
-                                    </div>
-
-                                    <a onclick="perfil(${publicacao.idUsuario})">
-                                        <div class="infoUser">
-                                            <div class="areaFotoPerfil">
-                                                <img src="../assets/fotoPerfil/2.png" alt="">
-                                            </div>
-                                            <h2>${publicacao.username}</h2>
-
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-                        `;
-                    }
-
-                    header_imgPerfil.setAttribute("onclick", `perfil(${sessionStorage.ID_USUARIO})`);
-
-                    finalizarAguardar();
-                });
+                        finalizarAguardar();
+                    });
+                }
             } else {
                 throw ('Houve um erro na API!');
             }

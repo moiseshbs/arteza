@@ -4,8 +4,8 @@ USE dbArteza;
 CREATE TABLE usuario (
 	idUsuario INT PRIMARY KEY AUTO_INCREMENT,
     nome VARCHAR(45),
-    username VARCHAR(20),
-    email VARCHAR(45),
+    username VARCHAR(20) UNIQUE,
+    email VARCHAR(45) UNIQUE,
     senha VARCHAR(45),
     imgPerfil VARCHAR(255),
     dtCadastro TIMESTAMP DEFAULT CURRENT_TIMESTAMP

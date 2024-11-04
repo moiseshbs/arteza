@@ -97,8 +97,8 @@
                         <input type="text" id="input_comentario" placeholder="Dê um feedback!">
                         <button onclick="comentar()">comentar</button>
                     </div>
-                    <div class="scrollComentarios">
-                        <div id="listaComentario_teste"></div>
+                    <div class="scrollComentarios" id="listaComentario_teste">
+
                     </div>
                 </div>
             </div>
@@ -120,29 +120,29 @@
                     mensagem.innerHTML = "Nenhum resultado encontrado."
                     feed.appendChild(mensagem);
                     throw "Nenhum resultado encontrado!!";
+                } else {
+                    resposta.json().then(function (resposta) {
+                        // console.log("Dados recebidos: ", JSON.stringify(resposta));
+    
+    
+                        var publicacao = resposta[0];
+    
+                        user_nome.innerText = `${publicacao.username}`;
+                        p_descricao.innerText = `${publicacao.descricao}`;
+                        h1_titulo.innerText = `${publicacao.titulo}`;
+    
+                        span_like.innerText = `${publicacao.curtida}`;
+                        span_deslike.innerText = `${publicacao.curtida}`;
+                        span_comentario.innerText = `${publicacao.comentario}`;
+                        span_visualizacao.innerText = `${publicacao.visualizacao}`;
+    
+                        id_imgPublicacao.innerHTML = `
+                        <img src="../assets/publicacao/${publicacao.imgPublicacao}" alt="Publicação">
+                        `;
+    
+                        finalizarAguardar();
+                    });
                 }
-
-                resposta.json().then(function (resposta) {
-                    console.log("Dados recebidos: ", JSON.stringify(resposta));
-
-
-                    var publicacao = resposta[0];
-
-                    user_nome.innerText = `${publicacao.username}`;
-                    p_descricao.innerText = `${publicacao.descricao}`;
-                    h1_titulo.innerText = `${publicacao.titulo}`;
-
-                    span_like.innerText = `${publicacao.curtida}`;
-                    span_deslike.innerText = `${publicacao.curtida}`;
-                    span_comentario.innerText = `${publicacao.comentario}`;
-                    span_visualizacao.innerText = `${publicacao.visualizacao}`;
-
-                    id_imgPublicacao.innerHTML = `
-                    <img src="../assets/publicacao/${publicacao.imgPublicacao}" alt="Publicação">
-                    `;
-
-                    finalizarAguardar();
-                });
             } else {
                 throw ('Houve um erro na API!');
             }
@@ -157,25 +157,35 @@
             if (resposta.ok) {
                 if (resposta.status == 204) {
                     var listaComentario = document.getElementById("listaComentario_teste");
-                    var mensagem = document.createElement("span");
-                    mensagem.innerHTML = "Nenhum feedback."
+                    var mensagem = document.createElement("div");
+                    mensagem.innerHTML = `
+                        <div class="comentario">
+                            <span>Seja o primeiro a comentar...</span>
+                        </div>`
                     listaComentario.appendChild(mensagem);
-                    throw "Nenhum feedback!!";
+                } else {
+                    resposta.json().then(function (resposta) {
+                        // console.log("Dados recebidos: ", JSON.stringify(resposta));
+    
+                        for (let i = 0; i < resposta.length; i++) {
+                            var comentario = resposta[i];
+    
+                            listaComentario_teste.innerHTML += `
+                                <div class="comentario">
+                                    <div class="areaFotoPerfil">
+                                        <div class="fotoPerfil"></div>
+                                    </div>
+                                    <div class="contComentario">
+                                        <h4>${comentario.username}</h4>
+                                        <span>${comentario.comentario}</span>
+                                    </div>
+                                </div>
+                            `;
+                        }
+    
+                        finalizarAguardar();
+                    });
                 }
-
-                resposta.json().then(function (resposta) {
-                    console.log("Dados recebidos: ", JSON.stringify(resposta));
-
-                    for (let i = 0; i < resposta.length; i++) {
-                        var comentario = resposta[i];
-
-                        listaComentario_teste.innerHTML += `
-                            <p>${comentario.comentario}</p>
-                        `;
-                    }
-
-                    finalizarAguardar();
-                });
             } else {
                 throw ('Houve um erro na API!');
             }
@@ -213,6 +223,9 @@
                 if (resposta.ok) {
                     console.log("Comentario realizado com sucesso!");
 
+                    listaComentario_teste.innerHTML = "";
+
+                    atualizarComentario();
                     limparFormulario();
                     finalizarAguardar();
                 } else {

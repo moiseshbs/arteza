@@ -157,7 +157,8 @@ function listarComentario(idPublicacao) {
         FROM comentario AS c
             JOIN usuario AS u
                 ON c.fkUsuario = u.idUsuario
-            WHERE c.fkPublicacao = '${idPublicacao}';
+            WHERE c.fkPublicacao = '${idPublicacao}'
+            ORDER BY dtComentario DESC;
     `;
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
     return database.executar(instrucaoSql);
