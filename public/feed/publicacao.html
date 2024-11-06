@@ -20,7 +20,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
 
-<body onload="validarSessao(), atualizarFeed(), atualizarComentario()">
+<body onload="validarSessao(), listarCurtida(), atualizarFeed(), atualizarComentario()">
     <header>
         <div class="container">
             <img src="../assets/componentes/logo.png" style="max-height: 100%; width: 150px;" alt="Arteza logo">
@@ -94,7 +94,7 @@
                 </div>
                 <div class="areaComentario">
                     <div class="inputComentario">
-                        <input type="text" id="input_comentario" placeholder="Dê um feedback!">
+                        <input type="text" id="input_comentario" placeholder="Dê um feedback!" maxlength="45">
                         <button onclick="comentar()">comentar</button>
                     </div>
                     <div class="scrollComentarios" id="listaComentario_teste">
@@ -111,6 +111,43 @@
 <script src="../js/publicacao.js"></script>
 
 <script>
+    var curtiu = [];
+
+    function listarCurtida() {
+        var idUsuario = sessionStorage.ID_USUARIO;
+
+        fetch(`/publicacoes/listarCurtida/${idUsuario}`).then(function (resposta) {
+            if (resposta.ok) {
+                if (resposta.status == 204) {
+                    // var listaComentario = document.getElementById("listaComentario_teste");
+                    // var mensagem = document.createElement("div");
+                    // mensagem.innerHTML = `
+                    // <div class="comentario">
+                    //     <span>Seja o primeiro a comentar...</span>
+                    // </div>`
+                    // listaComentario.appendChild(mensagem);
+                } else {
+                    resposta.json().then(function (resposta) {
+                        console.log("Dados recebidos: ", JSON.stringify(resposta));
+
+                        for (let i = 0; i < resposta.length; i++) {
+                            var curtida = resposta[i];
+
+                            curtiu.push(curtida.fkPublicacao);
+                        }
+
+                        finalizarAguardar();
+                    });
+                }
+            } else {
+                throw ('Houve um erro na API!');
+            }
+        }).catch(function (resposta) {
+            console.error(resposta);
+            finalizarAguardar();
+        });
+    }
+
     function atualizarFeed() {
         fetch(`/publicacoes/listarID/${sessionStorage.ID_PUBLICACAO}`).then(function (resposta) {
             if (resposta.ok) {
@@ -123,23 +160,33 @@
                 } else {
                     resposta.json().then(function (resposta) {
                         // console.log("Dados recebidos: ", JSON.stringify(resposta));
-    
-    
+
+                        var botao = ``;
                         var publicacao = resposta[0];
-    
+
+                        var inclui = curtiu.includes(publicacao.idPublicacao);
+
+                        if (inclui) {
+                            div_like.style.display = 'none';
+                            div_deslike.style.display = 'block';
+                        } else {
+                            div_like.style.display = 'block';
+                            div_deslike.style.display = 'none';
+                        }
+
                         user_nome.innerText = `${publicacao.username}`;
                         p_descricao.innerText = `${publicacao.descricao}`;
                         h1_titulo.innerText = `${publicacao.titulo}`;
-    
+
                         span_like.innerText = `${publicacao.curtida}`;
                         span_deslike.innerText = `${publicacao.curtida}`;
                         span_comentario.innerText = `${publicacao.comentario}`;
                         span_visualizacao.innerText = `${publicacao.visualizacao}`;
-    
+
                         id_imgPublicacao.innerHTML = `
-                        <img src="../assets/publicacao/${publicacao.imgPublicacao}" alt="Publicação">
+                            <img src="../assets/publicacao/${publicacao.imgPublicacao}" alt="Publicação">
                         `;
-    
+
                         finalizarAguardar();
                     });
                 }
@@ -166,10 +213,10 @@
                 } else {
                     resposta.json().then(function (resposta) {
                         // console.log("Dados recebidos: ", JSON.stringify(resposta));
-    
+
                         for (let i = 0; i < resposta.length; i++) {
                             var comentario = resposta[i];
-    
+
                             listaComentario_teste.innerHTML += `
                                 <div class="comentario">
                                     <div class="areaFotoPerfil">
@@ -182,7 +229,7 @@
                                 </div>
                             `;
                         }
-    
+
                         finalizarAguardar();
                     });
                 }
@@ -224,7 +271,7 @@
                     console.log("Comentario realizado com sucesso!");
 
                     listaComentario_teste.innerHTML = "";
-
+                    input_comentario.value = "";
                     atualizarComentario();
                     limparFormulario();
                     finalizarAguardar();
@@ -261,10 +308,6 @@
 
                     like(idPublicacao);
 
-                    var spanDeslike = document.getElementById(`span_deslike`);
-                    var spanLike = document.getElementById(`span_like`);
-                    spanLike.innerText = Number(spanLike.innerText) + 1;
-                    spanDeslike.innerText = Number(spanLike.innerText);
                 } else {
                     if (resposta.status == 500) {
                         console.log("voce ja curtiu!")
@@ -302,15 +345,6 @@
 
                     deslike(idPublicacao);
 
-                    var spanDeslike = document.getElementById(`span_deslike`);
-                    var spanLike = document.getElementById(`span_like`);
-                    var valorSpanDeslike = Number(spanDeslike.innerText);
-                    if (valorSpanDeslike <= 0) {
-                        spanDeslike.innerText = 0;
-                    } else {
-                        spanDeslike.innerText = valorSpanDeslike - 1;
-                    }
-                    spanLike.innerText = Number(spanDeslike.innerText);
                 } else {
                     throw "Houve um erro ao tentar descurtir a publicação!";
                 }
@@ -323,20 +357,22 @@
     }
 
     function like(idPublicacao) {
-        var divLike = document.getElementById(`div_like`);
-        var divDeslike = document.getElementById(`div_deslike`);
+        var spanDeslike = document.getElementById(`span_deslike`);
+        var spanLike = document.getElementById(`span_like`);
+        div_like.style.display = 'none';
+        div_deslike.style.display = 'block';
 
-        divLike.style.display = 'none';
-        divDeslike.style.display = 'block';
+        spanLike.innerText = Number(spanLike.innerText) + 1;
+        spanDeslike.innerText = Number(spanLike.innerText);
     }
 
     function deslike(idPublicacao) {
-        var divLike = document.getElementById(`div_like`);
-        var divDeslike = document.getElementById(`div_deslike`);
+        var spanDeslike = document.getElementById(`span_deslike`);
+        var spanLike = document.getElementById(`span_like`);
+        div_like.style.display = 'block';
+        div_deslike.style.display = 'none';
 
-        divLike.style.display = 'block';
-        divDeslike.style.display = 'none';
+        spanDeslike.innerText = Number(spanDeslike.innerText) - 1;
+        spanLike.innerText = Number(spanDeslike.innerText);
     }
-
-
 </script>

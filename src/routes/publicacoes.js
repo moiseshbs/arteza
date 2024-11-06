@@ -16,6 +16,11 @@ router.get("/listarID/:idPublicacao", function (req, res) {
     publicacaoController.listarPorId(req, res);
 });
 
+router.get("/listarCurtida/:idUsuario", function (req, res) {
+    publicacaoController.listarCurtida(req, res);
+});
+
+
 router.get("/pesquisar/:descricao", function (req, res) {
     publicacaoController.pesquisarDescricao(req, res);
 });
