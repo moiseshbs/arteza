@@ -88,6 +88,7 @@ section .areaConteudo {
     display: flex;
     justify-content: center;
     align-items: center;
+    position: relative;
 }
 
 .areaImagem input[type="file"] {
@@ -102,6 +103,7 @@ section .areaConteudo {
     align-items: center;
     flex-direction: column;
     cursor: pointer;
+    z-index: 1;
 }
 
 .custom-file-upload i {
@@ -135,4 +137,5 @@ section .areaConteudo {
     height: 100%;
     border-radius: 10px;
     object-fit: contain;
+    position: absolute;
 }

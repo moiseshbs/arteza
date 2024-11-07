@@ -28,7 +28,8 @@ foto.addEventListener('change', function() {
         reader.onload = function(event) {
             preview.src = event.target.result; // Define o src da imagem para a prévia
             preview.style.display = 'block'; // Mostra a imagem
-            btnEscolherImg.style.display = 'none';
+            // btnEscolherImg.style.display = 'none';
+            btnEscolherImg.innerHTML = '';
         };
         reader.readAsDataURL(file); // Lê o arquivo como URL de dados
     } else {
