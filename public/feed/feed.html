@@ -27,6 +27,9 @@
 
             <div class="nav">
                 <input type="text" placeholder="Pesquisar" id="input_pesquisa" oninput="pesquisar()">
+                <div class="barra" id="div_barra">
+
+                </div>
             </div>
 
             <div class="perfil">
@@ -248,7 +251,7 @@
                     console.log("Curtida realizada com sucesso pelo usuario" + sessionStorage.getItem("USERNAME_USUARIO"));
 
                     like(idPublicacao);
-                    
+
                 } else {
                     throw "Houve um erro ao tentar curtir a publicação!";
                 }
@@ -422,19 +425,28 @@
                             // mensagem.innerHTML = "Nenhum feedback."
                             // listaComentario.appendChild(mensagem);
                             // throw "Nenhum feedback!!";
+                            div_barra.innerHTML = ``;
                         }
 
                         resposta.json().then(function (resposta) {
                             console.log("Dados recebidos: ", JSON.stringify(resposta));
+                            
+                            div_barra.innerHTML = "";
 
                             for (let i = 0; i < resposta.length; i++) {
                                 var pesquisa = resposta[i];
-                                // Adicione o que deseja fazer com cada 'pesquisa' aqui
+
+                                div_barra.innerHTML = `
+                                    <p>Usuários: ${pesquisa.username}</p>
+                                    <p>Titulos: ${pesquisa.titulo}</p>
+                                    <p>Descrições: ${pesquisa.descricao}</p>
+                                `;
                             }
 
                             finalizarAguardar();
                         });
                     } else {
+                        div_barra.innerHTML = "";
                         throw ('Houve um erro na API!');
                     }
                 }).catch(function (resposta) {

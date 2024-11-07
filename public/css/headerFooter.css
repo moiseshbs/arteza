@@ -64,8 +64,27 @@ header .container .fotoPerfil {
     background-color: blue;
 }
 
+.barra {
+    position: absolute;
+    z-index: 10;
+    top: 70px;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    border-radius: 15px;
+    background-color: #FFF;
+
+} 
+
+.barra p {
+    border-bottom: 1px solid #0000006b;
+}
+
 header .container .nav {
     gap: 50px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
 }
 
 header a {
