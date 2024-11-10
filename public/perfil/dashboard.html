@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,7 +17,8 @@
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
-<body>
+
+<body onload="obterDadosGrafico(), curtida()">
     <header style="background: none;">
         <div class="container">
             <img src="../assets/componentes/logow.png" style="max-height: 100%; width: 150px;" alt="Arteza logo">
@@ -35,7 +37,7 @@
 
                 <a href="meuPerfil.html">
                     <div class="fotoPerfil">
-                    
+
                     </div>
                 </a>
             </div>
@@ -46,44 +48,296 @@
         <div class="gambiarra"></div>
         <section class="areaPublicacao">
             <div class="container">
-                <div class="areaCabecalho">
-                    <h1>Modo criador</h1>
+                <div class="areaCabecalho" id="infoCards">
+
                 </div>
 
                 <div class="areaConteudo">
-                    <div class="container">
-                        <canvas id="myChart"></canvas>
+                    <div class="areaBtn">
+                        <button onclick="curtida()" id="btnCurt">Curtidas</button>
+                        <button onclick="comentario()" id="btnCome">Comentarios</button>
+                        <button onclick="visualizacao()" id="btnVisu">Visualizações</button>
+                    </div>
+                    <div class="grafico">
+                        <canvas id="chartCurtida"></canvas>
+                        <canvas id="chartComentario"></canvas>
+                        <canvas id="chartVisualizacao"></canvas>
                     </div>
                 </div>
             </div>
     </main>
 
 </body>
+
 </html>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
-    const ctx = document.getElementById('myChart');
-  
-    new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Outubro', 'Novembro', 'Dezembro'],
-        datasets: [{
-          label: 'Mensal',
-          data: [12, 19, 3, 5, 2, 3, 12, 19, 3, 5],
-          borderWidth: 1,
-          borderRadius: 20,
-        }]
-      },
-      options: {
-        scales: {
-          y: {
-            label: 'Num',
-            beginAtZero: true
-          }
+    let proximaAtualizacao;
+
+    function obterDadosGrafico() {
+        var idUsuario = sessionStorage.ID_USUARIO;
+
+        if (proximaAtualizacao != undefined) {
+            clearTimeout(proximaAtualizacao);
         }
-      }
-    });
-  </script>
+
+        fetch(`/dados/ultimas/${idUsuario}`, { cache: 'no-store' }).then(function (response) {
+            if (response.ok) {
+                response.json().then(function (resposta) {
+                    console.log(`Dados recebidos: ${JSON.stringify(resposta)}`);
+                    resposta.reverse();
+
+                    var dados = resposta[0];
+
+                    infoCards.innerHTML = `
+                            <div class="card">
+                                <h3>Publicações</h3>
+                                <h1>${dados.publicacao}</h1>
+                            </div>
+
+                            <div class="card">
+                                <h3>Curtidas</h3>
+                                <h1>${dados.curtida}</h1>
+                            </div>
+
+                            <div class="card">
+                                <h3>Comentarios</h3>
+                                <h1>${dados.comentario}</h1>
+                            </div>
+
+                            <div class="card">
+                                <h3>Visualizações</h3>
+                                <h1>${dados.visualizacao}</h1>
+                            </div>
+                        `;
+
+                    plotarGrafico(resposta, idUsuario);
+                });
+            } else {
+                console.error('Nenhum dado encontrado ou erro na API');
+            }
+        })
+            .catch(function (error) {
+                console.error(`Erro na obtenção dos dados p/ gráfico: ${error.message}`);
+            });
+    }
+
+    function plotarGrafico(resposta, idUsuario) {
+        console.log('iniciando plotagem do gráfico...');
+
+        // Criando estrutura para plotar gráfico - labels
+        let labelsCurtida = [];
+        let labelsComentario = [];
+        let labelsVisualizacao = [];
+
+        // Criando estrutura para plotar gráfico - dados
+        let dados = {
+            labels: labelsCurtida,
+            datasets: [{
+                label: 'Curtida',
+                data: [],
+                fill: false,
+                borderColor: '#5E4889',
+                backgroundColor: '#5E4889'
+            }]
+        };
+
+        let dadosComentario = {
+            labels: labelsComentario,
+            datasets: [{
+                label: 'Comentario',
+                data: [],
+                fill: false,
+                borderColor: '#5E4889',
+                backgroundColor: '#5E4889'
+            }]
+        };
+
+        let dadosVisualizacao = {
+            labels: labelsVisualizacao,
+            datasets: [{
+                label: 'Visualizacao',
+                data: [],
+                fill: false,
+                borderColor: '#5E4889',
+                backgroundColor: '#5E4889'
+            }]
+        };
+
+        console.log('----------------------------------------------')
+        console.log('Estes dados foram recebidos pela funcao "obterDadosGrafico" e passados para "plotarGrafico":')
+        console.log(resposta)
+
+        // Inserindo valores recebidos em estrutura para plotar o gráfico
+        for (i = 0; i < resposta.length; i++) {
+            var registro = resposta[i];
+            labelsCurtida.push(registro.curtida);
+            dados.datasets[0].data.push(registro.curtida);
+
+            labelsComentario.push(registro.comentario);
+            dadosComentario.datasets[0].data.push(registro.comentario);
+
+            labelsVisualizacao.push(registro.visualizacao);
+            dadosVisualizacao.datasets[0].data.push(registro.visualizacao);
+        }
+
+        console.log('----------------------------------------------')
+        console.log('O gráfico será plotado com os respectivos valores:')
+        console.log('Labels:')
+        console.log(labelsCurtida)
+        console.log('Dados:')
+        console.log(dados.datasets)
+        console.log('----------------------------------------------')
+
+        // Criando estrutura para plotar gráfico - config
+        const configCurtida = {
+            type: 'bar',
+            data: dados,
+        };
+
+        const configComentario = {
+            type: 'bar',
+            data: dadosComentario,
+        };
+
+        const configVisualizacao = {
+            type: 'bar',
+            data: dadosVisualizacao,
+        };
+
+        // Adicionando gráfico criado em div na tela
+        let myChartCurtida = new Chart(
+            document.getElementById(`chartCurtida`),
+            configCurtida
+        );
+
+        let myChartComentario = new Chart(
+            document.getElementById(`chartComentario`),
+            configComentario
+        );
+
+        let myChartVisualizacao = new Chart(
+            document.getElementById(`chartVisualizacao`),
+            configVisualizacao
+        );
+
+        // Destroi gráficos existentes, se houver
+        if (myChartCurtida) myChartCurtida.destroy();
+        if (myChartComentario) myChartComentario.destroy();
+        if (myChartVisualizacao) myChartVisualizacao.destroy();
+
+        // Cria novos gráficos
+        myChartCurtida = new Chart(
+            document.getElementById('chartCurtida'),
+            configCurtida
+        );
+
+        myChartComentario = new Chart(
+            document.getElementById('chartComentario'),
+            configComentario
+        );
+
+        myChartVisualizacao = new Chart(
+            document.getElementById('chartVisualizacao'),
+            configVisualizacao
+        );
+
+        setTimeout(() => atualizarGrafico(idUsuario, dados, dadosComentario, dadosVisualizacao, myChartCurtida, myChartComentario, myChartVisualizacao), 2000);
+    }
+
+    function atualizarGrafico(idUsuario, dados, dadosComentario, dadosVisualizacao, myChartCurtida, myChartComentario, myChartVisualizacao) {
+        fetch(`/dados/tempo-real/${idUsuario}`, { cache: 'no-store' }).then(function (response) {
+            if (response.ok) {
+                response.json().then(function (novoRegistro) {
+
+                    obterDadosGrafico(idUsuario);
+
+                    console.log(`Dados recebidos: ${JSON.stringify(novoRegistro)}`);
+                    console.log(`Dados atuais do gráfico:`);
+                    console.log(dados);
+
+                    // let avisoCaptura = document.getElementById(`avisoCaptura${idUsuario}`)
+                    // avisoCaptura.innerHTML = ""
+
+
+                    if (novoRegistro[0].curtida == dados.labels[dados.labels.length - 1]) {
+                        // console.log("---------------------------------------------------------------")
+                        // console.log("Como não há dados novos para captura, o gráfico não atualizará.")
+                        // // avisoCaptura.innerHTML = "<i class='fa-solid fa-triangle-exclamation'></i> Foi trazido o dado mais atual capturado pelo sensor. <br> Como não há dados novos a exibir, o gráfico não atualizará."
+                        // console.log("Horário do novo dado capturado:")
+                        // console.log(novoRegistro[0].curtida)
+                        // console.log("Horário do último dado capturado:")
+                        // console.log(dados.labelsCurtida[dados.labelsCurtida.length - 1])
+                        // console.log("---------------------------------------------------------------")
+                    } else {
+                        // tirando e colocando valores no gráfico
+                        dados.labelsCurtida.shift();
+                        dados.labelsCurtida.push(novoRegistro[0].curtida);
+
+                        dadosComentario.labelsComentario.shift();
+                        dadosComentario.labelsComentario.push(novoRegistro[0].comentario);
+
+                        dadosVisualizacao.labelsVisualizacao.shift();
+                        dadosVisualizacao.labelsVisualizacao.push(novoRegistro[0].visualizacao);
+
+                        dados.datasets[0].data.shift();
+                        dados.datasets[0].data.push(novoRegistro[0].curtida);
+
+                        dadosComentario.datasets[0].dataComentario.shift();
+                        dadosComentario.datasets[0].dataComentario.push(novoRegistro[0].comentario);
+
+                        dadosVisualizacao.datasets[0].dataVisualizacao.shift();
+                        dadosVisualizacao.datasets[0].dataVisualizacao.push(novoRegistro[0].visualizacao);
+
+                        myChartCurtida.update();
+                        myChartComentario.update();
+                        myChartVisualizacao.update();
+                    }
+
+                    // Altere aqui o valor em ms se quiser que o gráfico atualize mais rápido ou mais devagar
+                    proximaAtualizacao = setTimeout(() => atualizarGrafico(idUsuario, dados, dadosComentario, dadosVisualizacao, myChartCurtida, myChartComentario, myChartVisualizacao), 2000);
+                });
+            } else {
+                console.error('Nenhum dado encontrado ou erro na API');
+                // Altere aqui o valor em ms se quiser que o gráfico atualize mais rápido ou mais devagar
+                proximaAtualizacao = setTimeout(() => atualizarGrafico(idUsuario, dados, dadosComentario, dadosVisualizacao, myChartCurtida, myChartComentario, myChartVisualizacao), 2000);
+            }
+        })
+            .catch(function (error) {
+                console.error(`Erro na obtenção dos dados p/ gráfico: ${error.message}`);
+            });
+
+    }
+
+    function curtida() {
+        chartCurtida.style.display = 'block';
+        chartComentario.style.display = 'none';
+        chartVisualizacao.style.display = 'none';
+
+        btnCurt.style.backgroundColor = '#5E4889';
+        btnCome.style.backgroundColor = '#211F22';
+        btnVisu.style.backgroundColor = '#211F22';
+    }
+
+    function visualizacao() {
+        chartCurtida.style.display = 'none';
+        chartComentario.style.display = 'none';
+        chartVisualizacao.style.display = 'block';
+
+        btnCurt.style.backgroundColor = '#211F22';
+        btnCome.style.backgroundColor = '#211F22';
+        btnVisu.style.backgroundColor = '#5E4889';
+    }
+
+    function comentario() {
+        chartCurtida.style.display = 'none';
+        chartComentario.style.display = 'block';
+        chartVisualizacao.style.display = 'none';
+
+        btnCurt.style.backgroundColor = '#211F22';
+        btnCome.style.backgroundColor = '#5E4889';
+        btnVisu.style.backgroundColor = '#211F22';
+    }
+</script>
