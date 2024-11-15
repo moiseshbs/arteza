@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,10 +16,12 @@
         href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
         rel="stylesheet">
 </head>
-<body>
+
+<body onload="validarSession()">
     <section>
         <div class="areaImagem login">
-            <img src="../assets/componentes/logow.png" style="max-height: 100%; width: 150px; margin: 25px;" alt="Arteza logo">
+            <img src="../assets/componentes/logow.png" style="max-height: 100%; width: 150px; margin: 25px;"
+                alt="Arteza logo">
         </div>
         <div class="areaForm">
             <div class="formulario">
@@ -28,7 +31,7 @@
                     <p>Username</p>
                     <input type="text" id="input_username">
                 </div>
-                     
+
                 <div>
                     <div class="esqueceuSenha">
                         <p>Senha</p>
@@ -36,27 +39,38 @@
                     </div>
                     <input type="password" id="input_senha">
                 </div>
-        
-                <button onclick="entrar()">Login</button>
-    
+
+                <button onclick="entrar()" id="btnAvancar">Login</button>
+
                 <span>Não possui uma conta? <a href="cadastro.html"><b>Cadastrar</b></a></span>
             </div>
         </div>
     </section>
 </body>
+
 </html>
 
 <script>
+    function validarSession() {
+        if (sessionStorage.USERNAME_USUARIO != '') {
+            input_username.value = sessionStorage.USERNAME_USUARIO
+        }
+    }
+
     function entrar() {
         var usernameVar = input_username.value;
         var senhaVar = input_senha.value;
 
+        // bordas de erro e acerto no input
+        var bordaVerde = 'solid 1px green';
+        var bordaVermelha = 'solid 1px red';
+
         if (usernameVar == "" || senhaVar == "") {
+            input_username.style.border = bordaVermelha;
+            input_senha.style.border = bordaVermelha;
+
             finalizarAguardar();
             return false;
-        }
-        else {
-            setInterval(5000)
         }
 
         console.log("FORM LOGIN: ", usernameVar);
@@ -74,10 +88,18 @@
         }).then(function (resposta) {
             console.log("ESTOU NO THEN DO entrar()!")
 
+            btnAvancar.innerHTML = 'Login';
+            input_username.style.border = bordaVermelha;
+            input_senha.style.border = bordaVermelha;
+
             if (resposta.ok) {
                 console.log(resposta);
-                
+
                 resposta.json().then(json => {
+                    input_username.style.border = bordaVerde;
+                    input_senha.style.border = bordaVerde;
+                    btnAvancar.innerHTML = '<img src="assets/componentes/loading.gif" height="70%">'
+
                     console.log(json);
                     console.log(JSON.stringify(json));
                     sessionStorage.ID_USUARIO = json.idUsuario;
@@ -91,7 +113,11 @@
 
                 });
 
+
             } else {
+                input_username.style.border = bordaVermelha;
+                input_senha.style.border = bordaVermelha;
+
                 console.log("Houve um erro ao tentar realizar o login!");
 
                 resposta.text().then(texto => {

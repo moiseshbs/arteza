@@ -83,6 +83,9 @@ section .areaForm {
     border-right: solid 1px #000;
     border-left: solid 1px #000;
     cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .formulario .doisInputs {

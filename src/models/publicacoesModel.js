@@ -177,13 +177,37 @@ function listarCurtida(idUsuario) {
     return database.executar(instrucaoSql);
 }
 
-
-function publicar(idUsuario, descricao, titulo, imagem) {
+// função async para ao mesmo tempo cadastrar tags
+async function publicar(idUsuario, descricao, titulo, imagem, lista_tags) {
     console.log("ACESSEI O PUBLICACAO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function publicar(): ", idUsuario, descricao, titulo, imagem);
+    
     var instrucaoSql = `
         INSERT INTO publicacao (fkUsuario, descricao, titulo, imgPublicacao) VALUES ('${idUsuario}', '${descricao}', '${titulo}', '${imagem}');
     `;
+
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
+    
+    resultadoQuery = await database.executar(instrucaoSql);
+
+    var resultadoCadastroTag = await cadastrarTags(resultadoQuery.insertId, lista_tags);
+    return resultadoQuery, resultadoCadastroTag;
+}
+
+async function cadastrarTags(idPublicacao, lista_tags) {
+    var mensagem = "INSERT INTO tag_publicacao (fkTag, fkPublicacao) VALUES";
+
+    for (var i = 0; i < lista_tags.length; i++) {
+        mensagem += `('${lista_tags[i]}', '${idPublicacao}')`;
+
+        if (i < lista_tags.length - 1) {
+            mensagem += ",";
+        }
+    }
+
+    var instrucaoSql = `
+        ${mensagem};
+    `;
+
     return database.executar(instrucaoSql);
 }
 
@@ -241,6 +265,8 @@ function visualizar(idPublicacao, idUsuario) {
     return database.executar(instrucaoSql);
 }
 
+
+
 module.exports = {
     listar,
     listarPorUsuario,
@@ -254,5 +280,6 @@ module.exports = {
     comentar,
     listarComentario,
     visualizar,
-    listarCurtida
+    listarCurtida,
+    cadastrarTags
 }

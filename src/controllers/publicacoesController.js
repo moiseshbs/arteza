@@ -107,6 +107,7 @@ function publicar(req, res) {
     var idUsuario = req.params.idUsuario;
     var descricao = req.body.descricao;
     var titulo = req.body.titulo;
+    var lista_tags = JSON.parse(req.body.lista); // transforma a lista de string json para vetor novamente
 
     if (titulo == undefined) {
         res.status(400).send("O título está indefinido!");
@@ -115,7 +116,7 @@ function publicar(req, res) {
     } else if (idUsuario == undefined) {
         res.status(403).send("O id do usuário está indefinido!");
     } else {
-        publicacaoModel.publicar(idUsuario, descricao, titulo, imagem)
+        publicacaoModel.publicar(idUsuario, descricao, titulo, imagem, lista_tags)
             .then(
                 function (resultado) {
                     res.json(resultado);
@@ -277,7 +278,6 @@ function visualizar(req, res) {
             }
         );
 }
-
 
 module.exports = {
     listar,

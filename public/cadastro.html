@@ -49,7 +49,7 @@
                     <input type="password" id="input_senha">
                 </div>
 
-                <button onclick="cadastrar()">Criar conta</button>
+                <button onclick="cadastrar()" id="btnAvancar">Criar conta</button>
 
                 <span>Já possui uma conta? <a href="login.html"><b>Entrar</b></a></span>
             </div>
@@ -81,17 +81,36 @@
         var tamUsername = usernameVar.length;
         var tamSenha = senhaVar.length;
 
+        if (nomeVar == '') {
+            input_nome.style.border = bordaVermelha;
+        } else {
+            input_nome.style.border = bordaVerde;
+        }
+
+        if (emailVar == ''){
+            input_email.style.border = bordaVermelha;
+        } else {
+            input_email.style.border = bordaVerde;
+        }
+
+        if (senhaVar == '') {
+            input_senha.style.border = bordaVermelha;
+        } else {
+            input_senha.style.border = bordaVerde;
+        }
+
+        if (usernameVar == '') {
+            input_username.style.border = bordaVermelha;
+        } else {
+            input_username.style.border = bordaVerde;
+        }
+
         if (
             nomeVar == "" ||
             emailVar == "" ||
             usernameVar == "" ||
             senhaVar == ""
         ) {
-            input_email.style.border = bordaVermelha;
-            input_nome.style.border = bordaVermelha;
-            input_username.style.border = bordaVermelha;
-            input_senha.style.border = bordaVermelha;
-
             finalizarAguardar();
             return false;
         } else if (!emailArroba) {
@@ -116,7 +135,8 @@
             return false;
         } else {
             input_senha.style.border = bordaVerde;
-            setInterval(5000);
+            btnAvancar.innerHTML = '<img src="assets/componentes/loading.gif" height="70%">'
+            setInterval(3000);
         }
 
         // enviando o valor da input
@@ -142,6 +162,7 @@
                     input_senha.style.border = bordaVerde;
 
                     console.log("Cadastro realizado com sucesso! Redirecionando para tela de Login...");
+                    
 
                     setTimeout(() => {
                         window.location = "login.html";

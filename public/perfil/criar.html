@@ -47,7 +47,7 @@
 
                     <div class="botoesCabecalho">
                         <a onclick="history.back()"><button class="btn btnCancelar">Cancelar</button></a>
-                        <button class="btn btnPublicar" onclick="publicar()">Publicar</button>
+                        <button class="btn btnPublicar" onclick="publicar()" id="btnAvancar">Publicar</button>
                     </div>
                 </div>
 
@@ -94,6 +94,49 @@
 <script src="../js/criar.js"></script>
 
 <script>
+    var contarTags = 0;
+    var lista_tags = [];
+
+    function verificarEnter(event) {
+        if (event.key === 'Enter') {
+            tags();
+        }
+    }
+
+    function tags() {
+        var tag = input_tag.value;
+
+        areaTags.innerHTML += `<button onclick="" class="btnTag">${tag}</button>`;
+
+        contarTags++;
+
+        span_qtdTags.innerHTML = contarTags;
+
+        lista_tags.push(tag);
+        console.log(lista_tags)
+        input_tag.value = '';
+    }
+
+    const foto = document.getElementById('foto');
+    const preview = document.getElementById('preview');
+
+    foto.addEventListener('change', function () {
+        const file = this.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (event) {
+                preview.src = event.target.result; // Define o src da imagem para a prévia
+                preview.style.display = 'block'; // Mostra a imagem
+                // btnEscolherImg.style.display = 'none';
+                btnEscolherImg.innerHTML = '';
+            };
+            reader.readAsDataURL(file); // Lê o arquivo como URL de dados
+        } else {
+            preview.src = ""; // Limpa a prévia se nenhum arquivo for selecionado
+            preview.style.display = 'none'; // Esconde a imagem
+        }
+    });
+
     function publicar() {
         var tituloVar = input_titulo.value;
         var descricaoVar = input_desc.value;
@@ -102,10 +145,18 @@
         formData.append('foto', foto.files[0]);
         formData.append('titulo', tituloVar);
         formData.append('descricao', descricaoVar);
+        formData.append('lista', JSON.stringify(lista_tags)); // envia a lista como string json
 
         var idUsuario = sessionStorage.ID_USUARIO;
 
+        // bordas de erro e acerto no input
+        var bordaVerde = 'solid 1px green';
+        var bordaVermelha = 'solid 1px red';
+
+
         if (tituloVar == "" || descricaoVar == "") {
+            input_titulo.style.border = bordaVermelha;
+            input_desc.style.border = bordaVermelha;
             return false;
         } else {
             fetch(`/publicacoes/publicar/${idUsuario}`, {
@@ -117,12 +168,14 @@
                 if (resposta.ok) {
                     console.log("Publicação realizado com sucesso! Redirecionando para tela de publicação...");
 
+                    btnAvancar.innerHTML = '<img src="../assets/componentes/loading.gif" height="70%">';
+                    input_titulo.style.border = bordaVerde;
+                    input_desc.style.border = bordaVerde;
+
                     setTimeout(() => {
                         history.back();
-                    }, "2000");
+                    }, "1000");
 
-                    limparFormulario();
-                    finalizarAguardar();
                 } else {
                     throw "Houve um erro ao tentar realizar o cadastro!";
                 }
@@ -134,6 +187,5 @@
 
             return false;
         }
-
     }
 </script>

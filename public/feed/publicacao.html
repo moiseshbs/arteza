@@ -83,7 +83,7 @@
 
                         <div>
                             <i class="bi bi-chat"></i>
-                            <span id="span_comentario">77</span>
+                            <span id="span_comentario">0</span>
                         </div>
 
                         <div>
@@ -174,7 +174,13 @@
                             div_deslike.style.display = 'none';
                         }
 
-                        user_nome.innerText = `${publicacao.username}`;
+                        user_nome.innerHTML = `
+                            <a onclick="perfil(${publicacao.idUsuario})">
+                                    <h3>${publicacao.username}</h3>
+                                </div>
+                            </a>
+                        `;
+
                         p_descricao.innerText = `${publicacao.descricao}`;
                         h1_titulo.innerText = `${publicacao.titulo}`;
 
@@ -230,6 +236,7 @@
                             `;
                         }
 
+                        contarComentario();
                         finalizarAguardar();
                     });
                 }
@@ -272,16 +279,14 @@
 
                     listaComentario_teste.innerHTML = "";
                     input_comentario.value = "";
+
                     atualizarComentario();
-                    limparFormulario();
-                    finalizarAguardar();
                 } else {
                     throw "Houve um erro ao tentar comentar!";
                 }
             })
             .catch(function (resposta) {
                 console.log(`#ERRO: ${resposta}`);
-                finalizarAguardar();
             });
 
         return false;
@@ -343,7 +348,7 @@
                 if (resposta.ok) {
                     console.log("descurtida realizada com sucesso pelo usuario" + sessionStorage.getItem("USERNAME_USUARIO"));
 
-                    deslike(idPublicacao);
+                    deslike();
 
                 } else {
                     throw "Houve um erro ao tentar descurtir a publicação!";
@@ -356,7 +361,7 @@
         return false;
     }
 
-    function like(idPublicacao) {
+    function like() {
         var spanDeslike = document.getElementById(`span_deslike`);
         var spanLike = document.getElementById(`span_like`);
         div_like.style.display = 'none';
@@ -366,7 +371,7 @@
         spanDeslike.innerText = Number(spanLike.innerText);
     }
 
-    function deslike(idPublicacao) {
+    function deslike() {
         var spanDeslike = document.getElementById(`span_deslike`);
         var spanLike = document.getElementById(`span_like`);
         div_like.style.display = 'block';
@@ -375,4 +380,48 @@
         spanDeslike.innerText = Number(spanDeslike.innerText) - 1;
         spanLike.innerText = Number(spanDeslike.innerText);
     }
+
+    function contarComentario() {
+        var spanComentario = document.getElementById(`span_comentario`);
+
+        spanComentario.innerText = Number(spanComentario.innerText) + 1;
+    }
+
+    function perfil(idUsuario) {
+        sessionStorage.ID_USUARIOPUBLICACAO = idUsuario;
+
+        var idUsuarioPublicacao = idUsuario;
+        var idUsuarioLogado = sessionStorage.ID_USUARIO;
+        var idUsuarioVar;
+
+        if (idUsuarioPublicacao == idUsuarioLogado) {
+            idUsuarioVar = idUsuarioLogado;
+        } else {
+            idUsuarioVar = idUsuarioPublicacao;
+        }
+
+        fetch(`/publicacoes/listar/${idUsuarioVar}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            }
+        })
+            .then(function (resposta) {
+                console.log("Resposta: ", resposta);
+
+                if (resposta.ok) {
+                    console.log("Usuario encontrado com sucesso!");
+
+                    window.location = "../perfil/perfil.html";
+                } else {
+                    throw "Houve um erro ao tentar buscar usuario!";
+                }
+            })
+            .catch(function (erro) {
+                console.log(`#ERRO: ${erro}`);
+            });
+
+        return false;
+    }
+
 </script>
