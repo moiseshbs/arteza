@@ -25,9 +25,6 @@ function autenticar(req, res) {
                             senha: resultadoAutenticar[0].senha,
                             username: resultadoAutenticar[0].username,
                         });
-                    } else if (resultadoAutenticar.length != 1) {
-                        res.status(204).json({ aquarios: [] });
-
                     } else if (resultadoAutenticar.length == 0) {
                         res.status(403).send("Email e/ou senha inválido(s)");
                     } else {
@@ -82,7 +79,23 @@ function cadastrar(req, res) {
     }
 }
 
+function listar(req, res) {
+    usuarioModel.listar().then(function (resultado) {
+        if (resultado.length > 0) {
+            res.status(200).json(resultado);
+        } else {
+            res.status(204).send("Nenhum resultado encontrado!")
+        }
+    }).catch(function (erro) {
+        console.log(erro);
+        console.log("Houve um erro ao buscar as ultimas tags.", erro.sqlMessage);
+        res.status(500).json(erro.sqlMessage);
+    });
+}
+
+
 module.exports = {
     autenticar,
-    cadastrar
+    cadastrar,
+    listar
 }

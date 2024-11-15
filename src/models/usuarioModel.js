@@ -23,7 +23,17 @@ function cadastrar(nome, username, email, senha) {
     return database.executar(instrucaoSql);
 }
 
+function listar() {
+    var instrucaoSql = `
+        SELECT idUsuario, nome, imgPerfil FROM usuario;
+    `;
+
+    console.log("Executando a instrução SQL: \n" + instrucaoSql);
+    return database.executar(instrucaoSql);
+}
+
 module.exports = {
     autenticar,
-    cadastrar
+    cadastrar,
+    listar
 };

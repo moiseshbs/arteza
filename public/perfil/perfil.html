@@ -24,15 +24,22 @@
 <body onload="validarSessao(), atualizarFeed(), listarCurtida()">
     <header>
         <div class="container">
-            <img src="../assets/componentes/logo.png" style="max-height: 100%; width: 150px;" alt="Arteza logo">
-
+            <a href="../feed/feed.html">
+                <img src="../assets/componentes/logo.png" style="max-height: 100%; width: 150px;" alt="Arteza logo">
+            </a>
+            
             <div class="nav">
-                <input type="text" placeholder="Pesquisar">
+                <div style="gap: 50px;">
+                    <a href="#">INICIO</a>
+                    <a href="explorar.html">EXPLORAR</a>
+                </div>
+                    
+                <input type="text" placeholder="Pesquisar" id="input_pesquisa" oninput="pesquisar()">
             </div>
 
             <div class="perfil">
                 <div class="criar">
-                    <a href="./criar.html">
+                    <a href="../perfil/criar.html">
                         <i class="bi bi-plus-circle"></i>
                         <h3>CRIAR</h3>
                     </a>

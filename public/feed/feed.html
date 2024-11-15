@@ -23,13 +23,17 @@
 <body onload="validarSessao(), listarCurtida(), atualizarFeed()">
     <header>
         <div class="container">
-            <img src="../assets/componentes/logo.png" style="max-height: 100%; width: 150px;" alt="Arteza logo">
+            <a href="feed.html">
+                <img src="../assets/componentes/logo.png" style="max-height: 100%; width: 150px;" alt="Arteza logo">
+            </a>
 
             <div class="nav">
-                <input type="text" placeholder="Pesquisar" id="input_pesquisa" oninput="pesquisar()">
-                <div class="barra" id="div_barra">
-
+                <div style="gap: 50px;">
+                    <a href="feed.html">INICIO</a>
+                    <a href="explorar.html">EXPLORAR</a>
                 </div>
+
+                <input type="text" placeholder="Pesquisar" id="input_pesquisa" oninput="pesquisar()">
             </div>
 
             <div class="perfil">
@@ -49,6 +53,7 @@
         </div>
     </header>
 
+
     <div class="gambiarra"></div>
 
     <section class="areaCards">
@@ -59,10 +64,9 @@
 
     <footer>
         <div class="areaNav">
-            <a href="">INICIO</a>
-            <a href="">EXPLORAR</a>
-            <a href="">SOBRE</a>
-            <a href="">PERFIL</a>
+            <a href="#">INICIO</a>
+            <a href="explorar.html">EXPLORAR</a>
+            <a href="../perfil/perfil.html">PERFIL</a>
         </div>
         <div class="areaInfos">
             <img src="../assets/componentes/logow.png" style="height: 30px; width: auto;" alt="Arteza logo">
@@ -430,7 +434,7 @@
 
                         resposta.json().then(function (resposta) {
                             console.log("Dados recebidos: ", JSON.stringify(resposta));
-                            
+
                             div_barra.innerHTML = "";
 
                             for (let i = 0; i < resposta.length; i++) {

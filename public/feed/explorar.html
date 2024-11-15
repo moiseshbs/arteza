@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arteza</title>
+
+    <script src="../js/sessao.js"></script>
+
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/headerFooter.css">
+    <link rel="stylesheet" href="../css/explorar.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+</head>
+
+<body onload="validarSessao(), listarTag(), listarUsuario(), listarPublicacao()">
+    <header>
+        <div class="container">
+            <a href="feed.html">
+                <img src="../assets/componentes/logo.png" style="max-height: 100%; width: 150px;" alt="Arteza logo">
+            </a>
+
+            <div class="nav">
+                <div style="gap: 50px;">
+                    <a href="feed.html">INICIO</a>
+                    <a href="#">EXPLORAR</a>
+                </div>
+
+                <input type="text" placeholder="Pesquisar" id="input_pesquisa" oninput="pesquisar()">
+            </div>
+
+            <div class="perfil">
+                <div class="criar">
+                    <a href="../perfil/criar.html">
+                        <i class="bi bi-plus-circle"></i>
+                        <h3>CRIAR</h3>
+                    </a>
+                </div>
+
+                <a id="header_imgPerfil">
+                    <div class="fotoPerfil">
+
+                    </div>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <div class="gambiarra"></div>
+
+    <section class="areaExplorar">
+        <div class="container">
+            <div class="areaArte">
+                <div class="arte" id="div_arte">
+                    
+                </div>
+            </div>
+
+            <div class="areaInfos">
+                <div class="conteudoInfo">
+                    <div class="headerPubli">
+                        <h1 id="titulo_publi">Ellie Williams</h1>
+
+                        <span class="span_top">#1</span>
+                    </div>
+
+                    <div class="conteudo">
+                        <div class="areaTotal">
+                            <div class="interacao">
+                                <p>Interações</p>
+                                <h1 id="numero_interacao">300</h1>
+                            </div>
+
+                            <div class="areaIcon">
+                                <i class="bi bi-graph-up-arrow icon-size"></i>
+                            </div>
+                        </div>
+
+                        <div class="areaNumeros">
+                            <div class="numeros">
+                                <i class="bi bi-heart-fill icon-size"></i>
+                                <h1 id="curtidas_publi">100</h1>
+                            </div>
+
+                            <div class="numeros">
+                                <i class="bi bi-chat-fill icon-size"></i>
+                                <h1 id="comentarios_publi">100</h1>
+                            </div>
+
+                            <div class="numeros">
+                                <i class="bi bi-eye-fill icon-size"></i>
+                                <h1 id="visu_publi">100</h1>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="areaTags">
+        <div class="container">
+            <div class="areaRecomendado">
+                <h2>Top Tags</h2>
+                <div class="areaContas" id="div_tags">
+
+                </div>
+            </div>
+
+            <div class="areaRecomendado">
+                <h2>Top Contas</h2>
+                <div class="areaContas" id="div_usuario">
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="areaNav">
+            <a href="feed.html">INICIO</a>
+            <a href="#">EXPLORAR</a>
+            <a href="../perfil/perfil.html">PERFIL</a>
+        </div>
+        <div class="areaInfos">
+            <img src="../assets/componentes/logow.png" style="height: 30px; width: auto;" alt="Arteza logo">
+        </div>
+    </footer>
+</body>
+
+</html>
+
+
+<script src="../js/navScroll.js"></script>
+<script src="../js/publicacao.js"></script>
+
+<script>
+    function listarTag() {
+        fetch("/tags/listarTop").then(function (resposta) {
+            if (resposta.ok) {
+                if (resposta.status == 204) {
+                    var feed = document.getElementById("feed_teste");
+                    var mensagem = document.createElement("span");
+                    mensagem.innerHTML = "Nenhum resultado encontrado."
+                    feed.appendChild(mensagem);
+                    throw "Nenhum resultado encontrado!!";
+                } else {
+                    resposta.json().then(function (resposta) {
+                        // console.log("Dados recebidos: ", JSON.stringify(resposta));
+
+                        for (let i = 0; i < resposta.length; i++) {
+                            var tag = resposta[i];
+
+                            div_tags.innerHTML += `
+                                <div class="areaConta">
+                                    <div class="areaFotoPerfil">
+                                        <img src="../assets/publicacao/${tag.imgPublicacao}">
+                                    </div>
+                                    <p>${tag.nome}</p>
+                                </div>
+                            `;
+                        }
+                    });
+                }
+            } else {
+                throw ('Houve um erro na API!');
+            }
+        }).catch(function (resposta) {
+            console.error(resposta);
+        });
+    }
+
+    function listarUsuario() {
+        fetch("/usuarios/listar").then(function (resposta) {
+            if (resposta.ok) {
+                if (resposta.status == 204) {
+                    var feed = document.getElementById("feed_teste");
+                    var mensagem = document.createElement("span");
+                    mensagem.innerHTML = "Nenhum resultado encontrado."
+                    feed.appendChild(mensagem);
+                    throw "Nenhum resultado encontrado!!";
+                } else {
+                    resposta.json().then(function (resposta) {
+                        // console.log("Dados recebidos: ", JSON.stringify(resposta));
+
+                        for (let i = 0; i < resposta.length; i++) {
+                            var usuario = resposta[i];
+
+                            div_usuario.innerHTML += `
+                                <div class="areaConta">
+                                    <div class="areaFotoPerfil">
+                                        <img src="../assets/publicacao/${usuario.imgPerfil}">
+                                    </div>
+                                    <p>${usuario.nome}</p>
+                                </div>
+                            `;
+                        }
+                    });
+                }
+            } else {
+                throw ('Houve um erro na API!');
+            }
+        }).catch(function (resposta) {
+            console.error(resposta);
+        });
+    }
+
+    function listarPublicacao() {
+        fetch("/publicacoes/listarTop").then(function (resposta) {
+            if (resposta.ok) {
+                if (resposta.status == 204) {
+                    var feed = document.getElementById("feed_teste");
+                    var mensagem = document.createElement("span");
+                    mensagem.innerHTML = "Nenhum resultado encontrado."
+                    feed.appendChild(mensagem);
+                    throw "Nenhum resultado encontrado!!";
+                } else {
+                    resposta.json().then(function (resposta) {
+                        // console.log("Dados recebidos: ", JSON.stringify(resposta));
+
+
+                        var publicacao = resposta[0];
+
+                        titulo_publi.innerText = `${publicacao.titulo}`;
+                        curtidas_publi.innerText = `${publicacao.curtida}`;
+                        comentarios_publi.innerText = `${publicacao.comentario}`;
+                        visu_publi.innerText = `${publicacao.visualizacao}`;
+
+
+                        var total_interacao = Number(publicacao.curtida) + Number(publicacao.comentario) + Number(publicacao.visualizacao); 
+
+                        numero_interacao.innerText = `${total_interacao}`;
+
+                        div_arte.innerHTML = `
+                        <img src="../assets/publicacao/${publicacao.imgPublicacao}" alt="Arte">
+                        `;
+                    });
+                }
+            } else {
+                throw ('Houve um erro na API!');
+            }
+        }).catch(function (resposta) {
+            console.error(resposta);
+        });
+    }
+</script>

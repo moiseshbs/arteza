@@ -34,6 +34,8 @@ header .container div {
 
 header .container .criar a{
     display: flex;
+    justify-content: center;
+    align-items: center;
     gap: 10px;
 }
 header .container i {
@@ -83,13 +85,16 @@ header .container .fotoPerfil {
 header .container .nav {
     gap: 50px;
     display: flex;
-    flex-direction: column;
-    position: relative;
+    justify-content: space-between;
+    height: 100%;
+    width: 60%;
 }
 
 header a {
     text-decoration: none;
     color: #000;
+    font-weight: bold;
+    font-size: 1.2rem;
 }
 
 footer {

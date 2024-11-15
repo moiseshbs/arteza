@@ -64,4 +64,8 @@ router.post("/visualizar/:idPublicacao", function (req, res) {
     publicacaoController.visualizar(req, res);
 });
 
+router.get("/listarTop", function (req, res) {
+    publicacaoController.listarTop(req, res);
+});
+
 module.exports = router;

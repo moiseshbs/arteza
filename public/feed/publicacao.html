@@ -23,10 +23,17 @@
 <body onload="validarSessao(), listarCurtida(), atualizarFeed(), atualizarComentario()">
     <header>
         <div class="container">
-            <img src="../assets/componentes/logo.png" style="max-height: 100%; width: 150px;" alt="Arteza logo">
-
+            <a href="feed.html">
+                <img src="../assets/componentes/logo.png" style="max-height: 100%; width: 150px;" alt="Arteza logo">
+            </a>
+            
             <div class="nav">
-                <input type="text" placeholder="Pesquisar">
+                <div style="gap: 50px;">
+                    <a href="#">INICIO</a>
+                    <a href="explorar.html">EXPLORAR</a>
+                </div>
+                    
+                <input type="text" placeholder="Pesquisar" id="input_pesquisa" oninput="pesquisar()">
             </div>
 
             <div class="perfil">
@@ -236,7 +243,6 @@
                             `;
                         }
 
-                        contarComentario();
                         finalizarAguardar();
                     });
                 }
@@ -281,6 +287,7 @@
                     input_comentario.value = "";
 
                     atualizarComentario();
+                    contarComentario();
                 } else {
                     throw "Houve um erro ao tentar comentar!";
                 }

@@ -52,8 +52,10 @@
 
 <script>
     function validarSession() {
-        if (sessionStorage.USERNAME_USUARIO != '') {
+        if (sessionStorage.USERNAME_USUARIO != undefined) {
             input_username.value = sessionStorage.USERNAME_USUARIO
+        } else {
+            input_username.value = '';
         }
     }
 
