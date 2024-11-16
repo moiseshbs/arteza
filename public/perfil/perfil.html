@@ -27,14 +27,14 @@
             <a href="../feed/feed.html">
                 <img src="../assets/componentes/logo.png" style="max-height: 100%; width: 150px;" alt="Arteza logo">
             </a>
-            
+
             <div class="nav">
                 <div style="gap: 50px;">
                     <a href="../feed/feed.html">INICIO</a>
                     <a href="explorar.html">EXPLORAR</a>
                 </div>
-                    
-                <input type="text" placeholder="Pesquisar" id="input_pesquisa" oninput="pesquisar()">
+
+                <input type="hidden" placeholder="Pesquisar" id="input_pesquisa" oninput="pesquisar()">
             </div>
 
             <div class="perfil">
@@ -173,6 +173,8 @@
                         var botao = ``;
                         var lista_publicacoes = [];
 
+                        var fotoPerfil = '';
+
                         for (let i = 0; i < resposta.length; i++) {
                             var publicacao = resposta[i];
 
@@ -187,9 +189,9 @@
                             }
 
                             lista_publicacoes.push(publicacao.idPublicacao);
-                            
+
                             console.log(lista_publicacoes);
-                            
+
                             var inclui = curtiu.includes(lista_publicacoes[i]);
 
                             if (inclui) {
@@ -217,45 +219,55 @@
                                 `;
                             }
 
-                            feed_teste.innerHTML += `
-                                <div class="card ${estilo}">
-                                    <a class="click" onclick="publicacao(${publicacao.idPublicacao})">
-                                        <img src="../assets/publicacao/${publicacao.imgPublicacao}" alt="Publicação">
-                                    </a>
-                                    <div class="info">
-                                        <div class="options">
-                                            <div id="div_botao">
-                                                                
-                                                ${botao}
-                                                                
-                                            </div>
-    
-                                            <div>
-                                                <i class="bi bi-chat"></i>
-                                                <span>${publicacao.comentario}</span>
-                                            </div>
-    
-                                            <div>
-                                                <i class="bi bi-eye"></i>
-                                                <span>${publicacao.visualizacao}</span>
-                                            </div>
-                                        </div>
-    
-                                        <a onclick="perfil(${publicacao.idUsuario})">
-                                            <div class="infoUser">
-                                                <div class="areaFotoPerfil">
-                                                    <img src="../assets/publicacao/${publicacao.imgPerfil}" alt="">
-                                                </div>
-                                                <h2>${publicacao.username}</h2>
-    
-                                            </div>
+                            if (publicacao.idPublicacao != null) {
+                                feed_teste.innerHTML += `
+                                    <div class="card ${estilo}">
+                                        <a class="click" onclick="publicacao(${publicacao.idPublicacao})">
+                                            <img src="../assets/publicacao/${publicacao.imgPublicacao}" alt="Publicação">
                                         </a>
+                                        <div class="info">
+                                            <div class="options">
+                                                <div id="div_botao">
+                                                                    
+                                                    ${botao}
+                                                                    
+                                                </div>
+        
+                                                <div>
+                                                    <i class="bi bi-chat"></i>
+                                                    <span>${publicacao.comentario}</span>
+                                                </div>
+        
+                                                <div>
+                                                    <i class="bi bi-eye"></i>
+                                                    <span>${publicacao.visualizacao}</span>
+                                                </div>
+                                            </div>
+        
+                                            <a onclick="perfil(${publicacao.idUsuario})">
+                                                <div class="infoUser">
+                                                    <div class="areaFotoPerfil">
+                                                        <img src="../assets/publicacao/${publicacao.imgPerfil}" alt="">
+                                                    </div>
+                                                    <h2>${publicacao.username}</h2>
+        
+                                                </div>
+                                            </a>
+                                        </div>
                                     </div>
-                                </div>
-                            `;
+                                `;
+                            }
                         }
-                        
-                        user_imagemPerfil.innerHTML = `<img src="../assets/publicacao/${publicacao.imgPerfil}" alt="foto de perfil" class="fotoPerfil">`;
+
+
+                        if (publicacao.imgPerfil == null) {
+                            fotoPerfil = 'padrao.jpg';
+                        } else {
+                            fotoPerfil = publicacao.imgPerfil;
+                        }
+
+
+                        user_imagemPerfil.innerHTML = `<img src="../assets/publicacao/${fotoPerfil}" alt="foto de perfil" class="fotoPerfil">`;
                         user_nome.innerText = `${publicacao.nome}`;
                         user_username.innerText = `${publicacao.username}`;
 

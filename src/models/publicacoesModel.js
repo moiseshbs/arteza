@@ -82,7 +82,7 @@ function listarPorUsuario(idUsuario) {
             COUNT(DISTINCT c.idComentario) AS comentario,
             COUNT(DISTINCT v.idVisualizacao) AS visualizacao
         FROM publicacao AS p
-            INNER JOIN usuario AS u 
+            RIGHT JOIN usuario AS u 
                 ON p.fkUsuario = u.idUsuario
             LEFT JOIN curtida AS l
                 ON l.fkPublicacao = p.idPublicacao

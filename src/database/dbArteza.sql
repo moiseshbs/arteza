@@ -67,8 +67,8 @@ CREATE TABLE tag_publicacao (
 );
 
 -- Inserindo usuários
-INSERT INTO usuario (nome, username, email, senha) VALUES 
-	('Moises', 'moiseshxs', 'moises@email.com', '12345678');
+INSERT INTO usuario (nome, username, email, senha, imgPerfil) VALUES 
+	('Moises', 'moiseshxs', 'moises@email.com', '12345678', '9d9ab97e0fca2375549542fa5b763b1f7bad7e292a904d9f9be55196b407078151d1d437889ca04bd2b97f3a43068118537673014c93b084aefc4e2629644c3a.jpg');
 
 -- inserindo publicacoes
 INSERT INTO publicacao (fkUsuario, imgPublicacao, descricao, titulo) VALUES 
@@ -379,3 +379,57 @@ ORDER BY FIELD(mes, 'Total') DESC, base.mes_referencia;
             WHERE p.fkUsuario = 1) AS visualizacaoKpi
             
         ORDER BY base.mes_referencia;
+        
+SELECT t.nome, p.imgPublicacao FROM tag AS t
+	JOIN tag_publicacao AS tp
+		ON tp.fkTag = t.idTag
+	JOIN publicacao AS p
+		ON tp.fkPublicacao = p.idPublicacao;
+        
+         SELECT 
+            p.idPublicacao, 
+            p.fkUsuario, 
+            p.imgPublicacao, 
+            p.descricao, 
+            p.dtPublicacao,
+            p.titulo, 
+            u.idUsuario, 
+            u.username,
+            COUNT(DISTINCT l.qtdCurtida) AS curtida,
+            COUNT(DISTINCT c.idComentario) AS comentario,
+            COUNT(DISTINCT v.idVisualizacao) AS visualizacao
+        FROM publicacao AS p
+            INNER JOIN usuario AS u 
+                ON p.fkUsuario = u.idUsuario
+            LEFT JOIN curtida AS l
+                ON l.fkPublicacao = p.idPublicacao
+            LEFT JOIN comentario AS c
+                ON c.fkPublicacao = p.idPublicacao
+            LEFT JOIN visualizacao AS v
+                ON v.fkPublicacao = p.idPublicacao
+                GROUP BY 
+                p.idPublicacao, 
+                p.fkUsuario, 
+                p.imgPublicacao, 
+                p.descricao, 
+                p.dtPublicacao,
+                p.titulo, 
+                u.idUsuario, 
+                u.username
+                ORDER BY curtida DESC LIMIT 1;
+                
+        SELECT 
+            u.idUsuario,
+            u.nome,
+            u.username,
+            u.imgPerfil,
+            p.titulo,
+            p.descricao,
+            p.imgPublicacao
+        FROM usuario AS u
+            JOIN publicacao AS p
+                ON p.fkUsuario = u.idUsuario
+        WHERE u.nome LIKE 'moises'
+        OR u.username LIKE '%${texto}%'
+        OR p.titulo LIKE '%${texto}%'
+        OR p.descricao LIKE '%${texto}%';
