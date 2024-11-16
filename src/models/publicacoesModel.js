@@ -12,6 +12,7 @@ function listar() {
             p.titulo, 
             u.idUsuario, 
             u.username,
+            u.imgPerfil,
             COUNT(DISTINCT l.qtdCurtida) AS curtida,
             COUNT(DISTINCT c.idComentario) AS comentario,
             COUNT(DISTINCT v.idVisualizacao) AS visualizacao
@@ -32,7 +33,8 @@ function listar() {
                 p.dtPublicacao,
                 p.titulo, 
                 u.idUsuario, 
-                u.username
+                u.username,
+                u.imgPerfil
                 ORDER BY p.dtPublicacao DESC;
     `;
     console.log("Executando a instrução SQL: \n" + instrucaoSql);

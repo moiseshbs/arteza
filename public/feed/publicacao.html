@@ -71,7 +71,7 @@
             <div class="areaInfoComentarios">
                 <div class="areaInfo">
                     <div class="infosUser">
-                        <img src="../assets/fotoPerfil/2.png" alt="" class="fotoPerfil">
+                        <div id="id_imgPerfil"></div>
                         <h3 id="user_nome">Moises Henry</h3>
                     </div>
                     <div class="areaDescricao">
@@ -196,11 +196,14 @@
                         span_comentario.innerText = `${publicacao.comentario}`;
                         span_visualizacao.innerText = `${publicacao.visualizacao}`;
 
+                        id_imgPerfil.innerHTML = `
+                            <img src="../assets/publicacao/${publicacao.imgPerfil}" alt="" class="fotoPerfil">
+                        `;
+
                         id_imgPublicacao.innerHTML = `
                             <img src="../assets/publicacao/${publicacao.imgPublicacao}" alt="Publicação">
                         `;
-
-                        finalizarAguardar();
+                        
                     });
                 }
             } else {
@@ -208,7 +211,6 @@
             }
         }).catch(function (resposta) {
             console.error(resposta);
-            finalizarAguardar();
         });
     }
 

@@ -63,7 +63,7 @@ header .container .fotoPerfil {
     height: 50px;
     width: 50px;
     border-radius: 100%;
-    background-color: blue;
+    object-fit: cover;
 }
 
 .barra {

@@ -30,7 +30,7 @@
             
             <div class="nav">
                 <div style="gap: 50px;">
-                    <a href="#">INICIO</a>
+                    <a href="../feed/feed.html">INICIO</a>
                     <a href="explorar.html">EXPLORAR</a>
                 </div>
                     
@@ -62,7 +62,7 @@
 
             <div class="areaInfoUser">
                 <div class="areaFotoPerfil" id="user_imagemPerfil">
-                    <img src="../assets/fotoPerfil/2.PNG" alt="" class="fotoPerfil">
+
                 </div>
 
                 <h1 id="user_nome"></h1>
@@ -244,7 +244,7 @@
                                         <a onclick="perfil(${publicacao.idUsuario})">
                                             <div class="infoUser">
                                                 <div class="areaFotoPerfil">
-                                                    <img src="../assets/fotoPerfil/2.png" alt="">
+                                                    <img src="../assets/publicacao/${publicacao.imgPerfil}" alt="">
                                                 </div>
                                                 <h2>${publicacao.username}</h2>
     
@@ -254,7 +254,8 @@
                                 </div>
                             `;
                         }
-
+                        
+                        user_imagemPerfil.innerHTML = `<img src="../assets/publicacao/${publicacao.imgPerfil}" alt="foto de perfil" class="fotoPerfil">`;
                         user_nome.innerText = `${publicacao.nome}`;
                         user_username.innerText = `${publicacao.username}`;
 
