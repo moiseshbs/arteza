@@ -37,8 +37,12 @@ router.put("/editar/:idPublicacao", function (req, res) {
     publicacaoController.editar(req, res);
 });
 
-router.delete("/deletar/:idPublicacao", function (req, res) {
+router.put("/deletar/:idPublicacao", function (req, res) {
     publicacaoController.deletar(req, res);
+});
+
+router.put("/recuperar/:idPublicacao", function (req, res) {
+    publicacaoController.recuperar(req, res);
 });
 
 // rotas para curtida

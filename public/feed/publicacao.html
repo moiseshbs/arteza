@@ -71,9 +71,31 @@
             <div class="areaInfoComentarios">
                 <div class="areaInfo">
                     <div class="infosUser">
-                        <div id="id_imgPerfil"></div>
-                        <h3 id="user_nome">Moises Henry</h3>
+                        <div class="nomeFoto">
+                            <div id="id_imgPerfil"></div>
+                            <h3 id="user_nome">Moises Henry</h3>
+                        </div>
+
+                        <div class="areaTresPontos" id="tresPontos">
+                            <div style="height: 100%; width: 100%;" id="btnModal" onclick="abrirModal()">
+                                <i class="bi bi-three-dots-vertical"></i>
+                            </div>
+
+                            <div class="cardOption" id="modalOptions">
+                                <div class="option" onclick="confirmarEditar()">
+                                    <i class="bi bi-pencil-square"></i>
+                                    <p>Editar</p>
+                                </div>
+                                <div class="option optionBaixo" onclick="confirmarExcluir()">
+                                    <i class="bi bi-trash3"></i>
+                                    <p>Excluir</p>
+                                </div>
+                            </div>
+
+                        </div>
+
                     </div>
+
                     <div class="areaDescricao">
                         <p id="p_descricao">Desenho feito em XXXX para que </p>
                     </div>
@@ -143,7 +165,6 @@
                             curtiu.push(curtida.fkPublicacao);
                         }
 
-                        finalizarAguardar();
                     });
                 }
             } else {
@@ -154,6 +175,9 @@
             finalizarAguardar();
         });
     }
+
+    var tituloPublicacao = '';
+    var descricaoPublicacao = '';
 
     function atualizarFeed() {
         fetch(`/publicacoes/listarID/${sessionStorage.ID_PUBLICACAO}`).then(function (resposta) {
@@ -170,6 +194,9 @@
 
                         var botao = ``;
                         var publicacao = resposta[0];
+
+                        tituloPublicacao = `${publicacao.titulo}`;
+                        descricaoPublicacao = `${publicacao.descricao}`;
 
                         var fotoPerfil = '';
 
@@ -188,6 +215,10 @@
                         } else {
                             div_like.style.display = 'block';
                             div_deslike.style.display = 'none';
+                        }
+
+                        if (publicacao.idUsuario == sessionStorage.ID_USUARIOPUBLICACAO) {
+                            tresPontos.style.display = 'flex';
                         }
 
                         user_nome.innerHTML = `
@@ -238,13 +269,21 @@
                     resposta.json().then(function (resposta) {
                         // console.log("Dados recebidos: ", JSON.stringify(resposta));
 
+                        var fotoPerfil = '';
+
                         for (let i = 0; i < resposta.length; i++) {
                             var comentario = resposta[i];
+
+                            if (comentario.imgPerfil == null) {
+                                fotoPerfil = 'padrao.jpg';
+                            } else {
+                                fotoPerfil = comentario.imgPerfil;
+                            }
 
                             listaComentario_teste.innerHTML += `
                                 <div class="comentario">
                                     <div class="areaFotoPerfil">
-                                        <div class="fotoPerfil"></div>
+                                        <img src="../assets/publicacao/${fotoPerfil}" class="fotoPerfil">
                                     </div>
                                     <div class="contComentario">
                                         <h4>${comentario.username}</h4>
@@ -254,7 +293,6 @@
                             `;
                         }
 
-                        finalizarAguardar();
                     });
                 }
             } else {
@@ -475,7 +513,7 @@
 
                             var fotoPerfil = '';
 
-              
+
 
                             for (let i = 0; i < resposta.length; i++) {
                                 var publicacao = resposta[i];
@@ -536,8 +574,8 @@
                                         fotoPerfil = publicacao.imgPerfil;
                                     }
 
-                                
-                                        feed_teste.innerHTML += `
+
+                                    feed_teste.innerHTML += `
                                                     <div class="card ${estilo}">
                                                         <a class="click" onclick="publicacao(${publicacao.idPublicacao})">
                                                             <img src="../assets/publicacao/${publicacao.imgPublicacao}" alt="Publicação">
@@ -587,4 +625,110 @@
         }
     }
 
+    function abrirModal() {
+        modalOptions.style.display = 'flex';
+        btnModal.onclick = fecharModal;
+    }
+
+    function fecharModal() {
+        modalOptions.innerHTML = `
+                <div class="option" onclick="confirmarEditar()">
+                    <i class="bi bi-pencil-square"></i>
+                    <p>Editar</p>
+                </div>
+                <div class="option optionBaixo" onclick="confirmarExcluir()">
+                    <i class="bi bi-trash3"></i>
+                    <p>Excluir</p>
+                </div>
+        `;
+        modalOptions.style.display = 'none';
+        btnModal.onclick = abrirModal;
+    }
+
+    function confirmarEditar() {
+        modalOptions.innerHTML = `
+            <div class="optionEditar">
+                <input type="text" value="${tituloPublicacao}" id="input_titulo">
+            </div>
+            <div class="optionEditar optionBaixo">
+                <textarea type="text" class="descricao" id="input_descricao">${descricaoPublicacao}</textarea>
+            </div>
+            <button class="btnSalvar" onclick="editar()">Salvar</button>
+        `;
+
+    }
+
+    function editar() {
+        var tituloVar = input_titulo.value;
+        var descricaoVar = input_descricao.value;
+        var idPublicacao = sessionStorage.ID_PUBLICACAO;
+
+        fetch(`/publicacoes/editar/${idPublicacao}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                tituloServer: tituloVar,
+                descricaoServer: descricaoVar
+            })
+        })
+            .then(function (resposta) {
+                console.log("Resposta: ", resposta);
+
+                if (resposta.ok) {
+                    console.log("Editado com sucesso!");
+
+                    atualizarFeed();
+                    fecharModal();
+                } else {
+                    throw "Houve um erro ao tentar buscar usuario!";
+                }
+            })
+            .catch(function (erro) {
+                console.log(`#ERRO: ${erro}`);
+            });
+    }
+
+    function confirmarExcluir() {
+        modalOptions.innerHTML = `
+            <div class="option">
+                <p>Excluir?</p>
+            </div>
+            <div class="option optionBaixo">
+                <div onclick="excluir()" class="opcaoExcluir">
+                    <i class="bi bi-trash3"></i>
+                </div>
+                <div onclick="fecharModal()" class="opcaoExcluir">
+                    <i class="bi bi-x-lg"></i>
+                </div>
+            </div>
+        `;
+    }
+
+
+    function excluir() {
+        var idPublicacao = sessionStorage.ID_PUBLICACAO;
+
+        fetch(`/publicacoes/deletar/${idPublicacao}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            }
+        })
+            .then(function (resposta) {
+                console.log("Resposta: ", resposta);
+
+                if (resposta.ok) {
+                    console.log("Excluido com sucesso!");
+
+                    window.location = "feed.html";
+                } else {
+                    throw "Houve um erro ao tentar buscar usuario!";
+                }
+            })
+            .catch(function (erro) {
+                console.log(`#ERRO: ${erro}`);
+            });
+    }
 </script>

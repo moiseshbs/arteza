@@ -133,10 +133,11 @@ function publicar(req, res) {
 }
 
 function editar(req, res) {
-    var novaDescricao = req.body.descricao;
-    var idAviso = req.params.idAviso;
+    var idPublicacao = req.params.idPublicacao;
+    var titulo = req.body.tituloServer;
+    var descricao = req.body.descricaoServer;
 
-    publicacaoModel.editar(novaDescricao, idAviso)
+    publicacaoModel.editar(idPublicacao, titulo, descricao)
         .then(
             function (resultado) {
                 res.json(resultado);
@@ -153,9 +154,27 @@ function editar(req, res) {
 }
 
 function deletar(req, res) {
-    var idAviso = req.params.idAviso;
+    var idPublicacao = req.params.idPublicacao;
 
-    publicacaoModel.deletar(idAviso)
+    publicacaoModel.deletar(idPublicacao)
+        .then(
+            function (resultado) {
+                res.json(resultado);
+            }
+        )
+        .catch(
+            function (erro) {
+                console.log(erro);
+                console.log("Houve um erro ao deletar o post: ", erro.sqlMessage);
+                res.status(500).json(erro.sqlMessage);
+            }
+        );
+}
+
+function recuperar(req, res) {
+    var idPublicacao = req.params.idPublicacao;
+
+    publicacaoModel.recuperar(idPublicacao)
         .then(
             function (resultado) {
                 res.json(resultado);
@@ -302,6 +321,7 @@ module.exports = {
     publicar,
     editar,
     deletar,
+    recuperar,
     curtir,
     descurtir,
     comentar,

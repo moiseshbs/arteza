@@ -350,9 +350,94 @@
     height: 25%;
     width: 100%;
     display: flex;
-    justify-content: start;
+    justify-content: space-between;
     align-items: center;
-    gap: 25px;
+}
+
+.nomeFoto {
+    display: flex;
+    gap: 10px;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+.areaTresPontos {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+}
+
+.cardOption {
+    position: absolute;
+    min-height: 100px;
+    max-height: fit-content;
+    min-width: 150px;
+    max-width: fit-content;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.150);
+    top: 20px;
+    right: 0;
+    display: none;
+    flex-direction: column;
+}
+
+.cardOption .option {
+    height: 50px;
+    width: 100%;
+    border-bottom: 1px solid;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    font-weight: bold;
+    border-radius: 10px 10px 0px 0px ;
+}
+
+.optionBaixo {
+    border: none !important;
+    color: red;
+    border-radius: 0px 0px 10px 10px;
+}
+
+.optionEditar {
+    height: 50%;
+    width: 300px;
+    padding: 10px;
+    border-bottom: 1px solid;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    font-weight: bold;
+    border-radius: 10px 10px 0px 0px ;
+}
+
+.opcaoExcluir {
+    height: 100%;
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.option input {
+    width: 100%;
+    margin: 20px;
+}
+
+.option .descricao {
+    height: 100px;
+    margin: 20px;
+}
+
+.cardOption .btnSalvar {
+    width: 90%;
+    margin: auto;
+    margin-bottom: 10px;
 }
 
 .infosUser .fotoPerfil {

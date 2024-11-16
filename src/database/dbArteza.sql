@@ -18,6 +18,7 @@ CREATE TABLE publicacao (
     descricao VARCHAR(45),
     dtPublicacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	titulo VARCHAR(45),
+    isDeleted BOOLEAN DEFAULT false,
     PRIMARY KEY (idPublicacao, fkUsuario),
     FOREIGN KEY (fkUsuario) REFERENCES usuario(idUsuario)
 );
