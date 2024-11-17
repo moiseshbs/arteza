@@ -308,7 +308,7 @@ function listarTop(req, res) {
         }
     }).catch(function (erro) {
         console.log(erro);
-        console.log("Houve um erro ao buscar os avisos: ", erro.sqlMessage);
+        console.log("Houve um erro ao buscar a publicação mais curtida: ", erro.sqlMessage);
         res.status(500).json(erro.sqlMessage);
     });
 }
