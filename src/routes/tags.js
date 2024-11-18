@@ -7,4 +7,8 @@ router.get("/listarTop/", function (req, res) {
     tagController.listarTop(req, res);
 });
 
+router.get("/recomendacao/:tag", function (req, res) {
+    tagController.recomendacao(req, res);
+});
+
 module.exports = router;

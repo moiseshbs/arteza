@@ -33,7 +33,7 @@
                     <a href="#">INICIO</a>
                     <a href="explorar.html">EXPLORAR</a>
                 </div>
-                    
+
                 <input type="hidden" placeholder="Pesquisar" id="input_pesquisa" oninput="pesquisar()">
             </div>
 
@@ -90,9 +90,14 @@
                                 <p>Descrição</p>
                                 <textarea name="descricao" id="input_desc"></textarea>
                             </div>
-                            <div>
+                            <div class="areaInputTags">
                                 <p>Procure tags (<span id="span_qtdTags">0</span>)</p>
-                                <input id="input_tag" onkeypress="verificarEnter(event)"></input>
+                                <input id="input_tag" oninput="buscarTag()"></input>
+
+                                <div id="barraTags">
+
+                                </div>
+
                             </div>
 
                             <div id="areaTags">
@@ -115,24 +120,39 @@
     var contarTags = 0;
     var lista_tags = [];
 
-    function verificarEnter(event) {
-        if (event.key === 'Enter') {
-            tags();
+    function tags(idTag, nomeTag) {
+        
+        var posicaoTag = lista_tags.indexOf(idTag);
+    
+        if (posicaoTag == -1) {
+            areaTags.innerHTML += `<div onclick="removerTag(${idTag})" class="btnTag" id="tag_${idTag}">${nomeTag}</div>`;
+            lista_tags.push(idTag);
+            
+            contarTags++;
+            span_qtdTags.innerHTML = contarTags;
         }
+
+        console.log(lista_tags);
+
+        input_tag.value = '';
+        barraTags.style.display = 'none';
     }
 
-    function tags() {
-        var tag = input_tag.value;
+    function removerTag(idTag) {
 
-        areaTags.innerHTML += `<button onclick="" class="btnTag">${tag}</button>`;
+        var posicaoTag = lista_tags.indexOf(idTag);
+        if (posicaoTag !== -1) {
+            lista_tags.splice(posicaoTag, 1);
+        }
 
-        contarTags++;
-
+        contarTags--;
         span_qtdTags.innerHTML = contarTags;
 
-        lista_tags.push(tag);
-        console.log(lista_tags)
-        input_tag.value = '';
+        var tagElemento = document.getElementById(`tag_${idTag}`);
+
+        tagElemento.style.display = 'none';
+
+        console.log(lista_tags);
     }
 
     const foto = document.getElementById('foto');
@@ -154,6 +174,41 @@
             preview.style.display = 'none'; // Esconde a imagem
         }
     });
+
+    function buscarTag() {
+        var texto = input_tag.value;
+
+        if (texto != '') {
+            fetch(`/tags/recomendacao/${texto}`).then(function (resposta) {
+                if (resposta.ok) {
+                    if (resposta.status == 204) {
+                        barraTags.innerHTML = `
+                            <p>Tag não encontrada :(</p>
+                        `;
+                    } else {
+                        resposta.json().then(function (resposta) {
+                            // console.log("Dados recebidos: ", JSON.stringify(resposta));
+                            barraTags.style.display = 'flex';
+
+                            for (let i = 0; i < resposta.length; i++) {
+                                var tag = resposta[i];
+
+                                barraTags.innerHTML = `
+                                <p onclick="tags(${tag.idTag}, '${tag.nome}')">${tag.nome}</p>
+                                `;
+                            }
+                        });
+                    }
+                } else {
+                    throw ('Houve um erro na API!');
+                }
+            }).catch(function (resposta) {
+                console.error(resposta);
+            });
+        } else {
+            barraTags.style.display = 'none';
+        }
+    }
 
     function publicar() {
         var tituloVar = input_titulo.value;

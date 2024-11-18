@@ -14,6 +14,21 @@ function listarTop() {
     return database.executar(instrucaoSql);
 }
 
+function recomendacao(texto) {
+
+    var instrucaoSql = `
+        SELECT 
+            t.idTag,
+            t.nome
+            FROM tag AS t
+            WHERE t.nome LIKE '%${texto}%';
+    `;
+
+    console.log("Executando a instrução SQL: \n" + instrucaoSql);
+    return database.executar(instrucaoSql);
+}
+
 module.exports = {
-    listarTop
+    listarTop,
+    recomendacao
 }
