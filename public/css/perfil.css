@@ -100,3 +100,83 @@ body {
     object-fit: cover;
     border-radius: 100%;
 }
+
+.areaEditar {
+    display: flex;
+    width: 90%;
+    margin: auto;
+    height: 75vh;
+}
+
+.areaEditar form {
+    display: flex;
+    width: 90%;
+    justify-content: space-between;
+    margin: auto;
+}
+
+.areaEsq {
+    width: 45%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+ input[type="file"] {
+    display: none;
+}
+
+.custom-file-upload {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    cursor: pointer;
+    z-index: 1;
+}
+
+.custom-file-upload i {
+    font-size: 2.5rem;
+}
+
+#input_foto {
+    width: 50%;
+}
+
+.areaDir {
+    width: 45%;
+    height: 100%;
+}
+
+.formulario .doisInputs {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.doisInputs input {
+    width: 215px;
+}
+
+.btnSalvar {
+    margin-top: 25px;
+    width: 100%;
+}
+
+.areaImagem {
+    height: 300px;
+    width: 300px;
+    border-radius: 100%;
+    border: 2px solid #000;
+}
+
+.imgPrevia {
+    height: 300px;
+    width: 300px;
+    object-fit: cover;
+    border-radius: 100%;
+}

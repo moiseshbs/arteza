@@ -82,16 +82,16 @@ function listarPorUsuario(idUsuario) {
             COUNT(DISTINCT l.qtdCurtida) AS curtida,
             COUNT(DISTINCT c.idComentario) AS comentario,
             COUNT(DISTINCT v.idVisualizacao) AS visualizacao
-        FROM publicacao AS p
-            RIGHT JOIN usuario AS u 
-                ON p.fkUsuario = u.idUsuario
+        FROM usuario AS u
+            LEFT JOIN publicacao AS p 
+                ON p.fkUsuario = u.idUsuario AND p.isDeleted = false
             LEFT JOIN curtida AS l
                 ON l.fkPublicacao = p.idPublicacao
             LEFT JOIN comentario AS c
                 ON c.fkPublicacao = p.idPublicacao
             LEFT JOIN visualizacao AS v
                 ON v.fkPublicacao = p.idPublicacao
-            WHERE u.idUsuario = ${idUsuario}
+        WHERE u.idUsuario = ${idUsuario}
         GROUP BY 
             p.idPublicacao, 
             p.fkUsuario, 
@@ -100,8 +100,12 @@ function listarPorUsuario(idUsuario) {
             p.dtPublicacao,
             p.titulo, 
             u.idUsuario, 
-            u.username
-            ORDER BY p.dtPublicacao DESC;
+            u.nome, 
+            u.username, 
+            u.email, 
+            u.senha, 
+            u.imgPerfil
+        ORDER BY p.dtPublicacao DESC;
     `;
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
     return database.executar(instrucaoSql);
