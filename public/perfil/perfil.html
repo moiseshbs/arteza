@@ -21,7 +21,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
 
-<body onload="validarSessao(), atualizarFeed(), listarCurtida()">
+<body onload="validarSessao(), listarCurtida()">
     <header>
         <div class="container">
             <a href="../feed/feed.html">
@@ -111,46 +111,11 @@
 <script src="../js/perfil.js"></script>
 <script src="../js/publicacao.js"></script>
 <script src="../js/navScroll.js"></script>
+<script src="../js/curtida.js"></script>
+<script src="../js/visualizar.js"></script>
 
 <script>
-    var curtiu = [];
-
-    function listarCurtida() {
-        var idUsuario = sessionStorage.ID_USUARIO;
-
-        fetch(`/publicacoes/listarCurtida/${idUsuario}`).then(function (resposta) {
-            if (resposta.ok) {
-                if (resposta.status == 204) {
-                    // var listaComentario = document.getElementById("listaComentario_teste");
-                    // var mensagem = document.createElement("div");
-                    // mensagem.innerHTML = `
-                    // <div class="comentario">
-                    //     <span>Seja o primeiro a comentar...</span>
-                    // </div>`
-                    // listaComentario.appendChild(mensagem);
-                } else {
-                    resposta.json().then(function (resposta) {
-                        console.log("Dados recebidos: ", JSON.stringify(resposta));
-
-                        for (let i = 0; i < resposta.length; i++) {
-                            var curtida = resposta[i];
-
-                            curtiu.push(curtida.fkPublicacao);
-                        }
-
-                      
-                    });
-                }
-            } else {
-                throw ('Houve um erro na API!');
-            }
-        }).catch(function (resposta) {
-            console.error(resposta);
-          
-        });
-    }
-
-    function atualizarFeed() {
+    function atualizarFeed(curtiu) {
         var idUsuario = sessionStorage.ID_USUARIOPUBLICACAO;
 
         fetch(`/publicacoes/listar/${idUsuario}`).then(function (resposta) {
@@ -295,96 +260,6 @@
         });
     }
 
-    function curtir(idPublicacao) {
-        sessionStorage.ID_PUBLICACAO = idPublicacao;
-        var idUsuario = sessionStorage.ID_USUARIO;
-
-        fetch(`/publicacoes/curtir/${sessionStorage.getItem("ID_PUBLICACAO")}`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                idUsuarioServer: idUsuario,
-                idPublicacaoServer: idPublicacao,
-            }),
-        })
-            .then(function (resposta) {
-                console.log("Resposta: ", resposta);
-
-                if (resposta.ok) {
-                    console.log("Curtida realizada com sucesso pelo usuario" + sessionStorage.getItem("USERNAME_USUARIO"));
-
-                    like(idPublicacao);
-
-                } else {
-                    throw "Houve um erro ao tentar curtir a publicação!";
-                }
-            })
-            .catch(function (erro) {
-                console.log(`#ERRO: ${erro}`);
-            });
-
-        return false;
-    }
-
-    function descurtir(idPublicacao) {
-        sessionStorage.ID_PUBLICACAO = idPublicacao;
-        var idUsuario = sessionStorage.ID_USUARIO;
-
-        fetch(`/publicacoes/descurtir/${sessionStorage.getItem("ID_PUBLICACAO")}`, {
-            method: "DELETE",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                idUsuarioServer: idUsuario,
-                idPublicacaoServer: idPublicacao,
-            }),
-        })
-            .then(function (resposta) {
-                console.log("Resposta: ", resposta);
-
-                if (resposta.ok) {
-                    console.log("descurtida realizada com sucesso pelo usuario" + sessionStorage.getItem("USERNAME_USUARIO"));
-
-                    deslike(idPublicacao);
-
-                } else {
-                    throw "Houve um erro ao tentar descurtir a publicação!";
-                }
-            })
-            .catch(function (erro) {
-                console.log(`#ERRO: ${erro}`);
-            });
-
-        return false;
-    }
-
-    function like(idPublicacao) {
-        var divLike = document.getElementById(`div_like_${idPublicacao}`);
-        var divDeslike = document.getElementById(`div_deslike_${idPublicacao}`);
-        divLike.style.display = 'none';
-        divDeslike.style.display = 'block';
-
-        var spanDeslike = document.getElementById(`span_deslike_${idPublicacao}`);
-        var spanLike = document.getElementById(`span_like_${idPublicacao}`);
-        spanLike.innerText = Number(spanLike.innerText) + 1;
-        spanDeslike.innerText = Number(spanLike.innerText);
-    }
-
-    function deslike(idPublicacao) {
-        var divLike = document.getElementById(`div_like_${idPublicacao}`);
-        var divDeslike = document.getElementById(`div_deslike_${idPublicacao}`);
-        divLike.style.display = 'block';
-        divDeslike.style.display = 'none';
-
-        var spanDeslike = document.getElementById(`span_deslike_${idPublicacao}`);
-        var spanLike = document.getElementById(`span_like_${idPublicacao}`);
-        spanDeslike.innerText = Number(spanDeslike.innerText) - 1;
-        spanLike.innerText = Number(spanDeslike.innerText);
-    }
-
     function publicacao(idPublicacao) {
         sessionStorage.ID_PUBLICACAO = idPublicacao;
 
@@ -411,33 +286,4 @@
 
         return false;
     }
-
-    function visualizar(idPublicacao) {
-        var idUsuarioVar = sessionStorage.ID_USUARIO;
-
-        fetch(`/publicacoes/visualizar/${sessionStorage.ID_PUBLICACAO}`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                idUsuarioServer: idUsuarioVar,
-            }),
-        })
-            .then(function (resposta) {
-                console.log("Resposta: ", resposta);
-
-                if (resposta.ok) {
-                    console.log("Visualização realizada com sucesso pelo usuario " + sessionStorage.getItem("USERNAME_USUARIO"));
-                } else {
-                    throw "Houve um erro ao tentar visualizar a publicação!";
-                }
-            })
-            .catch(function (erro) {
-                console.log(`#ERRO: ${erro}`);
-            });
-
-        return false;
-    }
-
 </script>

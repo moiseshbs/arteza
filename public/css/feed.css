@@ -519,6 +519,17 @@ html, body {
     display: flex;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
+}
+
+.comentarioResposta {
+    width: 80% !important;
+    display: none;
+}
+
+.comentarioResposta .fotoPerfil {
+    height: 30px !important;
+    width: 30px !important;
 }
 
 .areaFotoPerfil .fotoPerfilPubli {
@@ -544,6 +555,10 @@ html, body {
     width: 80%;
 }
 
+.contComentario h4 {
+    cursor: pointer;
+}
+
 .contComentario h4, span {
     margin-left: 5px;
 }
@@ -551,4 +566,14 @@ html, body {
 .scrollComentarios {
     overflow-y: auto;
     height: 250px;
+}
+
+.btnMostrarMais {
+    font-weight: bold;
+    color: #5E4889;
+    cursor: pointer;
+}
+
+.btnMostrarMais:hover {
+    color: #6f49bb;
 }

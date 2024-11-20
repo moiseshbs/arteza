@@ -16,11 +16,6 @@ router.get("/listarID/:idPublicacao", function (req, res) {
     publicacaoController.listarPorId(req, res);
 });
 
-router.get("/listarCurtida/:idUsuario", function (req, res) {
-    publicacaoController.listarCurtida(req, res);
-});
-
-
 router.get("/pesquisar/:descricao", function (req, res) {
     publicacaoController.pesquisarDescricao(req, res);
 });
@@ -43,24 +38,6 @@ router.put("/deletar/:idPublicacao", function (req, res) {
 
 router.put("/recuperar/:idPublicacao", function (req, res) {
     publicacaoController.recuperar(req, res);
-});
-
-// rotas para curtida
-router.post("/curtir/:idPublicacao", function (req, res) {
-    publicacaoController.curtir(req, res);
-});
-
-router.delete("/descurtir/:idPublicacao", function (req, res) {
-    publicacaoController.descurtir(req, res);
-});
-
-//rotas de comentario
-router.post("/comentar/:idPublicacao", function (req, res) {
-    publicacaoController.comentar(req, res);
-})
-
-router.get("/listarComentario/:idPublicacao", function (req, res) {
-    publicacaoController.listarComentario(req, res);
 });
 
 //rota de visualizacao

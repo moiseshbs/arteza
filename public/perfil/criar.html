@@ -119,7 +119,41 @@
 <script>
     var contarTags = 0;
     var lista_tags = [];
+    
+    function buscarTag() {
+        var texto = input_tag.value;
 
+        if (texto != '') {
+            fetch(`/tags/recomendacao/${texto}`).then(function (resposta) {
+                if (resposta.ok) {
+                    if (resposta.status == 204) {
+                        barraTags.innerHTML = `
+                            <p>Tag não encontrada :(</p>
+                        `;
+                    } else {
+                        resposta.json().then(function (resposta) {
+                            // console.log("Dados recebidos: ", JSON.stringify(resposta));
+                            barraTags.style.display = 'flex';
+
+                            for (let i = 0; i < resposta.length; i++) {
+                                var tag = resposta[i];
+
+                                barraTags.innerHTML = `
+                                <p onclick="tags(${tag.idTag}, '${tag.nome}')">${tag.nome}</p>
+                                `;
+                            }
+                        });
+                    }
+                } else {
+                    throw ('Houve um erro na API!');
+                }
+            }).catch(function (resposta) {
+                console.error(resposta);
+            });
+        } else {
+            barraTags.style.display = 'none';
+        }
+    }
     function tags(idTag, nomeTag) {
         
         var posicaoTag = lista_tags.indexOf(idTag);
@@ -174,41 +208,6 @@
             preview.style.display = 'none'; // Esconde a imagem
         }
     });
-
-    function buscarTag() {
-        var texto = input_tag.value;
-
-        if (texto != '') {
-            fetch(`/tags/recomendacao/${texto}`).then(function (resposta) {
-                if (resposta.ok) {
-                    if (resposta.status == 204) {
-                        barraTags.innerHTML = `
-                            <p>Tag não encontrada :(</p>
-                        `;
-                    } else {
-                        resposta.json().then(function (resposta) {
-                            // console.log("Dados recebidos: ", JSON.stringify(resposta));
-                            barraTags.style.display = 'flex';
-
-                            for (let i = 0; i < resposta.length; i++) {
-                                var tag = resposta[i];
-
-                                barraTags.innerHTML = `
-                                <p onclick="tags(${tag.idTag}, '${tag.nome}')">${tag.nome}</p>
-                                `;
-                            }
-                        });
-                    }
-                } else {
-                    throw ('Houve um erro na API!');
-                }
-            }).catch(function (resposta) {
-                console.error(resposta);
-            });
-        } else {
-            barraTags.style.display = 'none';
-        }
-    }
 
     function publicar() {
         var tituloVar = input_titulo.value;

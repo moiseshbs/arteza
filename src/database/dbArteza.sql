@@ -7,7 +7,7 @@ CREATE TABLE usuario (
     username VARCHAR(20) UNIQUE,
     email VARCHAR(45) UNIQUE,
     senha VARCHAR(45),
-    imgPerfil VARCHAR(255),
+    imgPerfil VARCHAR(255) DEFAULT 'padrao.jpg',
     dtCadastro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -39,9 +39,11 @@ CREATE TABLE comentario (
     fkUsuario INT,
     comentario VARCHAR(45),
     dtComentario TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    fkResposta INT,
     PRIMARY KEY (idComentario, fkPublicacao, fkUsuario),
 	FOREIGN KEY (fkPublicacao) REFERENCES publicacao(idPublicacao),
-    FOREIGN KEY (fkUsuario) REFERENCES usuario(idUsuario)
+    FOREIGN KEY (fkUsuario) REFERENCES usuario(idUsuario),
+    FOREIGN KEY (fkResposta) REFERENCES comentario(idComentario)
 );
 
 CREATE TABLE visualizacao (
@@ -69,7 +71,8 @@ CREATE TABLE tag_publicacao (
 
 -- Inserindo usuários
 INSERT INTO usuario (nome, username, email, senha, imgPerfil) VALUES 
-	('Moises', 'moiseshxs', 'moises@email.com', '12345678', '9d9ab97e0fca2375549542fa5b763b1f7bad7e292a904d9f9be55196b407078151d1d437889ca04bd2b97f3a43068118537673014c93b084aefc4e2629644c3a.jpg');
+	('Moises', 'moiseshxs', 'moises@email.com', '12345678', '970a619cd1b06b8f1a85026eefc2fe1f0507d007cf2de4c4b03e2a94d1f5e31c12d2a08db65230e5d23c7ef9ee1bd8012b52ca26a4fe21eba23288bab6de5bcd.jpg'),
+    ('Dudu', 'Ohata', 'dudu@gmail.com', '12345678', '57e24422d6e6df0571bd32d7b180dc853d8bd4a729bcb28b85b40c4de8ab3a4b22ebbc78c3f6d98bd06687fbf67e8a4c5bf3fa8eb56c0e514b17dd5c438cbe19.jfif');
 
 -- inserindo publicacoes
 INSERT INTO publicacao (fkUsuario, imgPublicacao, descricao, titulo) VALUES 
@@ -85,7 +88,8 @@ INSERT INTO publicacao (fkUsuario, imgPublicacao, descricao, titulo) VALUES
 	(1, 'cfa3e946fa1000a24b07b28195e8c7b535d9db8b9e8a669f0dd5b160efdea43742a3f658b2044a7e5b3c74f2e705badddb9e1a47a3f8f94fe7ea8d31b1c9ecbe.jpg', 'Personagem de anime samurai', 'Samurai'),
     (1, 'ea3183b1924ccd3ebc58240ea33da5b2ea451a8d5f1ca392fb26240b4afa16d9f005842b1c815a7fa6292d5a66ee4f4ad0cb0de843e01d43e4ddc3214660f6c2.jpg', 'Personagem de anime 2', 'Samurai 2'),
 	(1, 'a0b8a0de826d7aea13f82e0f5a7efbc2690a59185f0ff2d76a2abd70d9ef8582bf3b29b12734181917d82821e5dbcb2302ee85c1196a0d882ef82ef408c97908.jpg', 'Ellie sem colorir', 'Ellie lineart'),
-	(1, '2448660b9cb670ebfd83ed446a92ee3d3e88ade756a6ac138ac9435cae49a40f82a4859082d0b1fb0bd03d7407fdcf9531af6cffd9bbacd0494b5dd5f317b9e3.jpg', 'Ellie de The Last of Us - colorido', 'Ellie');
+	(1, '2448660b9cb670ebfd83ed446a92ee3d3e88ade756a6ac138ac9435cae49a40f82a4859082d0b1fb0bd03d7407fdcf9531af6cffd9bbacd0494b5dd5f317b9e3.jpg', 'Ellie de The Last of Us - colorido', 'Ellie'),
+    (2, '0fc86963085d839e23d0021d1537d8c521e4542a912b450aef198bfd9b7ed909044b83d9884fae2863c4bced32b381a1f08a1f4a7018ce4f9cb1a6093663d811.png', 'Meu desenho feito para o Moises', 'Shimen Takezo');
 
 -- inserindo curtidas
 INSERT INTO curtida (fkPublicacao, fkUsuario) VALUES 
@@ -116,321 +120,3 @@ INSERT INTO tag_publicacao (fkPublicacao, fkTag) VALUES
 	(1, 1),
 	(2, 2),
 	(3, 3);
-
-SELECT 
-    DATE_FORMAT(base.mes_referencia, '%M') AS mes,
-    IFNULL(publicacoes.total_publicacao, 0) AS publicacao,
-    IFNULL(comentarios.total_comentario, 0) AS comentario,
-    IFNULL(curtidas.total_curtida, 0) AS curtida,
-    IFNULL(visualizacoes.total_visualizacao, 0) AS visualizacao
-FROM (
-    SELECT DISTINCT DATE_FORMAT(dtPublicacao, '%Y-%m-01') AS mes_referencia
-    FROM publicacao
-    UNION
-    SELECT DISTINCT DATE_FORMAT(dtComentario, '%Y-%m-01')
-    FROM comentario
-    UNION
-    SELECT DISTINCT DATE_FORMAT(dtCurtida, '%Y-%m-01')
-    FROM curtida
-    UNION
-    SELECT DISTINCT DATE_FORMAT(dtVisualizacao, '%Y-%m-01')
-    FROM visualizacao
-) AS base
-
-LEFT JOIN (
-    SELECT 
-        DATE_FORMAT(dtPublicacao, '%Y-%m-01') AS mes_referencia, 
-        COUNT(*) AS total_publicacao
-    FROM publicacao
-    WHERE fkUsuario = 1
-    GROUP BY mes_referencia
-) AS publicacoes
-ON base.mes_referencia = publicacoes.mes_referencia
-
-LEFT JOIN (
-    SELECT 
-        DATE_FORMAT(dtComentario, '%Y-%m-01') AS mes_referencia, 
-        COUNT(*) AS total_comentario
-    FROM comentario
-    JOIN publicacao ON comentario.fkPublicacao = publicacao.idPublicacao
-    WHERE publicacao.fkUsuario = 1
-    GROUP BY mes_referencia
-) AS comentarios
-ON base.mes_referencia = comentarios.mes_referencia
-
-LEFT JOIN (
-    SELECT 
-        DATE_FORMAT(dtCurtida, '%Y-%m-01') AS mes_referencia, 
-        COUNT(*) AS total_curtida
-    FROM curtida
-    JOIN publicacao ON curtida.fkPublicacao = publicacao.idPublicacao
-    WHERE publicacao.fkUsuario = 1
-    GROUP BY mes_referencia
-) AS curtidas
-ON base.mes_referencia = curtidas.mes_referencia
-
-LEFT JOIN (
-    SELECT 
-        DATE_FORMAT(dtVisualizacao, '%Y-%m-01') AS mes_referencia, 
-        COUNT(*) AS total_visualizacao
-    FROM visualizacao
-    JOIN publicacao ON visualizacao.fkPublicacao = publicacao.idPublicacao
-    WHERE publicacao.fkUsuario = 1
-    GROUP BY mes_referencia
-) AS visualizacoes
-ON base.mes_referencia = visualizacoes.mes_referencia
-
-ORDER BY base.mes_referencia;
-
-
-SELECT
-			(SELECT COUNT(p.idPublicacao)
-            FROM publicacao AS p
-            WHERE p.fkUsuario = ${idUsuario}) AS publicacao,
-            
-            (SELECT COUNT(c.idComentario)
-            FROM comentario AS c
-            JOIN publicacao AS p ON c.fkPublicacao = p.idPublicacao
-            WHERE p.fkUsuario = ${idUsuario}) AS comentario,
-            
-            (SELECT COUNT(l.qtdCurtida) 
-            FROM curtida AS l
-            JOIN publicacao AS p ON l.fkPublicacao = p.idPublicacao
-            WHERE p.fkUsuario = ${idUsuario}) AS curtida,
-            
-            (SELECT COUNT(v.idVisualizacao) 
-            FROM visualizacao AS v
-            JOIN publicacao AS p ON v.fkPublicacao = p.idPublicacao
-            WHERE p.fkUsuario = ${idUsuario}) AS visualizacao;
-            
-	SELECT COUNT(l.qtdCurtida) 
-            FROM curtida AS l
-            JOIN publicacao AS p ON l.fkPublicacao = p.idPublicacao
-            WHERE p.fkUsuario = 1;
-            
-            
-	SELECT 
-    IF(base.mes_referencia IS NULL, 'Total', DATE_FORMAT(base.mes_referencia, '%M')) AS mes,
-    SUM(IFNULL(publicacoes.total_publicacao, 0)) AS publicacao,
-    SUM(IFNULL(comentarios.total_comentario, 0)) AS comentario,
-    SUM(IFNULL(curtidas.total_curtida, 0)) AS curtida,
-    SUM(IFNULL(visualizacoes.total_visualizacao, 0)) AS visualizacao
-FROM (
-    SELECT DISTINCT DATE_FORMAT(dtPublicacao, '%Y-%m-01') AS mes_referencia
-    FROM publicacao
-    UNION
-    SELECT DISTINCT DATE_FORMAT(dtComentario, '%Y-%m-01')
-    FROM comentario
-    UNION
-    SELECT DISTINCT DATE_FORMAT(dtCurtida, '%Y-%m-01')
-    FROM curtida
-    UNION
-    SELECT DISTINCT DATE_FORMAT(dtVisualizacao, '%Y-%m-01')
-    FROM visualizacao
-) AS base
-
-LEFT JOIN (
-    SELECT 
-        DATE_FORMAT(dtPublicacao, '%Y-%m-01') AS mes_referencia, 
-        COUNT(*) AS total_publicacao
-    FROM publicacao
-    WHERE fkUsuario = 1
-    GROUP BY mes_referencia
-) AS publicacoes
-ON base.mes_referencia = publicacoes.mes_referencia
-
-LEFT JOIN (
-    SELECT 
-        DATE_FORMAT(dtComentario, '%Y-%m-01') AS mes_referencia, 
-        COUNT(*) AS total_comentario
-    FROM comentario
-    JOIN publicacao ON comentario.fkPublicacao = publicacao.idPublicacao
-    WHERE publicacao.fkUsuario = 1
-    GROUP BY mes_referencia
-) AS comentarios
-ON base.mes_referencia = comentarios.mes_referencia
-
-LEFT JOIN (
-    SELECT 
-        DATE_FORMAT(dtCurtida, '%Y-%m-01') AS mes_referencia, 
-        COUNT(*) AS total_curtida
-    FROM curtida
-    JOIN publicacao ON curtida.fkPublicacao = publicacao.idPublicacao
-    WHERE publicacao.fkUsuario = 1
-    GROUP BY mes_referencia
-) AS curtidas
-ON base.mes_referencia = curtidas.mes_referencia
-
-LEFT JOIN (
-    SELECT 
-        DATE_FORMAT(dtVisualizacao, '%Y-%m-01') AS mes_referencia, 
-        COUNT(*) AS total_visualizacao
-    FROM visualizacao
-    JOIN publicacao ON visualizacao.fkPublicacao = publicacao.idPublicacao
-    WHERE publicacao.fkUsuario = 1
-    GROUP BY mes_referencia
-) AS visualizacoes
-ON base.mes_referencia = visualizacoes.mes_referencia
-
-GROUP BY base.mes_referencia WITH ROLLUP
-HAVING base.mes_referencia IS NOT NULL OR mes = 'Total'
-ORDER BY FIELD(mes, 'Total') DESC, base.mes_referencia;
-
- SELECT
-			(SELECT COUNT(p.idPublicacao)
-            FROM publicacao AS p
-            WHERE p.fkUsuario = 1) AS publicacaoKpi,
-            
-            (SELECT COUNT(c.idComentario)
-            FROM comentario AS c
-            JOIN publicacao AS p ON c.fkPublicacao = p.idPublicacao
-            WHERE p.fkUsuario = 1) AS comentarioKpi,
-            
-            (SELECT COUNT(l.qtdCurtida) 
-            FROM curtida AS l
-            JOIN publicacao AS p ON l.fkPublicacao = p.idPublicacao
-            WHERE p.fkUsuario = 1) AS curtidaKpi,
-            
-            (SELECT COUNT(v.idVisualizacao) 
-            FROM visualizacao AS v
-            JOIN publicacao AS p ON v.fkPublicacao = p.idPublicacao
-            WHERE p.fkUsuario = 1) AS visualizacaoKpi;
-            
-            
-        SELECT 
-            DATE_FORMAT(base.mes_referencia, '%M') AS mes,
-            IFNULL(publicacoes.total_publicacao, 0) AS publicacao,
-            IFNULL(comentarios.total_comentario, 0) AS comentario,
-            IFNULL(curtidas.total_curtida, 0) AS curtida,
-            IFNULL(visualizacoes.total_visualizacao, 0) AS visualizacao
-        FROM (
-            SELECT DISTINCT DATE_FORMAT(dtPublicacao, '%Y-%m-01') AS mes_referencia
-            FROM publicacao
-            UNION
-            SELECT DISTINCT DATE_FORMAT(dtComentario, '%Y-%m-01')
-            FROM comentario
-            UNION
-            SELECT DISTINCT DATE_FORMAT(dtCurtida, '%Y-%m-01')
-            FROM curtida
-            UNION
-            SELECT DISTINCT DATE_FORMAT(dtVisualizacao, '%Y-%m-01')
-            FROM visualizacao
-        ) AS base
-
-        LEFT JOIN (
-            SELECT 
-                DATE_FORMAT(dtPublicacao, '%Y-%m-01') AS mes_referencia, 
-                COUNT(*) AS total_publicacao
-            FROM publicacao
-            WHERE fkUsuario = 1
-            GROUP BY mes_referencia
-        ) AS publicacoes
-        ON base.mes_referencia = publicacoes.mes_referencia
-
-        LEFT JOIN (
-            SELECT 
-                DATE_FORMAT(dtComentario, '%Y-%m-01') AS mes_referencia, 
-                COUNT(*) AS total_comentario
-            FROM comentario
-            JOIN publicacao ON comentario.fkPublicacao = publicacao.idPublicacao
-            WHERE publicacao.fkUsuario = 1
-            GROUP BY mes_referencia
-        ) AS comentarios
-        ON base.mes_referencia = comentarios.mes_referencia
-
-        LEFT JOIN (
-            SELECT 
-                DATE_FORMAT(dtCurtida, '%Y-%m-01') AS mes_referencia, 
-                COUNT(*) AS total_curtida
-            FROM curtida
-            JOIN publicacao ON curtida.fkPublicacao = publicacao.idPublicacao
-            WHERE publicacao.fkUsuario = 1
-            GROUP BY mes_referencia
-        ) AS curtidas
-        ON base.mes_referencia = curtidas.mes_referencia
-
-        LEFT JOIN (
-            SELECT 
-                DATE_FORMAT(dtVisualizacao, '%Y-%m-01') AS mes_referencia, 
-                COUNT(*) AS total_visualizacao
-            FROM visualizacao
-            JOIN publicacao ON visualizacao.fkPublicacao = publicacao.idPublicacao
-            WHERE publicacao.fkUsuario = 1
-            GROUP BY mes_referencia
-        ) AS visualizacoes
-        ON base.mes_referencia = visualizacoes.mes_referencia,
-        
-        (SELECT COUNT(p.idPublicacao)
-            FROM publicacao AS p
-            WHERE p.fkUsuario = 1) AS publicacaoKpi,
-            
-        (SELECT COUNT(c.idComentario)
-            FROM comentario AS c
-            JOIN publicacao AS p ON c.fkPublicacao = p.idPublicacao
-            WHERE p.fkUsuario = 1) AS comentarioKpi,
-            
-        (SELECT COUNT(l.qtdCurtida) 
-            FROM curtida AS l
-            JOIN publicacao AS p ON l.fkPublicacao = p.idPublicacao
-            WHERE p.fkUsuario = 1) AS curtidaKpi,
-            
-        (SELECT COUNT(v.idVisualizacao) 
-            FROM visualizacao AS v
-            JOIN publicacao AS p ON v.fkPublicacao = p.idPublicacao
-            WHERE p.fkUsuario = 1) AS visualizacaoKpi
-            
-        ORDER BY base.mes_referencia;
-        
-SELECT t.nome, p.imgPublicacao FROM tag AS t
-	JOIN tag_publicacao AS tp
-		ON tp.fkTag = t.idTag
-	JOIN publicacao AS p
-		ON tp.fkPublicacao = p.idPublicacao;
-        
-         SELECT 
-            p.idPublicacao, 
-            p.fkUsuario, 
-            p.imgPublicacao, 
-            p.descricao, 
-            p.dtPublicacao,
-            p.titulo, 
-            u.idUsuario, 
-            u.username,
-            COUNT(DISTINCT l.qtdCurtida) AS curtida,
-            COUNT(DISTINCT c.idComentario) AS comentario,
-            COUNT(DISTINCT v.idVisualizacao) AS visualizacao
-        FROM publicacao AS p
-            INNER JOIN usuario AS u 
-                ON p.fkUsuario = u.idUsuario
-            LEFT JOIN curtida AS l
-                ON l.fkPublicacao = p.idPublicacao
-            LEFT JOIN comentario AS c
-                ON c.fkPublicacao = p.idPublicacao
-            LEFT JOIN visualizacao AS v
-                ON v.fkPublicacao = p.idPublicacao
-                GROUP BY 
-                p.idPublicacao, 
-                p.fkUsuario, 
-                p.imgPublicacao, 
-                p.descricao, 
-                p.dtPublicacao,
-                p.titulo, 
-                u.idUsuario, 
-                u.username
-                ORDER BY curtida DESC LIMIT 1;
-                
-        SELECT 
-            u.idUsuario,
-            u.nome,
-            u.username,
-            u.imgPerfil,
-            p.titulo,
-            p.descricao,
-            p.imgPublicacao
-        FROM usuario AS u
-            JOIN publicacao AS p
-                ON p.fkUsuario = u.idUsuario
-        WHERE u.nome LIKE 'moises'
-        OR u.username LIKE '%${texto}%'
-        OR p.titulo LIKE '%${texto}%'
-        OR p.descricao LIKE '%${texto}%';

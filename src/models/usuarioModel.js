@@ -50,7 +50,6 @@ function listarID(idUsuario) {
 }
 
 function atualizar(idUsuario, nome, username, email, senha, imagem) {
-    console.log(`atualizando essa porra veia. ${nome}, ${username}, ${email}, ${senha}`)
     var instrucaoSql = `
         UPDATE usuario SET 
             nome = '${nome}', 

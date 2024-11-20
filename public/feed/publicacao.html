@@ -20,7 +20,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
 
-<body onload="validarSessao(), listarCurtida(), atualizarFeed(), atualizarComentario()">
+<body onload="validarSessao(), listarCurtida(), atualizarComentario()">
     <header>
         <div class="container">
             <a href="feed.html">
@@ -138,48 +138,14 @@
 </html>
 
 <script src="../js/publicacao.js"></script>
+<script src="../js/comentario.js"></script>
+<script src="../js/curtida.js"></script>
 
 <script>
-    var curtiu = [];
-
-    function listarCurtida() {
-        var idUsuario = sessionStorage.ID_USUARIO;
-
-        fetch(`/publicacoes/listarCurtida/${idUsuario}`).then(function (resposta) {
-            if (resposta.ok) {
-                if (resposta.status == 204) {
-                    // var listaComentario = document.getElementById("listaComentario_teste");
-                    // var mensagem = document.createElement("div");
-                    // mensagem.innerHTML = `
-                    // <div class="comentario">
-                    //     <span>Seja o primeiro a comentar...</span>
-                    // </div>`
-                    // listaComentario.appendChild(mensagem);
-                } else {
-                    resposta.json().then(function (resposta) {
-                        console.log("Dados recebidos: ", JSON.stringify(resposta));
-
-                        for (let i = 0; i < resposta.length; i++) {
-                            var curtida = resposta[i];
-
-                            curtiu.push(curtida.fkPublicacao);
-                        }
-
-                    });
-                }
-            } else {
-                throw ('Houve um erro na API!');
-            }
-        }).catch(function (resposta) {
-            console.error(resposta);
-            finalizarAguardar();
-        });
-    }
-
     var tituloPublicacao = '';
     var descricaoPublicacao = '';
 
-    function atualizarFeed() {
+    function atualizarFeed(curtiu) {
         fetch(`/publicacoes/listarID/${sessionStorage.ID_PUBLICACAO}`).then(function (resposta) {
             if (resposta.ok) {
                 if (resposta.status == 204) {
@@ -217,7 +183,7 @@
                             div_deslike.style.display = 'none';
                         }
 
-                        if (publicacao.idUsuario == sessionStorage.ID_USUARIOPUBLICACAO) {
+                        if (publicacao.fkUsuario == sessionStorage.ID_USUARIO) {
                             tresPontos.style.display = 'flex';
                         }
 
@@ -252,195 +218,6 @@
         }).catch(function (resposta) {
             console.error(resposta);
         });
-    }
-
-    function atualizarComentario() {
-        fetch(`/publicacoes/listarComentario/${sessionStorage.ID_PUBLICACAO}`).then(function (resposta) {
-            if (resposta.ok) {
-                if (resposta.status == 204) {
-                    var listaComentario = document.getElementById("listaComentario_teste");
-                    var mensagem = document.createElement("div");
-                    mensagem.innerHTML = `
-                        <div class="comentario">
-                            <span>Seja o primeiro a comentar...</span>
-                        </div>`
-                    listaComentario.appendChild(mensagem);
-                } else {
-                    resposta.json().then(function (resposta) {
-                        // console.log("Dados recebidos: ", JSON.stringify(resposta));
-
-                        var fotoPerfil = '';
-
-                        for (let i = 0; i < resposta.length; i++) {
-                            var comentario = resposta[i];
-
-                            if (comentario.imgPerfil == null) {
-                                fotoPerfil = 'padrao.jpg';
-                            } else {
-                                fotoPerfil = comentario.imgPerfil;
-                            }
-
-                            listaComentario_teste.innerHTML += `
-                                <div class="comentario">
-                                    <div class="areaFotoPerfil">
-                                        <img src="../assets/publicacao/${fotoPerfil}" class="fotoPerfil">
-                                    </div>
-                                    <div class="contComentario">
-                                        <h4>${comentario.username}</h4>
-                                        <span>${comentario.comentario}</span>
-                                    </div>
-                                </div>
-                            `;
-                        }
-
-                    });
-                }
-            } else {
-                throw ('Houve um erro na API!');
-            }
-        }).catch(function (resposta) {
-            console.error(resposta);
-            finalizarAguardar();
-        });
-    }
-
-    function comentar() {
-        // variaveis vindo do formulario de cadastro
-        var comentarioVar = input_comentario.value;
-
-        if (comentarioVar == "") {
-            finalizarAguardar();
-            return false;
-        } else {
-            setInterval(5000);
-        }
-
-        // enviando o valor da input
-        fetch(`/publicacoes/comentar/${sessionStorage.ID_PUBLICACAO}`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                idUsuarioServer: sessionStorage.ID_USUARIO,
-                comentarioServer: comentarioVar
-            }),
-        })
-            .then(function (resposta) {
-                console.log("resposta: ", resposta);
-
-                if (resposta.ok) {
-                    console.log("Comentario realizado com sucesso!");
-
-                    listaComentario_teste.innerHTML = "";
-                    input_comentario.value = "";
-
-                    atualizarComentario();
-                    contarComentario();
-                } else {
-                    throw "Houve um erro ao tentar comentar!";
-                }
-            })
-            .catch(function (resposta) {
-                console.log(`#ERRO: ${resposta}`);
-            });
-
-        return false;
-    }
-
-    function curtir(idPublicacao) {
-        var idUsuario = sessionStorage.ID_USUARIO;
-
-        fetch(`/publicacoes/curtir/${sessionStorage.ID_PUBLICACAO}`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                idUsuarioServer: idUsuario,
-                idPublicacaoServer: sessionStorage.ID_PUBLICACAO,
-            }),
-        })
-            .then(function (resposta) {
-                console.log("Resposta: ", resposta);
-
-                if (resposta.ok) {
-                    console.log("Curtida realizada com sucesso pelo usuario" + sessionStorage.getItem("USERNAME_USUARIO"));
-
-                    like(idPublicacao);
-
-                } else {
-                    if (resposta.status == 500) {
-                        console.log("voce ja curtiu!")
-
-                        like();
-                    }
-                    throw "Houve um erro ao tentar curtir a publicação!";
-                }
-            })
-            .catch(function (erro) {
-                console.log(`#ERRO: ${erro}`);
-            });
-
-        return false;
-    }
-
-    function descurtir(idPublicacao) {
-        var idUsuario = sessionStorage.ID_USUARIO;
-
-        fetch(`/publicacoes/descurtir/${sessionStorage.ID_PUBLICACAO}`, {
-            method: "DELETE",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                idUsuarioServer: idUsuario,
-                idPublicacaoServer: sessionStorage.ID_PUBLICACAO,
-            }),
-        })
-            .then(function (resposta) {
-                console.log("Resposta: ", resposta);
-
-                if (resposta.ok) {
-                    console.log("descurtida realizada com sucesso pelo usuario" + sessionStorage.getItem("USERNAME_USUARIO"));
-
-                    deslike();
-
-                } else {
-                    throw "Houve um erro ao tentar descurtir a publicação!";
-                }
-            })
-            .catch(function (erro) {
-                console.log(`#ERRO: ${erro}`);
-            });
-
-        return false;
-    }
-
-    function like() {
-        var spanDeslike = document.getElementById(`span_deslike`);
-        var spanLike = document.getElementById(`span_like`);
-        div_like.style.display = 'none';
-        div_deslike.style.display = 'block';
-
-        spanLike.innerText = Number(spanLike.innerText) + 1;
-        spanDeslike.innerText = Number(spanLike.innerText);
-    }
-
-    function deslike() {
-        var spanDeslike = document.getElementById(`span_deslike`);
-        var spanLike = document.getElementById(`span_like`);
-        div_like.style.display = 'block';
-        div_deslike.style.display = 'none';
-
-        spanDeslike.innerText = Number(spanDeslike.innerText) - 1;
-        spanLike.innerText = Number(spanDeslike.innerText);
-    }
-
-    function contarComentario() {
-        var spanComentario = document.getElementById(`span_comentario`);
-
-        spanComentario.innerText = Number(spanComentario.innerText) + 1;
     }
 
     function perfil(idUsuario) {
@@ -706,7 +483,6 @@
         `;
     }
 
-
     function excluir() {
         var idPublicacao = sessionStorage.ID_PUBLICACAO;
 
@@ -730,5 +506,15 @@
             .catch(function (erro) {
                 console.log(`#ERRO: ${erro}`);
             });
+    }
+
+    function mostrarResposta(idComentario) {
+        var resposta = document.getElementById(`respostaComent_${idComentario}`);
+
+        if (resposta.style.display == 'none') {
+            resposta.style.display = 'flex';
+        } else {
+            resposta.style.display = 'none';
+        }
     }
 </script>

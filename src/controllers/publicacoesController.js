@@ -14,22 +14,6 @@ function listar(req, res) {
     });
 }
 
-function listarCurtida(req, res) {
-    var idUsuario = req.params.idUsuario
-
-    publicacaoModel.listarCurtida(idUsuario).then(function (resultado) {
-        if (resultado.length > 0) {
-            res.status(200).json(resultado);
-        } else {
-            res.status(204).send("Nenhum resultado encontrado!")
-        }
-    }).catch(function (erro) {
-        console.log(erro);
-        console.log("Houve um erro ao buscar os avisos: ", erro.sqlMessage);
-        res.status(500).json(erro.sqlMessage);
-    });
-}
-
 function listarPorUsuario(req, res) {
     var idUsuario = req.params.idUsuario;
 
@@ -189,96 +173,6 @@ function recuperar(req, res) {
         );
 }
 
-function curtir(req, res) {
-    var idPublicacao = req.body.idPublicacaoServer;
-    var idUsuario = req.body.idUsuarioServer;
-
-    publicacaoModel.curtir(idPublicacao, idUsuario)
-        .then(
-            function (resultado) {
-                res.json(resultado);
-            }
-        )
-        .catch(
-            function (erro) {
-                console.log(erro);
-                console.log("Houve um erro ao curtir o post: ", erro.sqlMessage);
-                res.status(500).json(erro.sqlMessage);
-                console.log(idUsuario)
-            }
-        );
-}
-
-function descurtir(req, res) {
-    var idPublicacao = req.body.idPublicacaoServer;
-    var idUsuario = req.body.idUsuarioServer;
-
-    publicacaoModel.descurtir(idPublicacao, idUsuario)
-        .then(
-            function (resultado) {
-                res.json(resultado);
-            }
-        )
-        .catch(
-            function (erro) {
-                console.log(erro);
-                console.log("Houve um erro ao descurtir o post: ", erro.sqlMessage);
-                res.status(500).json(erro.sqlMessage);
-            }
-        );
-}
-
-function comentar(req, res) {
-    var idPublicacao = req.params.idPublicacao;
-    var idUsuario = req.body.idUsuarioServer;
-    var comentario = req.body.comentarioServer;
-
-    if (comentario == undefined) {
-        res.status(400).send("O comentario está indefinido!");
-    } else if (idUsuario == undefined) {
-        res.status(403).send("O id do usuário está indefinido!");
-    } else {
-        publicacaoModel.comentar(idPublicacao, idUsuario, comentario)
-            .then(
-                function (resultado) {
-                    res.json(resultado);
-                }
-            )
-            .catch(
-                function (erro) {
-                    console.log(erro);
-                    console.log("Houve um erro ao realizar o comentario: ", erro.sqlMessage);
-                    res.status(500).json(erro.sqlMessage);
-                }
-            );
-    }
-}
-
-function listarComentario(req, res) {
-    var idPublicacao = req.params.idPublicacao;
-
-    publicacaoModel.listarComentario(idPublicacao)
-        .then(
-            function (resultado) {
-                if (resultado.length > 0) {
-                    res.status(200).json(resultado);
-                } else {
-                    res.status(204).send("Nenhum resultado encontrado!");
-                }
-            }
-        )
-        .catch(
-            function (erro) {
-                console.log(erro);
-                console.log(
-                    "Houve um erro ao buscar os avisos: ",
-                    erro.sqlMessage
-                );
-                res.status(500).json(erro.sqlMessage);
-            }
-        );
-}
-
 function visualizar(req, res) {
     var idPublicacao = req.params.idPublicacao;
     var idUsuario = req.body.idUsuarioServer;
@@ -297,7 +191,6 @@ function visualizar(req, res) {
             }
         );
 }
-
 
 function listarTop(req, res) {
     publicacaoModel.listarTop().then(function (resultado) {
@@ -322,11 +215,6 @@ module.exports = {
     editar,
     deletar,
     recuperar,
-    curtir,
-    descurtir,
-    comentar,
-    listarComentario,
     visualizar,
-    listarCurtida,
     listarTop
 }
