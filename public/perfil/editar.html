@@ -21,7 +21,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
 
-<body onload="validarSessao(), listarUsuario()">
+<body onload="validarSessao(), listarUsuarioEditar()">
     <header>
         <div class="container">
             <a href="../feed/feed.html">
@@ -104,91 +104,9 @@
 </body>
 
 </html>
+<script src="../js/usuario.js"></script>
 
 <script>
-    function listarUsuario() {
-        var idUsuario = sessionStorage.ID_USUARIO;
-
-        fetch(`/usuarios/listarID/${idUsuario}`).then(function (resposta) {
-            if (resposta.ok) {
-                if (resposta.status == 204) {
-                    var feed = document.getElementById("feed_teste");
-                    var mensagem = document.createElement("span");
-                    mensagem.innerHTML = "Nenhum resultado encontrado."
-                    feed.appendChild(mensagem);
-                    throw "Nenhum resultado encontrado!!";
-                } else {
-                    resposta.json().then(function (resposta) {
-                        // console.log("Dados recebidos: ", JSON.stringify(resposta));
-
-                        var usuario = resposta[0];
-
-                        input_nome.value = usuario.nome;
-                        input_username.value = usuario.username;
-                        input_email.value = usuario.email;
-                        input_senha.value = usuario.senha;
-                        
-                        // input_foto.value = usuario.
-                        // imagemPerfil.innerHTML = `
-                        //     <img id="preview" src="../assets/publicacao/${usuario.imgPerfil}" alt="Prévia da Imagem" class="imgPrevia">
-                        // `;
-
-                        
-                        sessionStorage.FOTO_USUARIO = usuario.imgPerfil 
-                    });
-                }
-            } else {
-                throw ('Houve um erro na API!');
-            }
-        }).catch(function (resposta) {
-            console.error(resposta);
-        });
-    }
-
-    function atualizar() {
-        const foto = document.getElementById('foto');
-        var nomeVar = input_nome.value;
-        var usernameVar = input_username.value;
-        var emailVar = input_email.value;
-        var senhaVar = input_senha.value;
-
-        const formData = new FormData();
-        formData.append('foto', foto.files[0]);
-        formData.append('nome', nomeVar);
-        formData.append('username', usernameVar);
-        formData.append('email', emailVar);
-        formData.append('senha', senhaVar);
-
-        var idUsuario = sessionStorage.ID_USUARIO;
-
-
-        fetch(`/usuarios/atualizar/${idUsuario}`, {
-            method: "PUT",
-            body: formData,
-        }).then(function (resposta) {
-            console.log("resposta: ", resposta);
-
-            if (resposta.ok) {
-                console.log("Atualização realizado com sucesso! Redirecionando para tela anterior...");
-
-                btnAvancar.innerHTML = '<img src="../assets/componentes/loading.gif" height="70%">';
-                listarUsuario();
-
-                setTimeout(() => {
-                    window.location = 'perfil.html';
-                }, "1000");
-
-            } else {
-                throw "Houve um erro ao tentar realizar a atualização!";
-            }
-        })
-            .catch(function (resposta) {
-                console.log(`#ERRO: ${resposta}`);
-            });
-
-        return false;
-    }
-
     const foto = document.getElementById('foto');
     const preview = document.getElementById('preview');
 

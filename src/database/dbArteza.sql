@@ -69,6 +69,15 @@ CREATE TABLE tag_publicacao (
     FOREIGN KEY (fkTag) REFERENCES tag(idTag)
 );
 
+CREATE TABLE seguidor (
+	fkSeguido INT,
+    fkSeguidor INT,
+	dtFollow TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (fkSeguido, fkSeguidor),
+    FOREIGN KEY (fkSeguido) REFERENCES usuario(idUsuario),
+    FOREIGN KEY (fkSeguidor) REFERENCES usuario(idUsuario)
+);
+
 -- Inserindo usuários
 INSERT INTO usuario (nome, username, email, senha, imgPerfil) VALUES 
 	('Moises', 'moiseshxs', 'moises@email.com', '12345678', '970a619cd1b06b8f1a85026eefc2fe1f0507d007cf2de4c4b03e2a94d1f5e31c12d2a08db65230e5d23c7ef9ee1bd8012b52ca26a4fe21eba23288bab6de5bcd.jpg'),
@@ -99,9 +108,11 @@ INSERT INTO curtida (fkPublicacao, fkUsuario) VALUES
 
 -- inserindo comentarios
 INSERT INTO comentario (fkPublicacao, fkUsuario, comentario) VALUES 
-	(1, 1, 'Linda paisagem!'),
-	(1, 1, 'Adorei as cores!'),
 	(2, 1, 'Essa arte é fantástica!');
+
+-- inserindo resposta para comentario
+INSERT INTO comentario (fkPublicacao, fkUsuario, comentario, fkResposta) VALUES 
+	(1, 2, 'Verdade', 2);
 
 -- inserindo visualizacoes
 INSERT INTO visualizacao (fkPublicacao, fkUsuario) VALUES 

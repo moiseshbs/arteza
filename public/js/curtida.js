@@ -14,6 +14,7 @@ function listarCurtida() {
                 //     <span>Seja o primeiro a comentar...</span>
                 // </div>`
                 // listaComentario.appendChild(mensagem);
+                atualizarFeed(curtiu); // atualizo o feed passando o vetor com as curtidas do usuario
             } else {
                 resposta.json().then(function (resposta) {
                     console.log("Dados recebidos: ", JSON.stringify(resposta));
@@ -62,7 +63,7 @@ function curtir(idPublicacao) {
                 if (resposta.status == 500) {
                     console.log("voce ja curtiu!")
 
-                    like();
+                    like(idPublicacao);
                 }
                 throw "Houve um erro ao tentar curtir a publicação!";
             }
@@ -94,7 +95,7 @@ function descurtir(idPublicacao) {
             if (resposta.ok) {
                 console.log("descurtida realizada com sucesso pelo usuario" + sessionStorage.getItem("USERNAME_USUARIO"));
 
-                deslike();
+                deslike(idPublicacao);
 
             } else {
                 throw "Houve um erro ao tentar descurtir a publicação!";
@@ -107,21 +108,26 @@ function descurtir(idPublicacao) {
     return false;
 }
 
-function like() {
-    var spanDeslike = document.getElementById(`span_deslike`);
-    var spanLike = document.getElementById(`span_like`);
-    div_like.style.display = 'none';
-    div_deslike.style.display = 'block';
+function like(idPublicacao) {
+    var divDeslike = document.getElementById(`div_deslike_${idPublicacao}`);
+    var divLike = document.getElementById(`div_like_${idPublicacao}`);
+    divLike.style.display = 'none';
+    divDeslike.style.display = 'block';
 
+    var spanDeslike = document.getElementById(`span_deslike_${idPublicacao}`);
+    var spanLike = document.getElementById(`span_like_${idPublicacao}`);
     spanLike.innerText = Number(spanLike.innerText) + 1;
     spanDeslike.innerText = Number(spanLike.innerText);
 }
 
-function deslike() {
-    var spanDeslike = document.getElementById(`span_deslike`);
-    var spanLike = document.getElementById(`span_like`);
-    div_like.style.display = 'block';
-    div_deslike.style.display = 'none';
+function deslike(idPublicacao) {
+    var divDeslike = document.getElementById(`div_deslike_${idPublicacao}`);
+    var divLike = document.getElementById(`div_like_${idPublicacao}`);
+    divLike.style.display = 'block';
+    divDeslike.style.display = 'none';
+
+    var spanDeslike = document.getElementById(`span_deslike_${idPublicacao}`);
+    var spanLike = document.getElementById(`span_like_${idPublicacao}`);
 
     spanDeslike.innerText = Number(spanDeslike.innerText) - 1;
     spanLike.innerText = Number(spanDeslike.innerText);

@@ -21,7 +21,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
 
-<body onload="validarSessao(), listarCurtida()">
+<body onload="validarSessao(), listarCurtida(), listarSeguindo(), listarSeguidores()">
     <header>
         <div class="container">
             <a href="../feed/feed.html">
@@ -71,17 +71,17 @@
 
                 <div class="areaSeguindo">
                     <span><span id="span_numSeguidor">0</span> seguidores</span>
-                    <span>0 seguindo</span>
+                    <span><span id="span_numSeguindo">0</span> seguindo</span>
                 </div>
 
                 <div id="perfilLogado" style="display: none;">
-                    <a href="editar.html"><button id="btn_follow">Editar Perfil</button></a>
+                    <a href="editar.html"><button>Editar Perfil</button></a>
                     <a href="dashboard.html"><button class="btnDash"><i class="bi bi-activity"></i></button></a>
                 </div>
 
                 <div id="perfilOutro">
-                    <button onclick="follow()" id="btn_follow">Seguir</button>
-                    <button onclick="unfollow()" id="btn_unfollow" style="display: none;">Unfollow</button>
+                    <button id="btn_follow" onclick="seguir()">Seguir</button>
+                    <button id="btn_unfollow" style="display: none;" onclick="desseguir()">Unfollow</button>
                 </div>
             </div>
         </section>
@@ -108,11 +108,12 @@
 
 </html>
 
-<script src="../js/perfil.js"></script>
 <script src="../js/publicacao.js"></script>
 <script src="../js/navScroll.js"></script>
 <script src="../js/curtida.js"></script>
 <script src="../js/visualizar.js"></script>
+<script src="../js/seguidor.js"></script>
+<script src="../js/usuario.js"></script>
 
 <script>
     function atualizarFeed(curtiu) {
@@ -244,7 +245,6 @@
                             perfilOutro.style.display = 'block';
                         }
 
-                      
                     });
                 }
             } else {
