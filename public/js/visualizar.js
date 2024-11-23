@@ -17,10 +17,12 @@ function visualizar(idPublicacao) {
             if (resposta.ok) {
                 console.log("Visualização realizada com sucesso pelo usuario " + sessionStorage.getItem("USERNAME_USUARIO"));
             } else {
+                alerta(`Houve um erro ao contabilizar visualização!`, 'erro');
                 throw "Houve um erro ao tentar visualizar a publicação!";
             }
         })
         .catch(function (erro) {
+            alerta(`${erro}: Houve um erro interno ao contabilizar visualização!`, 'erro');
             console.log(`#ERRO: ${erro}`);
         });
 

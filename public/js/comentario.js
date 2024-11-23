@@ -32,10 +32,12 @@ function comentar() {
                 atualizarComentario();
                 contarComentario();
             } else {
+                alerta('Houve um erro ao tentar comentar!', 'erro');
                 throw "Houve um erro ao tentar comentar!";
             }
         })
         .catch(function (resposta) {
+            alerta(`${erro}: Houve um erro interno ao comentar`, 'erro');
             console.log(`#ERRO: ${resposta}`);
         });
 
@@ -99,13 +101,37 @@ function atualizarComentario() {
                             `;
                         }
 
+                        const data1 = new Date();
+                        const data2 = new Date(comentario.dtComentarioPrincipal);
+                        
+                        var dataComentario = '';
+
+                        const diferencaMilissegundos = data1 - data2;
+
+                        const diferencaHoras = diferencaMilissegundos / (1000 * 60 * 60);
+                        const diferencaMinutos = diferencaHoras * 60;
+                        const diferencaDias = diferencaHoras / 24;
+
+                        if (diferencaHoras < 1) {
+                            dataComentario = `Há ${parseInt(diferencaMinutos)} minutos`;
+                        } else if (diferencaDias < 1 && diferencaHoras >= 1) {
+                            dataComentario = `Há ${parseInt(diferencaHoras)} horas`;
+                        } else if (diferencaDias < 1 && diferencaHoras < 24) {
+                            dataComentario = 'Hoje'
+                        } else {
+                            dataComentario = `há ${parseInt(diferencaDias)} dias`;
+                        }
+
                         listaComentario_teste.innerHTML += `
                             <div class="comentario">
                                 <div class="areaFotoPerfil" onclick="perfil(${comentario.fkUsuarioPrincipal})">
                                     <img src="../assets/publicacao/${fotoPerfil}" class="fotoPerfil">
                                 </div>
                                 <div class="contComentario">
-                                    <h4 onclick="perfil(${comentario.fkUsuarioPrincipal})">${comentario.usernamePrincipal}</h4>
+                                    <div class="headerComentario">
+                                        <h4 onclick="perfil(${comentario.fkUsuarioPrincipal})">${comentario.usernamePrincipal}</h4>
+                                        <span class="dtComentario">${dataComentario}</span>
+                                    </div>
                                     <span>${comentario.comentarioPrincipal}</span>
                                     ${botaoMostrar}
                                 </div>
@@ -118,11 +144,12 @@ function atualizarComentario() {
                 });
             }
         } else {
+            alerta(`Houve um erro ao listar feedbacks`, 'erro');
             throw ('Houve um erro na API!');
         }
     }).catch(function (resposta) {
+        alerta(`${resposta}: Houve um erro interno ao listar feedbacks`, 'erro');
         console.error(resposta);
-        finalizarAguardar();
     });
 }
 

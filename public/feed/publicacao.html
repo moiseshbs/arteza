@@ -53,6 +53,10 @@
         </div>
     </header>
 
+    <div id="div_alerta">
+
+    </div>
+
     <div class="gambiarra"></div>
     <section class="areaPublicacao" id="div_pesquisa">
         <div class="container">
@@ -98,6 +102,8 @@
 
                     <div class="areaDescricao">
                         <p id="p_descricao">Desenho feito em XXXX para que </p>
+
+                        <span id="span_data">07/11/2005</span>
                     </div>
                     <div class="areaOpcoes">
                         <div onclick="curtir()" id="div_like">
@@ -140,8 +146,10 @@
 <script src="../js/publicacao.js"></script>
 <script src="../js/comentario.js"></script>
 <script src="../js/curtida.js"></script>
+<script src="../js/alerta.js"></script>
 
 <script>
+    var curtida_usuario = [];
     var tituloPublicacao = '';
     var descricaoPublicacao = '';
 
@@ -194,6 +202,29 @@
                             </a>
                         `;
 
+                        const data1 = new Date();
+                        const data2 = new Date(publicacao.dtPublicacao);
+
+                        var dataPublicacao = '';
+
+                        const diferencaMilissegundos = data1 - data2;
+
+                        const diferencaHoras = diferencaMilissegundos / (1000 * 60 * 60);
+                        const diferencaMinutos = diferencaHoras * 60;
+                        const diferencaDias = diferencaHoras / 24;
+
+                        if (diferencaHoras < 1) {
+                            dataPublicacao = `Há ${parseInt(diferencaMinutos)} minutos`;
+                        } else if (diferencaDias < 1 && diferencaHoras >= 1) {
+                            dataPublicacao = `Há ${parseInt(diferencaHoras)} horas`;
+                        } else if (diferencaDias < 1 && diferencaHoras < 24) {
+                            dataPublicacao = 'Hoje'
+                        } else {
+                            dataPublicacao = `há ${parseInt(diferencaDias)} dias`;
+                        }
+
+                        span_data.innerText = `${dataPublicacao}`;
+
                         p_descricao.innerText = `${publicacao.descricao}`;
                         h1_titulo.innerText = `${publicacao.titulo}`;
 
@@ -209,13 +240,14 @@
                         id_imgPublicacao.innerHTML = `
                             <img src="../assets/publicacao/${publicacao.imgPublicacao}" alt="Publicação">
                         `;
-
                     });
                 }
             } else {
+                alerta(`Houve um erro ao listar publicação`, 'erro');
                 throw ('Houve um erro na API!');
             }
         }).catch(function (resposta) {
+            alerta(`${resposta}: Houve um erro interno ao listar publicação`, 'erro');
             console.error(resposta);
         });
     }
@@ -247,159 +279,16 @@
 
                     window.location = "../perfil/perfil.html";
                 } else {
+                    alerta(`Houve um erro ao buscar usuário`, 'erro');
                     throw "Houve um erro ao tentar buscar usuario!";
                 }
             })
             .catch(function (erro) {
+                alerta(`${erro}: Houve um erro interno ao buscar usuário`, 'erro');
                 console.log(`#ERRO: ${erro}`);
             });
 
         return false;
-    }
-
-    function pesquisar() {
-        var textoServer = input_pesquisa.value;
-
-        if (textoServer == '') {
-            div_pesquisa.innerHTML = `
-                <div class="pin_container" id="feed_teste">
-
-                </div>
-            `;
-
-            atualizarFeed();
-        } else {
-
-        }
-
-        if (textoServer.length > 0) {
-            fetch(`/pesquisas/pesquisar/${textoServer}`)
-                .then(function (resposta) {
-                    if (resposta.ok) {
-                        if (resposta.status == 204) {
-                            // var listaComentario = document.getElementById("listaComentario_teste");
-                            // var mensagem = document.createElement("span");
-                            // mensagem.innerHTML = "Nenhum feedback."
-                            // listaComentario.appendChild(mensagem);
-                            // throw "Nenhum feedback!!";
-                            // div_barra.innerHTML = ``;
-                        }
-
-                        resposta.json().then(function (resposta) {
-                            // console.log("Dados recebidos: ", JSON.stringify(resposta));
-
-                            var fotoPerfil = '';
-
-
-
-                            for (let i = 0; i < resposta.length; i++) {
-                                var publicacao = resposta[i];
-
-                                var feed = document.getElementById("feed_teste");
-                                feed.innerHTML = "";
-
-                                var aleatorio = 0;
-                                var estilo = ``;
-                                var botao = ``;
-                                var lista_publicacoes = [];
-
-                                for (let i = 0; i < resposta.length; i++) {
-                                    var publicacao = resposta[i];
-
-                                    aleatorio = parseInt(Math.random() * 3 + 1);
-
-                                    if (aleatorio == 1) {
-                                        estilo = `card_small`;
-                                    } else if (aleatorio == 2) {
-                                        estilo = `card_medium`;
-                                    } else {
-                                        estilo = `card_large`;
-                                    }
-
-                                    lista_publicacoes.push(publicacao.idPublicacao);
-
-                                    var inclui = curtiu.includes(lista_publicacoes[i]);
-
-                                    if (inclui) {
-                                        console.log(`inclui? ${lista_publicacoes[i]}. ${inclui}`)
-                                        botao = `
-                                            <div onclick="descurtir(${publicacao.idPublicacao})" id="div_deslike_${publicacao.idPublicacao}" class="deslike" style="display: block">
-                                                <i class="bi bi-heart-fill curtida"></i>
-                                                <span id="span_deslike_${publicacao.idPublicacao}">${publicacao.curtida}</span>
-                                            </div>
-                                            <div onclick="curtir(${publicacao.idPublicacao})" id="div_like_${publicacao.idPublicacao}" class="like" style="display: none">
-                                                <i class="bi bi-heart"></i>
-                                                <span id="span_like_${publicacao.idPublicacao}">${publicacao.curtida}</span>
-                                            </div>
-                                        `;
-                                    } else {
-                                        botao = `
-                                            <div onclick="curtir(${publicacao.idPublicacao})" id="div_like_${publicacao.idPublicacao}" class="like" style="display: block">
-                                                <i class="bi bi-heart"></i>
-                                                <span id="span_like_${publicacao.idPublicacao}">${publicacao.curtida}</span>
-                                            </div>
-                                            <div onclick="descurtir(${publicacao.idPublicacao})" id="div_deslike_${publicacao.idPublicacao}" class="deslike" style="display: none">
-                                                <i class="bi bi-heart-fill curtida"></i>
-                                                <span id="span_deslike_${publicacao.idPublicacao}">${publicacao.curtida}</span>
-                                            </div>
-                                        `;
-                                    }
-
-                                    if (publicacao.imgPerfil == null) {
-                                        fotoPerfil = 'padrao.jpg';
-                                    } else {
-                                        fotoPerfil = publicacao.imgPerfil;
-                                    }
-
-
-                                    feed_teste.innerHTML += `
-                                                    <div class="card ${estilo}">
-                                                        <a class="click" onclick="publicacao(${publicacao.idPublicacao})">
-                                                            <img src="../assets/publicacao/${publicacao.imgPublicacao}" alt="Publicação">
-                                                        </a>
-                                                        <div class="info">
-                                                            <div class="options">
-                                                                <div id="div_botao">
-                                                                    
-                                                                    ${botao}
-                                                                    
-                                                                </div>
-                        
-                                                                <div>
-                                                                    <i class="bi bi-chat"></i>
-                                                                    <span>${publicacao.comentario}</span>
-                                                                </div>
-                        
-                                                                <div>
-                                                                    <i class="bi bi-eye"></i>
-                                                                    <span>${publicacao.visualizacao}</span>
-                                                                </div>
-                                                            </div>
-                        
-                                                            <a onclick="perfil(${publicacao.idUsuario})">
-                                                                <div class="infoUser">
-                                                                    <div class="areaFotoPerfil">
-                                                                        <img src="../assets/publicacao/${fotoPerfil}" alt="">
-                                                                    </div>
-                                                                    <h2>${publicacao.username}</h2>
-                        
-                                                                </div>
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                `;
-                                }
-
-                            }
-                        });
-                    } else {
-                        // div_barra.innerHTML = "";
-                        throw ('Houve um erro na API!');
-                    }
-                }).catch(function (resposta) {
-                    console.error(resposta);
-                });
-        }
     }
 
     function abrirModal() {
@@ -456,13 +345,16 @@
                 if (resposta.ok) {
                     console.log("Editado com sucesso!");
 
-                    atualizarFeed();
+                    atualizarFeed(curtida_usuario);
                     fecharModal();
+                    alerta(`Editado com sucesso!`, 'sucesso');
                 } else {
+                    alerta(`Houve um erro ao editar publicação`, 'erro');
                     throw "Houve um erro ao tentar buscar usuario!";
                 }
             })
             .catch(function (erro) {
+                alerta(`${erro}: Houve um erro interno ao editar publicação`, 'erro');
                 console.log(`#ERRO: ${erro}`);
             });
     }
@@ -498,12 +390,18 @@
                 if (resposta.ok) {
                     console.log("Excluido com sucesso!");
 
-                    window.location = "feed.html";
+                    alerta(`Publicação excluida com sucesso!`, 'sucesso');
+
+                    setTimeout(() => {
+                        window.location = "feed.html";
+                    }, "2000");
                 } else {
-                    throw "Houve um erro ao tentar buscar usuario!";
+                    alerta(`Houve um erro ao excluir publicação!`, 'erro');
+                    throw "Houve um erro ao excluir publicação!";
                 }
             })
             .catch(function (erro) {
+                alerta(`${erro}: Houve um erro interno ao excluir publicação!`, 'erro');
                 console.log(`#ERRO: ${erro}`);
             });
     }

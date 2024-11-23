@@ -30,6 +30,7 @@ function listarCurtida() {
                 });
             }
         } else {
+            alerta('Houve um erro ao listar curtidas!', 'erro');
             throw ('Houve um erro na API!');
         }
     }).catch(function (resposta) {
@@ -65,10 +66,12 @@ function curtir(idPublicacao) {
 
                     like(idPublicacao);
                 }
+                alerta('Houve um erro ao curtir a publicação!', 'erro');
                 throw "Houve um erro ao tentar curtir a publicação!";
             }
         })
         .catch(function (erro) {
+            alerta(`${erro}: Houve um erro interno ao curtir publicação`, 'erro');
             console.log(`#ERRO: ${erro}`);
         });
 
@@ -98,10 +101,12 @@ function descurtir(idPublicacao) {
                 deslike(idPublicacao);
 
             } else {
+                alerta('Houve um erro ao retirar curtida', 'erro');
                 throw "Houve um erro ao tentar descurtir a publicação!";
             }
         })
         .catch(function (erro) {
+            alerta(`${erro}: Houve um erro interno ao retirar curtida`, 'erro');
             console.log(`#ERRO: ${erro}`);
         });
 

@@ -53,7 +53,9 @@
             </div>
         </div>
     </header>
+    <div id="div_alerta">
 
+    </div>
     <main>
         <section class="areaPerfil">
             <div class="areaBanner">
@@ -114,6 +116,7 @@
 <script src="../js/visualizar.js"></script>
 <script src="../js/seguidor.js"></script>
 <script src="../js/usuario.js"></script>
+<script src="../js/alerta.js"></script>
 
 <script>
     function atualizarFeed(curtiu) {
@@ -156,12 +159,12 @@
 
                             lista_publicacoes.push(publicacao.idPublicacao);
 
-                            console.log(lista_publicacoes);
+                            // console.log(lista_publicacoes);
 
                             var inclui = curtiu.includes(lista_publicacoes[i]);
 
                             if (inclui) {
-                                console.log(`inclui? ${lista_publicacoes[i]}. ${inclui}`)
+                                // console.log(`inclui? ${lista_publicacoes[i]}. ${inclui}`)
                                 botao = `
                                     <div onclick="descurtir(${publicacao.idPublicacao})" id="div_deslike_${publicacao.idPublicacao}" class="deslike" style="display: block">
                                         <i class="bi bi-heart-fill curtida"></i>

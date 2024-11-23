@@ -21,24 +21,28 @@ function cadastrar() {
 
     if (nomeVar == '') {
         input_nome.style.border = bordaVermelha;
+        alerta(`Preencha o nome corretamente!`, 'erro');
     } else {
         input_nome.style.border = bordaVerde;
     }
 
     if (emailVar == ''){
         input_email.style.border = bordaVermelha;
+        alerta(`Preencha o email corretamente!`, 'erro');
     } else {
         input_email.style.border = bordaVerde;
     }
 
     if (senhaVar == '') {
         input_senha.style.border = bordaVermelha;
+        alerta(`Preencha a senha corretamente!`, 'erro');
     } else {
         input_senha.style.border = bordaVerde;
     }
 
     if (usernameVar == '') {
         input_username.style.border = bordaVermelha;
+        alerta(`Preencha o username corretamente!`, 'erro');
     } else {
         input_username.style.border = bordaVerde;
     }
@@ -49,27 +53,20 @@ function cadastrar() {
         usernameVar == "" ||
         senhaVar == ""
     ) {
-        finalizarAguardar();
         return false;
     } else if (!emailArroba) {
         input_email.style.border = bordaVermelha;
-
-        finalizarAguardar();
+        alerta(`Email inválido!`, 'erro');
         return false;
     } else if (tamNome <= 0) {
         input_nome.style.border = bordaVermelha;
-
-        finalizarAguardar();
         return false;
     } else if (tamUsername <= 0) {
         input_username.style.border = bordaVermelha;
-
-        finalizarAguardar();
         return false;
     } else if (tamSenha < 8) {
         input_senha.style.border = bordaVermelha;
-
-        finalizarAguardar();
+        alerta(`Senha muito curta!`, 'erro');
         return false;
     } else {
         input_senha.style.border = bordaVerde;
@@ -91,7 +88,7 @@ function cadastrar() {
         }),
     })
         .then(function (resposta) {
-            console.log("resposta: ", resposta);
+            // console.log("resposta: ", resposta);
 
             if (resposta.ok) {
                 input_email.style.border = bordaVerde;
@@ -99,22 +96,24 @@ function cadastrar() {
                 input_username.style.border = bordaVerde;
                 input_senha.style.border = bordaVerde;
 
-                console.log("Cadastro realizado com sucesso! Redirecionando para tela de Login...");
+                // console.log("Cadastro realizado com sucesso! Redirecionando para tela de Login...");
                 
+                alerta(`Cadastrado com sucesso!`, 'sucesso');
 
                 setTimeout(() => {
                     window.location = "login.html";
                 }, "2000");
 
-                limparFormulario();
-                finalizarAguardar();
+
             } else {
+                alerta(`Houve um erro ao tentar cadastrar!`, 'erro');
                 throw "Houve um erro ao tentar realizar o cadastro!";
             }
         })
         .catch(function (resposta) {
+            alerta(`${resposta}: Houve um erro interno ao cadastrar`, 'erro');
             console.log(`#ERRO: ${resposta}`);
-            finalizarAguardar();
+
         });
 
     return false;
@@ -139,13 +138,9 @@ function entrar() {
     if (usernameVar == "" || senhaVar == "") {
         input_username.style.border = bordaVermelha;
         input_senha.style.border = bordaVermelha;
-
-        finalizarAguardar();
+        alerta(`Preencha o username e a senha!`, 'erro');
         return false;
     }
-
-    console.log("FORM LOGIN: ", usernameVar);
-    console.log("FORM SENHA: ", senhaVar);
 
     fetch("/usuarios/autenticar", {
         method: "POST",
@@ -189,7 +184,7 @@ function entrar() {
         } else {
             input_username.style.border = bordaVermelha;
             input_senha.style.border = bordaVermelha;
-
+            alerta(`Username ou senha inválidos!`, 'erro');
             console.log("Houve um erro ao tentar realizar o login!");
 
             resposta.text().then(texto => {
@@ -199,6 +194,7 @@ function entrar() {
         }
 
     }).catch(function (erro) {
+        alerta(`${erro}: Erro interno ao realizar login!`, 'erro');
         console.log(erro);
     })
 
@@ -237,9 +233,11 @@ function listarUsuario() {
                 });
             }
         } else {
+            alerta(`Houve um erro ao listar usuário!`, 'erro');
             throw ('Houve um erro na API!');
         }
     }).catch(function (resposta) {
+        alerta(`${resposta}: Erro interno ao listar usuário!`, 'erro');
         console.error(resposta);
     });
 }
@@ -272,16 +270,18 @@ function atualizar() {
 
             btnAvancar.innerHTML = '<img src="../assets/componentes/loading.gif" height="70%">';
             listarUsuario();
-
+            alerta(`Informações atualizadas com sucesso!`, 'sucesso');
             setTimeout(() => {
                 window.location = 'perfil.html';
             }, "1000");
 
         } else {
+            alerta(`Houve um erro ao tentar atualizar informações!`, 'erro');
             throw "Houve um erro ao tentar realizar a atualização!";
         }
     })
         .catch(function (resposta) {
+            alerta(`${resposta}: Houve um erro interno ao atualizar informações!`, 'erro');
             console.log(`#ERRO: ${resposta}`);
         });
 

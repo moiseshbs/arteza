@@ -39,9 +39,11 @@ function listarSeguindo() {
                 });
             }
         } else {
+            alerta(`Houve um erro ao listar seguindo!`, 'erro');
             throw ('Houve um erro na API!');
         }
     }).catch(function (resposta) {
+        alerta(`${resposta}: Houve um erro interno ao listar seguindo!`, 'erro');
         console.error(resposta);
     });
 }
@@ -74,10 +76,12 @@ function seguir() {
 
                     follow();
                 }
+                alerta(`Houve um erro ao seguir!`, 'erro');
                 throw "Houve um erro ao tentar seguir!";
             }
         })
         .catch(function (erro) {
+            alerta(`${erro}: Houve um erro interno ao seguir!`, 'erro');
             console.log(`#ERRO: ${erro}`);
         });
 
@@ -107,10 +111,12 @@ function desseguir() {
                 unfollow();
 
             } else {
+                alerta(`Houve um erro ao parar de seguir!`, 'erro');
                 throw "Houve um erro ao tentar desseguir!";
             }
         })
         .catch(function (erro) {
+            alerta(`${erro}: Houve um erro interno ao parar de seguir!`, 'erro');
             console.log(`#ERRO: ${erro}`);
         });
 
@@ -166,9 +172,11 @@ function listarSeguidores() {
                 });
             }
         } else {
+            alerta(`Houve um erro ao listar seguidores!`, 'erro');
             throw ('Houve um erro na API!');
         }
     }).catch(function (resposta) {
+        alerta(`${resposta}: Houve um erro interno ao listar seguidores!`, 'erro');
         console.error(resposta);
     });
 }

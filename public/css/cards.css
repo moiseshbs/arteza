@@ -53,6 +53,7 @@
     flex-direction: column;
     position: relative;
     box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.150);
+    cursor: pointer;
 }
 
 .card .click {

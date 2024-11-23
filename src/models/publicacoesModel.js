@@ -119,7 +119,7 @@ function listarPorId(idPublicacao) {
             p.fkUsuario, 
             p.imgPublicacao, 
             p.descricao, 
-            p.dtPublicacao,
+            DATE_FORMAT(p.dtPublicacao, '%Y-%m-%dT%T') AS dtPublicacao,
             p.titulo, 
             u.idUsuario,
             u.nome,

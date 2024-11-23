@@ -15,7 +15,7 @@ function listarComentario(idPublicacao) {
         SELECT
             c.idComentario AS idComentarioPrincipal,
             c.comentario AS comentarioPrincipal,
-            c.dtComentario AS dtComentarioPrincipal,
+            DATE_FORMAT(c.dtComentario, '%Y-%m-%dT%T') AS dtComentarioPrincipal,
             c.fkUsuario AS fkUsuarioPrincipal,
             u.username AS usernamePrincipal,
             u.imgPerfil AS imgPerfilPrincipal,

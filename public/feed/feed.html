@@ -52,6 +52,9 @@
         </div>
     </header>
 
+    <div id="div_alerta">
+
+    </div>
 
     <div class="gambiarra"></div>
 
@@ -80,6 +83,7 @@
 <script src="../js/curtida.js"></script>
 <script src="../js/visualizar.js"></script>
 <script src="../js/pesquisar.js"></script>
+<script src="../js/alerta.js"></script>
 
 <script>
     var curtida_usuario = [];
@@ -172,12 +176,12 @@
                                                                 
                                                             </div>
                     
-                                                            <div>
+                                                            <div onclick="publicacao(${publicacao.idPublicacao})">
                                                                 <i class="bi bi-chat"></i>
                                                                 <span>${publicacao.comentario}</span>
                                                             </div>
                     
-                                                            <div>
+                                                            <div onclick="publicacao(${publicacao.idPublicacao})">
                                                                 <i class="bi bi-eye"></i>
                                                                 <span>${publicacao.visualizacao}</span>
                                                             </div>
@@ -202,6 +206,7 @@
                     });
                 }
             } else {
+                alerta('Erro ao listar feed', 'erro');
                 throw ('Houve um erro na API!');
             }
         }).catch(function (resposta) {
@@ -233,10 +238,9 @@
                 console.log("Resposta: ", resposta);
 
                 if (resposta.ok) {
-                    console.log("Usuario encontrado com sucesso!");
-
                     window.location = "../perfil/perfil.html";
                 } else {
+                    alerta('Erro ao buscar usuário', 'erro');
                     throw "Houve um erro ao tentar buscar usuario!";
                 }
             })

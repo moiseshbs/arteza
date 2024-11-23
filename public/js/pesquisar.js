@@ -133,9 +133,11 @@ function pesquisar() {
                     });
                 } else {
                     // div_barra.innerHTML = "";
+                    alerta(`Houve um erro ao pesquisar!`, 'erro');
                     throw ('Houve um erro na API!');
                 }
             }).catch(function (resposta) {
+                alerta(`${resposta}: Houve um erro interno ao pesquisar!`, 'erro');
                 console.error(resposta);
             });
     }
