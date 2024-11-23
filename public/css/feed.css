@@ -4,7 +4,7 @@
     margin: auto;
 }
 
-#div_like, #div_deslike {
+.divLike {
     cursor: pointer;
 }
 
@@ -18,6 +18,24 @@ html, body {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
+}
+
+#div_arteAmpliada {
+    position: absolute;
+    background-color: #000000be;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+#div_arteAmpliada img {
+    height: 90%;
+    max-width: 90%;
+    object-fit: contain;
+    cursor: zoom-out;
 }
 
 .areaPublicacoes .container {
@@ -305,8 +323,13 @@ html, body {
     height: 85vh;
 }
 
+#id_imgPublicacao img {
+    cursor: zoom-in;
+}
+
 .areaPublicacao .container {
     width: 95%;
+    height: 95%;
     display: flex;
 }
 

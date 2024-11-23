@@ -57,6 +57,8 @@
 
     </div>
 
+    <div id="div_arteAmpliada" onclick="ampliarFoto()"></div>
+
     <div class="gambiarra"></div>
     <section class="areaPublicacao" id="div_pesquisa">
         <div class="container">
@@ -105,26 +107,8 @@
 
                         <span id="span_data">07/11/2005</span>
                     </div>
-                    <div class="areaOpcoes">
-                        <div onclick="curtir()" id="div_like">
-                            <i class="bi bi-heart"></i>
-                            <span id="span_like">0</span>
-                        </div>
+                    <div class="areaOpcoes" id="opcoes">
 
-                        <div onclick="descurtir()" id="div_deslike" style="display: none;">
-                            <i class="bi bi-heart-fill curtida"></i>
-                            <span id="span_deslike">0</span>
-                        </div>
-
-                        <div>
-                            <i class="bi bi-chat"></i>
-                            <span id="span_comentario">0</span>
-                        </div>
-
-                        <div>
-                            <i class="bi bi-eye-fill"></i>
-                            <span id="span_visualizacao">0</span>
-                        </div>
                     </div>
                 </div>
                 <div class="areaComentario">
@@ -180,15 +164,39 @@
                             fotoPerfil = publicacao.imgPerfil;
                         }
 
+                        opcoes.innerHTML = `
+                        <div onclick="curtir(${publicacao.idPublicacao})" class="divLike" id="div_like_${publicacao.idPublicacao}">
+                            <i class="bi bi-heart"></i>
+                            <span id="span_like_${publicacao.idPublicacao}">0</span>
+                        </div>
+
+                        <div onclick="descurtir(${publicacao.idPublicacao})" class="divLike" id="div_deslike_${publicacao.idPublicacao}" style="display: none;">
+                            <i class="bi bi-heart-fill curtida"></i>
+                            <span id="span_deslike_${publicacao.idPublicacao}">0</span>
+                        </div>
+
+                        <div>
+                            <i class="bi bi-chat"></i>
+                            <span id="span_comentario">0</span>
+                        </div>
+
+                        <div>
+                            <i class="bi bi-eye-fill"></i>
+                            <span id="span_visualizacao">0</span>
+                        </div>
+                        `;
+
+                        var divDeslike = document.getElementById(`div_deslike_${publicacao.idPublicacao}`);
+                        var divLike = document.getElementById(`div_like_${publicacao.idPublicacao}`);
 
                         var inclui = curtiu.includes(publicacao.idPublicacao);
 
                         if (inclui) {
-                            div_like.style.display = 'none';
-                            div_deslike.style.display = 'block';
+                            divLike.style.display = 'none';
+                            divDeslike.style.display = 'block';
                         } else {
-                            div_like.style.display = 'block';
-                            div_deslike.style.display = 'none';
+                            divLike.style.display = 'block';
+                            divDeslike.style.display = 'none';
                         }
 
                         if (publicacao.fkUsuario == sessionStorage.ID_USUARIO) {
@@ -228,8 +236,11 @@
                         p_descricao.innerText = `${publicacao.descricao}`;
                         h1_titulo.innerText = `${publicacao.titulo}`;
 
-                        span_like.innerText = `${publicacao.curtida}`;
-                        span_deslike.innerText = `${publicacao.curtida}`;
+                        var spanDeslike = document.getElementById(`span_deslike_${publicacao.idPublicacao}`);
+                        var spanLike = document.getElementById(`span_like_${publicacao.idPublicacao}`);
+
+                        spanLike.innerText = `${publicacao.curtida}`;
+                        spanDeslike.innerText = `${publicacao.curtida}`;
                         span_comentario.innerText = `${publicacao.comentario}`;
                         span_visualizacao.innerText = `${publicacao.visualizacao}`;
 
@@ -238,6 +249,10 @@
                         `;
 
                         id_imgPublicacao.innerHTML = `
+                            <img src="../assets/publicacao/${publicacao.imgPublicacao}" alt="Publicação" onclick="ampliarFoto()">
+                        `;
+
+                        div_arteAmpliada.innerHTML = `
                             <img src="../assets/publicacao/${publicacao.imgPublicacao}" alt="Publicação">
                         `;
                     });
@@ -413,6 +428,14 @@
             resposta.style.display = 'flex';
         } else {
             resposta.style.display = 'none';
+        }
+    }
+
+    function ampliarFoto() {
+        if (div_arteAmpliada.style.display == 'none') {
+            div_arteAmpliada.style.display = 'flex';
+        } else {
+            div_arteAmpliada.style.display = 'none';
         }
     }
 </script>
