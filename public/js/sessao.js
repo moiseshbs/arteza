@@ -16,10 +16,18 @@ function validarSessao() {
         // user_nome.innerHTML = nome;
         // user_username.innerHTML = username;
         user_foto.innerHTML = `<img src="../assets/publicacao/${foto}" alt="" class="fotoPerfil">`;
-        user_foto.setAttribute("onclick", `perfil(${sessionStorage.ID_USUARIO})`);
+        user_foto.setAttribute("onclick", `abrirDrop()`);
 
     } else {
         window.location = "../login.html";
+    }
+}
+
+function abrirDrop() {
+    if (dropDownPerfil.style.display == "" || dropDownPerfil.style.display == "none") {
+        dropDownPerfil.style.display = "flex";
+    } else {
+        dropDownPerfil.style.display = "none";
     }
 }
 
@@ -46,10 +54,9 @@ function perfil(idUsuario) {
             console.log("Resposta: ", resposta);
 
             if (resposta.ok) {
-                console.log("Usuario encontrado com sucesso!");
-
                 window.location = "../perfil/perfil.html";
             } else {
+                alerta('Erro ao buscar usuário', 'erro');
                 throw "Houve um erro ao tentar buscar usuario!";
             }
         })
@@ -59,6 +66,7 @@ function perfil(idUsuario) {
 
     return false;
 }
+
 
 function limparSessao() {
     sessionStorage.clear();

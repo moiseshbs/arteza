@@ -67,40 +67,70 @@
 }
 
 .headerPubli h1 {
-    font-size: 2rem;
+    font-size: 3rem;
+    width: 80%;
+    height: 80px;
 }
 
 .span_top {
     color: green;
     font-weight: bold;
+    font-size: 2.5rem;
 }
 
 .conteudo {
     width: 100%;
-    height: 70%;
+    height: 85%;
+}
+
+.areaDescricao {
+    height: 35%;
+    border-bottom: 1px solid;
+}
+
+.areaDescricao .descricao {
+    height: 65%;
+    width: 100%;
+}
+
+.perfilTop {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    gap: 15px;
+    height: 35%;
+}
+
+.perfilTop .fotoPerfil {
+    height: 40px;
+    width: 40px;
+    border-radius: 100%;
+    background: #000;
 }
 
 .areaTotal {
-    height: 70%;
+    height: 20%;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    border-bottom: 1px solid;
 }
 
 .areaIcon {
-    width: 50%;
+    width: 70%;
     display: flex;
     justify-content: center;
     align-items: center;
+    gap: 25px;
 }
 
 .areaIcon .icon-size {
-    font-size: 3rem;
-    color: green;
+    font-size: 1.5rem;
+    color: black;
 }
 
 .interacao {
-    width: 50%;
+    width: 30%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -108,25 +138,26 @@
 }
 
 .areaTotal p {
-    font-size: 1.5rem;
+    font-size: 1rem;
 }
 
 .areaTotal h1 {
-    font-size: 3rem;
+    font-size: 2rem;
 }
 
-.areaNumeros {
+.areaOutros {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 30%;
+    height: 45%;
+    background-color: rebeccapurple;
 }
 
 .numeros {
     display: flex;
     justify-content: start;
     align-items: center;
-    gap: 10px;
+    gap: 5px;
 }
 
 .numeros h1 {

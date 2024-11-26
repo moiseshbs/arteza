@@ -23,14 +23,14 @@
 <body onload="validarSessao(), listarTag(), listarUsuario(), listarPublicacao()">
     <header>
         <div class="container">
-            <a href="feed.html">
+            <a href="../feed/feed.html">
                 <img src="../assets/componentes/logo.png" style="max-height: 100%; width: 150px;" alt="Arteza logo">
             </a>
 
             <div class="nav">
                 <div style="gap: 50px;">
-                    <a href="feed.html">INICIO</a>
-                    <a href="#">EXPLORAR</a>
+                    <a href="../feed/feed.html">INICIO</a>
+                    <a href="../feed/explorar.html">EXPLORAR</a>
                 </div>
 
                 <input type="hidden" placeholder="Pesquisar" id="input_pesquisa" oninput="pesquisar()">
@@ -49,6 +49,21 @@
 
                     </div>
                 </a>
+            </div>
+
+            <div id="dropDownPerfil">
+                <div class="opcaoDrop"  id="div_perfil" onclick="perfil(sessionStorage.ID_USUARIO)">
+                    <div>
+                        <i class="bi bi-person-fill"></i>
+                        <p>Perfil</p>
+                    </div>
+                </div>
+                <div class="opcaoDrop" id="div_sair" onclick="limparSessao()">
+                    <div>
+                        <i class="bi bi-box-arrow-left"></i>
+                        <p>Sair</p>
+                    </div>
+                </div>
             </div>
         </div>
     </header>
@@ -72,6 +87,17 @@
                     </div>
 
                     <div class="conteudo">
+                        <div class="areaDescricao">
+                            <div class="descricao">
+                                <p>A descrição da publicacao vai aqui</p>
+                            </div>
+
+                            <div class="perfilTop">
+                                <div class="fotoPerfil"></div>
+                                <h3>moiseshxs</h3>
+                            </div>
+                        </div>
+
                         <div class="areaTotal">
                             <div class="interacao">
                                 <p>Interações</p>
@@ -79,25 +105,25 @@
                             </div>
 
                             <div class="areaIcon">
-                                <i class="bi bi-graph-up-arrow icon-size"></i>
+                                <div class="numeros">
+                                    <i class="bi bi-heart-fill icon-size"></i>
+                                    <h1 id="curtidas_publi">100</h1>
+                                </div>
+    
+                                <div class="numeros">
+                                    <i class="bi bi-chat-fill icon-size"></i>
+                                    <h1 id="comentarios_publi">100</h1>
+                                </div>
+    
+                                <div class="numeros">
+                                    <i class="bi bi-eye-fill icon-size"></i>
+                                    <h1 id="visu_publi">100</h1>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="areaNumeros">
-                            <div class="numeros">
-                                <i class="bi bi-heart-fill icon-size"></i>
-                                <h1 id="curtidas_publi">100</h1>
-                            </div>
-
-                            <div class="numeros">
-                                <i class="bi bi-chat-fill icon-size"></i>
-                                <h1 id="comentarios_publi">100</h1>
-                            </div>
-
-                            <div class="numeros">
-                                <i class="bi bi-eye-fill icon-size"></i>
-                                <h1 id="visu_publi">100</h1>
-                            </div>
+                        <div class="areaOutros">
+                            
                         </div>
                     </div>
 

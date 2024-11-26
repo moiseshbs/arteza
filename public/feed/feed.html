@@ -30,8 +30,8 @@
 
             <div class="nav">
                 <div style="gap: 50px;">
-                    <a href="feed.html">INICIO</a>
-                    <a href="explorar.html">EXPLORAR</a>
+                    <a href="../feed/feed.html">INICIO</a>
+                    <a href="../feed/explorar.html">EXPLORAR</a>
                 </div>
 
                 <input type="text" placeholder="Pesquisar" id="input_pesquisa" oninput="pesquisar()">
@@ -48,6 +48,21 @@
                 <a id="header_imgPerfil">
 
                 </a>
+            </div>
+
+            <div id="dropDownPerfil">
+                <div class="opcaoDrop"  id="div_perfil"  onclick="perfil(sessionStorage.ID_USUARIO)">
+                    <div>
+                        <i class="bi bi-person-fill"></i>
+                        <p>Perfil</p>
+                    </div>
+                </div>
+                <div class="opcaoDrop" id="div_sair" onclick="limparSessao()">
+                    <div>
+                        <i class="bi bi-box-arrow-left"></i>
+                        <p>Sair</p>
+                    </div>
+                </div>
             </div>
         </div>
     </header>
@@ -201,8 +216,8 @@
                                             `;
                         }
 
-                        header_imgPerfil.setAttribute("onclick", `perfil(${sessionStorage.ID_USUARIO})`);
-
+                        div_perfil.setAttribute("onclick", `perfil(${sessionStorage.ID_USUARIO})`);
+                        div_sair.setAttribute("onclick", `limparSessao()`);
                     });
                 }
             } else {
@@ -213,42 +228,6 @@
             console.error(resposta);
 
         });
-    }
-
-    function perfil(idUsuario) {
-        sessionStorage.ID_USUARIOPUBLICACAO = idUsuario;
-
-        var idUsuarioPublicacao = idUsuario;
-        var idUsuarioLogado = sessionStorage.ID_USUARIO;
-        var idUsuarioVar;
-
-        if (idUsuarioPublicacao == idUsuarioLogado) {
-            idUsuarioVar = idUsuarioLogado;
-        } else {
-            idUsuarioVar = idUsuarioPublicacao;
-        }
-
-        fetch(`/publicacoes/listar/${idUsuarioVar}`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-            }
-        })
-            .then(function (resposta) {
-                console.log("Resposta: ", resposta);
-
-                if (resposta.ok) {
-                    window.location = "../perfil/perfil.html";
-                } else {
-                    alerta('Erro ao buscar usuário', 'erro');
-                    throw "Houve um erro ao tentar buscar usuario!";
-                }
-            })
-            .catch(function (erro) {
-                console.log(`#ERRO: ${erro}`);
-            });
-
-        return false;
     }
 
     function publicacao(idPublicacao) {

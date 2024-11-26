@@ -30,8 +30,8 @@
 
             <div class="nav">
                 <div style="gap: 50px;">
-                    <a href="#">INICIO</a>
-                    <a href="explorar.html">EXPLORAR</a>
+                    <a href="../feed/feed.html">INICIO</a>
+                    <a href="../feed/explorar.html">EXPLORAR</a>
                 </div>
 
                 <input type="hidden" placeholder="Pesquisar" id="input_pesquisa" oninput="pesquisar()">
@@ -50,6 +50,21 @@
 
                     </div>
                 </a>
+            </div>
+
+            <div id="dropDownPerfil">
+                <div class="opcaoDrop"  id="div_perfil" onclick="perfil(sessionStorage.ID_USUARIO)">
+                    <div>
+                        <i class="bi bi-person-fill"></i>
+                        <p>Perfil</p>
+                    </div>
+                </div>
+                <div class="opcaoDrop" id="div_sair" onclick="limparSessao()">
+                    <div>
+                        <i class="bi bi-box-arrow-left"></i>
+                        <p>Sair</p>
+                    </div>
+                </div>
             </div>
         </div>
     </header>

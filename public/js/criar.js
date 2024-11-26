@@ -41,7 +41,7 @@
         var posicaoTag = lista_tags.indexOf(idTag);
     
         if (posicaoTag == -1) {
-            areaTags.innerHTML += `<div onclick="removerTag(${idTag})" class="btnTag" id="tag_${idTag}">${nomeTag}</div>`;
+            areaTags.innerHTML += `<div onclick="removerTag(${idTag})" class="btnTag" id="tag_${idTag}">${nomeTag} <i class="bi bi-x-lg"></i></div>`;
             lista_tags.push(idTag);
             
             contarTags++;

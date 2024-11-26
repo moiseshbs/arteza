@@ -22,6 +22,7 @@
 
 .areaCards {
     height: fit-content;
+    min-height: 55vh;
     width: 100%;
 }
 
@@ -118,4 +119,17 @@
     font-size: 1rem;
     display: flex;
     gap: 25px;
+}
+
+.semPubli {
+    width: 80vw;
+    height: 250px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.semPubli i {
+    font-size: 4rem;
 }

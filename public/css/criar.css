@@ -120,6 +120,7 @@ section .areaConteudo {
     width: 100%;
     margin-top: 10px;
     gap: 10px;
+    flex-wrap: wrap;
 }
 
 .btnTag {
@@ -136,6 +137,7 @@ section .areaConteudo {
     font-weight: bold;
     color: #fff;
     cursor: pointer;
+    gap: 15px;
 }
 
 .imgPrevia {
