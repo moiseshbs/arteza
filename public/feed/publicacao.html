@@ -82,7 +82,7 @@
                     <a onclick="history.back()">
                         <i class="bi bi-arrow-left"></i>
                     </a>
-                    <h1 id="h1_titulo">R0-Z3</h1>
+                    <h1 id="h1_titulo"></h1>
                 </div>
                 <div class="areaImgPublicacao" id="id_imgPublicacao">
 
@@ -94,7 +94,7 @@
                     <div class="infosUser">
                         <div class="nomeFoto">
                             <div id="id_imgPerfil"></div>
-                            <h3 id="user_nome">Moises Henry</h3>
+                            <h3 id="user_nome"></h3>
                         </div>
 
                         <div class="areaTresPontos" id="tresPontos">
@@ -118,9 +118,9 @@
                     </div>
 
                     <div class="areaDescricao">
-                        <p id="p_descricao">Desenho feito em XXXX para que </p>
+                        <p id="p_descricao"></p>
 
-                        <span id="span_data">07/11/2005</span>
+                        <span id="span_data"></span>
                     </div>
                     <div class="areaOpcoes" id="opcoes">
 
@@ -234,9 +234,12 @@
 
                         const diferencaHoras = diferencaMilissegundos / (1000 * 60 * 60);
                         const diferencaMinutos = diferencaHoras * 60;
+                        const diferencaSegundos = diferencaMinutos * 60;
                         const diferencaDias = diferencaHoras / 24;
 
-                        if (diferencaHoras < 1) {
+                        if (diferencaSegundos < 60) {
+                            dataPublicacao = `Há ${parseInt(diferencaSegundos)} segundos`;
+                        } else if (diferencaHoras < 1) {
                             dataPublicacao = `Há ${parseInt(diferencaMinutos)} minutos`;
                         } else if (diferencaDias < 1 && diferencaHoras >= 1) {
                             dataPublicacao = `Há ${parseInt(diferencaHoras)} horas`;
@@ -260,7 +263,7 @@
                         span_visualizacao.innerText = `${publicacao.visualizacao}`;
 
                         id_imgPerfil.innerHTML = `
-                            <img src="../assets/publicacao/${fotoPerfil}" alt="" class="fotoPerfil">
+                            <img src="../assets/publicacao/${fotoPerfil}" alt="" class="fotoPerfil" onclick="perfil(${publicacao.idUsuario})">
                         `;
 
                         id_imgPublicacao.innerHTML = `
@@ -302,10 +305,10 @@
             }
         })
             .then(function (resposta) {
-                console.log("Resposta: ", resposta);
+                // console.log("Resposta: ", resposta);
 
                 if (resposta.ok) {
-                    console.log("Usuario encontrado com sucesso!");
+                    // console.log("Usuario encontrado com sucesso!");
 
                     window.location = "../perfil/perfil.html";
                 } else {
@@ -370,11 +373,12 @@
             })
         })
             .then(function (resposta) {
-                console.log("Resposta: ", resposta);
+                // console.log("Resposta: ", resposta);
 
                 if (resposta.ok) {
-                    console.log("Editado com sucesso!");
+                    // console.log("Editado com sucesso!");
 
+                    listarCurtida();
                     atualizarFeed(curtida_usuario);
                     fecharModal();
                     alerta(`Editado com sucesso!`, 'sucesso');
@@ -415,10 +419,10 @@
             }
         })
             .then(function (resposta) {
-                console.log("Resposta: ", resposta);
+                // console.log("Resposta: ", resposta);
 
                 if (resposta.ok) {
-                    console.log("Excluido com sucesso!");
+                    // console.log("Excluido com sucesso!");
 
                     alerta(`Publicação excluida com sucesso!`, 'sucesso');
 

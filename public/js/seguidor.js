@@ -66,13 +66,13 @@ function seguir() {
             // console.log("Resposta: ", resposta);
 
             if (resposta.ok) {
-                console.log("Seguiu com sucesso");
+                // console.log("Seguiu com sucesso");
 
                 follow();
 
             } else {
                 if (resposta.status == 500) {
-                    console.log("voce ja seguiu!")
+                    // console.log("voce ja seguiu!")
 
                     follow();
                 }
@@ -106,7 +106,7 @@ function desseguir() {
             // console.log("Resposta: ", resposta);
 
             if (resposta.ok) {
-                console.log("Desseguiu com sucesso");
+                // console.log("Desseguiu com sucesso");
 
                 unfollow();
 
@@ -163,7 +163,7 @@ function listarSeguidores() {
                 // listaComentario.appendChild(mensagem);
             } else {
                 resposta.json().then(function (resposta) {
-                    console.log("Dados recebidos: ", JSON.stringify(resposta));
+                    // console.log("Dados recebidos: ", JSON.stringify(resposta));
 
                     var seguidores = resposta[0];
 

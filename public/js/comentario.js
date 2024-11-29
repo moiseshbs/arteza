@@ -21,10 +21,10 @@ function comentar() {
         }),
     })
         .then(function (resposta) {
-            console.log("resposta: ", resposta);
+            // console.log("resposta: ", resposta);
 
             if (resposta.ok) {
-                console.log("Comentario realizado com sucesso!");
+                // console.log("Comentario realizado com sucesso!");
 
                 listaComentario_teste.innerHTML = "";
                 input_comentario.value = "";
@@ -110,9 +110,12 @@ function atualizarComentario() {
 
                         const diferencaHoras = diferencaMilissegundos / (1000 * 60 * 60);
                         const diferencaMinutos = diferencaHoras * 60;
+                        const diferencaSegundos = diferencaMinutos * 60;
                         const diferencaDias = diferencaHoras / 24;
 
-                        if (diferencaHoras < 1) {
+                        if (diferencaSegundos < 60) {
+                            dataComentario = `Há ${parseInt(diferencaSegundos)} segundos`;
+                        } else if (diferencaHoras < 1) {
                             dataComentario = `Há ${parseInt(diferencaMinutos)} minutos`;
                         } else if (diferencaDias < 1 && diferencaHoras >= 1) {
                             dataComentario = `Há ${parseInt(diferencaHoras)} horas`;

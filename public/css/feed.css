@@ -350,6 +350,10 @@ html, body {
     margin-right: 15px;
 }
 
+.cabecalhoPublicacao a {
+    cursor: pointer;
+}
+
 .areaImgPublicacao {
     height: 85%;
     width: 100%;
@@ -496,6 +500,7 @@ html, body {
     height: 40px;
     width: 40px;
     margin: 0 10px;
+    cursor: pointer;
 }
 
 #id_imgPerfil {

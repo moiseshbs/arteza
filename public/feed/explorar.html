@@ -88,23 +88,23 @@
 
                     <div class="conteudo">
                         <div class="areaDescricao">
-                            <div class="descricao">
+                            <div class="descricao" id="descricao_publi">
                                 <p>A descrição da publicacao vai aqui</p>
                             </div>
 
                             <div class="perfilTop">
-                                <div class="fotoPerfil"></div>
-                                <h3>moiseshxs</h3>
+                                <div class="fotoPerfil" id="fotoPerfilTop"></div>
+                                <h3 id="usernameTop"></h3>
                             </div>
                         </div>
 
                         <div class="areaTotal">
                             <div class="interacao">
-                                <p>Interações</p>
+                                <p>Interações totais</p>
                                 <h1 id="numero_interacao">300</h1>
                             </div>
 
-                            <div class="areaIcon">
+                            <!-- <div class="areaIcon">
                                 <div class="numeros">
                                     <i class="bi bi-heart-fill icon-size"></i>
                                     <h1 id="curtidas_publi">100</h1>
@@ -119,11 +119,34 @@
                                     <i class="bi bi-eye-fill icon-size"></i>
                                     <h1 id="visu_publi">100</h1>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
 
                         <div class="areaOutros">
-                            
+                            <div class="topMenor bordaBaixo">
+                                <div class="areaFotoMenor">
+
+                                </div>
+                                <div class="interacaoMenor">
+                                    <p>Interações totais</p>
+                                    <h1>300</h1>
+                                </div>
+                                <div class="posicaoMenor">
+                                    <span class="span_top">#2</span>
+                                </div>
+                            </div>
+                            <div class="topMenor">
+                                <div class="areaFotoMenor">
+
+                                </div>
+                                <div class="interacaoMenor">
+                                    <p>Interações totais</p>
+                                    <h1>300</h1>
+                                </div>
+                                <div class="posicaoMenor">
+                                    <span class="span_top">#3</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -254,13 +277,23 @@
 
 
                         var publicacao = resposta[0];
+                        var tituloPublicacao = ''
+                        if ((publicacao.titulo).length > 8) {
+                            for (var i = 0; i < 8; i++) {
+                                tituloPublicacao += publicacao.titulo[i];
+                            }
 
-                        titulo_publi.innerText = `${publicacao.titulo}`;
-                        curtidas_publi.innerText = `${publicacao.curtida}`;
-                        comentarios_publi.innerText = `${publicacao.comentario}`;
-                        visu_publi.innerText = `${publicacao.visualizacao}`;
+                            tituloPublicacao += `...`;
+                        } else {
+                            tituloPublicacao = publicacao.titulo;
+                        }
 
-
+                        titulo_publi.innerText = `${tituloPublicacao}`;
+                        descricao_publi.innerText = `${publicacao.descricao}`;
+                        usernameTop.innerText = `${publicacao.username}`;
+                        fotoPerfilTop.innerHTML = `
+                            <img src="../assets/publicacao/${publicacao.imgPerfil}" alt="Arte">
+                        `;
                         var total_interacao = Number(publicacao.curtida) + Number(publicacao.comentario) + Number(publicacao.visualizacao); 
 
                         numero_interacao.innerText = `${total_interacao}`;
@@ -268,6 +301,8 @@
                         div_arte.innerHTML = `
                         <img src="../assets/publicacao/${publicacao.imgPublicacao}" alt="Arte">
                         `;
+
+                        
                     });
                 }
                 

@@ -61,9 +61,8 @@
 .headerPubli {
     display: flex;
     justify-content: space-between;
-    height: 10%;
+    height: fit-content;
     width: 100%;
-    margin-bottom: 10px;
 }
 
 .headerPubli h1 {
@@ -102,8 +101,8 @@
 }
 
 .perfilTop .fotoPerfil {
-    height: 40px;
-    width: 40px;
+    height: 35px;
+    width: 35px;
     border-radius: 100%;
     background: #000;
 }
@@ -130,11 +129,18 @@
 }
 
 .interacao {
-    width: 30%;
+    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
+}
+
+#fotoPerfilTop img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 100%;
 }
 
 .areaTotal p {
@@ -149,8 +155,45 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 45%;
-    background-color: rebeccapurple;
+    flex-direction: column;
+    height: 40%;
+}
+
+.areaOutros .topMenor {
+    height: 50%;
+    width: 100%;
+    display: flex;
+}
+
+.topMenor .areaFotoMenor {
+    background-color: #ff0000;
+    width: 30%;
+    height: 100%;
+}
+
+.bordaBaixo {
+    border-bottom: solid 1px;
+}
+
+.topMenor .interacaoMenor {
+    width: 50%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.topMenor .posicaoMenor {
+    width: 20%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.posicaoMenor .span_top {
+    font-size: 1.7rem;
 }
 
 .numeros {

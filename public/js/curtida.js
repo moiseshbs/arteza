@@ -17,7 +17,7 @@ function listarCurtida() {
                 atualizarFeed(curtiu); // atualizo o feed passando o vetor com as curtidas do usuario
             } else {
                 resposta.json().then(function (resposta) {
-                    console.log("Dados recebidos: ", JSON.stringify(resposta));
+                    // console.log("Dados recebidos: ", JSON.stringify(resposta));
 
                     for (let i = 0; i < resposta.length; i++) {
                         var curtida = resposta[i];
@@ -53,16 +53,16 @@ function curtir(idPublicacao) {
         }),
     })
         .then(function (resposta) {
-            console.log("Resposta: ", resposta);
+            // console.log("Resposta: ", resposta);
 
             if (resposta.ok) {
-                console.log("Curtida realizada com sucesso pelo usuario" + sessionStorage.getItem("USERNAME_USUARIO"));
+                // console.log("Curtida realizada com sucesso pelo usuario" + sessionStorage.getItem("USERNAME_USUARIO"));
 
                 like(idPublicacao);
 
             } else {
                 if (resposta.status == 500) {
-                    console.log("voce ja curtiu!")
+                    // console.log("voce ja curtiu!")
 
                     like(idPublicacao);
                 }
@@ -93,10 +93,10 @@ function descurtir(idPublicacao) {
         }),
     })
         .then(function (resposta) {
-            console.log("Resposta: ", resposta);
+            // console.log("Resposta: ", resposta);
 
             if (resposta.ok) {
-                console.log("descurtida realizada com sucesso pelo usuario" + sessionStorage.getItem("USERNAME_USUARIO"));
+                // console.log("descurtida realizada com sucesso pelo usuario" + sessionStorage.getItem("USERNAME_USUARIO"));
 
                 deslike(idPublicacao);
 
