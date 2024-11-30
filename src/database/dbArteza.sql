@@ -24,11 +24,11 @@ CREATE TABLE publicacao (
 );
 
 CREATE TABLE curtida (
-    qtdCurtida INT AUTO_INCREMENT UNIQUE,
+    idCurtida INT AUTO_INCREMENT,
     fkPublicacao INT,
     fkUsuario INT,
     dtCurtida TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (fkPublicacao, fkUsuario),
+    PRIMARY KEY (idCurtida, fkPublicacao, fkUsuario),
     FOREIGN KEY (fkPublicacao) REFERENCES publicacao(idPublicacao),
     FOREIGN KEY (fkUsuario) REFERENCES usuario(idUsuario)
 );

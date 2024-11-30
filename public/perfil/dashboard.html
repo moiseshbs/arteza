@@ -18,39 +18,43 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
 
-<body onload="obterDadosGrafico(), curtida()">
-    <header style="background: none;">
+<body onload="validarSessao(), chamarDados()">
+    <header class="dash">
         <div class="container">
-            <img src="../assets/componentes/logow.png" style="max-height: 100%; width: 150px;" alt="Arteza logo">
+            <a href="feed.html">
+                <img src="../assets/componentes/logow.png" style="max-height: 100%; width: 150px;" alt="Arteza logo">
+            </a>
 
-            <div class="nav" style="color: #fff;">
-                <i class="bi bi-arrow-left" onclick="history.back()"></i>
-                <h1>Modo criador</h1>
+            <div class="nav">
+                <div style="gap: 50px;">
+                    <a href="../feed/feed.html">INICIO</a>
+                    <a href="../feed/explorar.html">EXPLORAR</a>
+                </div>
+
+                <!-- <input type="text" placeholder="Pesquisar" id="input_pesquisa" oninput="pesquisar()"> -->
             </div>
 
             <div class="perfil">
                 <div class="criar">
-                    <a href="criar.html">
+                    <a href="../perfil/criar.html">
                         <i class="bi bi-plus-circle"></i>
                         <h3>CRIAR</h3>
                     </a>
                 </div>
 
-                <a href="meuPerfil.html">
-                    <div class="fotoPerfil">
+                <a id="header_imgPerfil">
 
-                    </div>
                 </a>
             </div>
 
             <div id="dropDownPerfil">
-                <div class="opcaoDrop"  id="div_perfil">
+                <div class="opcaoDrop"  id="div_perfil"  onclick="perfil(sessionStorage.ID_USUARIO)">
                     <div>
                         <i class="bi bi-person-fill"></i>
                         <p>Perfil</p>
                     </div>
                 </div>
-                <div class="opcaoDrop" id="div_sair">
+                <div class="opcaoDrop" id="div_sair" onclick="limparSessao()">
                     <div>
                         <i class="bi bi-box-arrow-left"></i>
                         <p>Sair</p>
@@ -63,6 +67,8 @@
     <main>
         <div class="gambiarra"></div>
         <section class="areaPublicacao">
+            <i class="bi bi-arrow-left iconeSair" onclick="history.back()"></i>
+
             <div class="container">
                 <div class="areaCabecalho" id="infoCards">
 
@@ -87,257 +93,6 @@
 
 </html>
 
+<script src="../js/sessao.js"></script>
+<script src="../js/dashboard.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<script>
-    let proximaAtualizacao;
-
-    function obterDadosGrafico() {
-        var idUsuario = sessionStorage.ID_USUARIO;
-
-        if (proximaAtualizacao != undefined) {
-            clearTimeout(proximaAtualizacao);
-        }
-
-        fetch(`/dados/ultimas/${idUsuario}`, { cache: 'no-store' }).then(function (response) {
-            if (response.ok) {
-                response.json().then(function (resposta) {
-                    console.log(`Dados recebidos: ${JSON.stringify(resposta)}`);
-                    resposta.reverse();
-
-                    var dados = resposta[0];
-
-                    infoCards.innerHTML = `
-                            <div class="card">
-                                <h3>Publicações</h3>
-                                <h1>${dados.publicacaoKpi}</h1>
-                            </div>
-
-                            <div class="card">
-                                <h3>Curtidas</h3>
-                                <h1>${dados.curtidaKpi}</h1>
-                            </div>
-
-                            <div class="card">
-                                <h3>Comentarios</h3>
-                                <h1>${dados.comentarioKpi}</h1>
-                            </div>
-
-                            <div class="card">
-                                <h3>Visualizações</h3>
-                                <h1>${dados.visualizacaoKpi}</h1>
-                            </div>
-                        `;
-
-                    plotarGrafico(resposta, idUsuario);
-                });
-            } else {
-                console.error('Nenhum dado encontrado ou erro na API');
-            }
-        })
-            .catch(function (error) {
-                console.error(`Erro na obtenção dos dados p/ gráfico: ${error.message}`);
-            });
-    }
-
-    function plotarGrafico(resposta, idUsuario) {
-        console.log('iniciando plotagem do gráfico...');
-
-        // Criando estrutura para plotar gráfico - labels
-        let labelsCurtida = [];
-        let labelsComentario = [];
-        let labelsVisualizacao = [];
-
-        // Criando estrutura para plotar gráfico - dados
-        let dadosCurtida = {
-            labels: labelsCurtida,
-            datasets: [{
-                label: 'Curtida',
-                data: [],
-                fill: false,
-                borderColor: '#5E4889',
-                backgroundColor: '#5E4889',
-                borderRadius: 5
-            }]
-        };
-
-        let dadosComentario = {
-            labels: labelsComentario,
-            datasets: [{
-                label: 'Comentario',
-                data: [],
-                fill: false,
-                borderColor: '#5E4889',
-                backgroundColor: '#5E4889',
-                borderRadius: 5
-            }]
-        };
-
-        let dadosVisualizacao = {
-            labels: labelsVisualizacao,
-            datasets: [{
-                label: 'Visualizacao',
-                data: [],
-                fill: false,
-                borderColor: '#5E4889',
-                backgroundColor: '#5E4889',
-                borderRadius: 25
-            }]
-        };
-
-        console.log('----------------------------------------------')
-        console.log('Estes dados foram recebidos pela funcao "obterDadosGrafico" e passados para "plotarGrafico":')
-        console.log(resposta)
-
-        // Inserindo valores recebidos em estrutura para plotar o gráfico
-        for (i = resposta.length - 1; i >= 0; i--) {
-            var registro = resposta[i];
-            labelsCurtida.push(registro.mes);
-            dadosCurtida.datasets[0].data.push(registro.curtida);
-
-            labelsComentario.push(registro.mes);
-            dadosComentario.datasets[0].data.push(registro.comentario);
-
-            labelsVisualizacao.push(registro.mes);
-            dadosVisualizacao.datasets[0].data.push(registro.visualizacao);
-        }
-
-        console.log('----------------------------------------------')
-        console.log('O gráfico será plotado com os respectivos valores:')
-        console.log('Labels:')
-        console.log(labelsCurtida)
-        console.log('Dados:')
-        console.log(dadosCurtida.datasets)
-        console.log('----------------------------------------------')
-
-        // Criando estrutura para plotar gráfico - config
-        const configCurtida = {
-            type: 'bar',
-            data: dadosCurtida,
-        };
-
-        const configComentario = {
-            type: 'bar',
-            data: dadosComentario,
-        };
-
-        const configVisualizacao = {
-            type: 'bar',
-            data: dadosVisualizacao,
-        };
-
-        // Adicionando gráfico criado em div na tela
-        let myChartCurtida = new Chart(
-            document.getElementById(`chartCurtida`),
-            configCurtida
-        );
-
-        let myChartComentario = new Chart(
-            document.getElementById(`chartComentario`),
-            configComentario
-        );
-
-        let myChartVisualizacao = new Chart(
-            document.getElementById(`chartVisualizacao`),
-            configVisualizacao
-        );
-
-        // setTimeout(() => atualizarGrafico(idUsuario, dadosCurtida, dadosComentario, dadosVisualizacao, myChartCurtida, myChartComentario, myChartVisualizacao), 2000);
-    }
-
-    function atualizarGrafico(idUsuario, dadosCurtida, dadosComentario, dadosVisualizacao, myChartCurtida, myChartComentario, myChartVisualizacao) {
-        fetch(`/dados/tempo-real/${idUsuario}`, { cache: 'no-store' }).then(function (response) {
-            if (response.ok) {
-                response.json().then(function (novoRegistro) {
-
-                    obterDadosGrafico(idUsuario);
-
-                    // console.log(`Dados recebidos: ${JSON.stringify(novoRegistro)}`);
-                    // console.log(`Dados atuais do gráfico:`);
-                    // console.log(dadosCurtida);
-            
-
-                    // let avisoCaptura = document.getElementById(`avisoCaptura${idUsuario}`)
-                    // avisoCaptura.innerHTML = ""
-
-                    // console.log(`AQUI ${dadosCurtida.data[0]}`);
-
-                    if (novoRegistro[0].curtida == dadosCurtida.labels[dadosCurtida.labels.length - 1]) {
-                        // console.log("---------------------------------------------------------------")
-                        // console.log("Como não há dados novos para captura, o gráfico não atualizará.")
-                        // // avisoCaptura.innerHTML = "<i class='fa-solid fa-triangle-exclamation'></i> Foi trazido o dado mais atual capturado pelo sensor. <br> Como não há dados novos a exibir, o gráfico não atualizará."
-                        // console.log("Horário do novo dado capturado:")
-                        // console.log(novoRegistro[0].curtida)
-                        // console.log("Horário do último dado capturado:")
-                        // console.log(dados.labelsCurtida[dados.labelsCurtida.length - 1])
-                        // console.log("---------------------------------------------------------------")
-                    } else {
-                        // tirando e colocando valores no gráfico
-                        // dadosCurtida.labels.shift();
-                        // dadosCurtida.labels.push(novoRegistro[0].curtida);
-
-                        // dadosComentario.labels.shift();
-                        // dadosComentario.labels.push(novoRegistro[0].comentario);
-
-                        // dadosVisualizacao.labels.shift();
-                        // dadosVisualizacao.labels.push(novoRegistro[0].visualizacao);
-
-                        dadosCurtida.datasets[0].data.shift();
-                        dadosCurtida.datasets[0].data.push(novoRegistro[0].curtida);
-
-                        dadosComentario.datasets[0].data.shift();
-                        dadosComentario.datasets[0].data.push(novoRegistro[0].comentario);
-
-                        dadosVisualizacao.datasets[0].data.shift();
-                        dadosVisualizacao.datasets[0].data.push(novoRegistro[0].visualizacao);
-
-                        myChartCurtida.update();
-                        myChartComentario.update();
-                        myChartVisualizacao.update();
-                    }
-
-                    // Altere aqui o valor em ms se quiser que o gráfico atualize mais rápido ou mais devagar
-                    proximaAtualizacao = setTimeout(() => atualizarGrafico(idUsuario, dadosCurtida, dadosComentario, dadosVisualizacao, myChartCurtida, myChartComentario, myChartVisualizacao), 2000);
-                });
-            } else {
-                console.error('Nenhum dado encontrado ou erro na API');
-                // Altere aqui o valor em ms se quiser que o gráfico atualize mais rápido ou mais devagar
-                proximaAtualizacao = setTimeout(() => atualizarGrafico(idUsuario, dadosCurtida, dadosComentario, dadosVisualizacao, myChartCurtida, myChartComentario, myChartVisualizacao), 2000);
-            }
-        })
-            .catch(function (error) {
-                console.error(`Erro na obtenção dos dados p/ gráfico: ${error.message}`);
-            });
-
-    }
-
-    function curtida() {
-        chartCurtida.style.display = 'block';
-        chartComentario.style.display = 'none';
-        chartVisualizacao.style.display = 'none';
-
-        btnCurt.style.backgroundColor = '#5E4889';
-        btnCome.style.backgroundColor = '#211F22';
-        btnVisu.style.backgroundColor = '#211F22';
-    }
-
-    function visualizacao() {
-        chartCurtida.style.display = 'none';
-        chartComentario.style.display = 'none';
-        chartVisualizacao.style.display = 'block';
-
-        btnCurt.style.backgroundColor = '#211F22';
-        btnCome.style.backgroundColor = '#211F22';
-        btnVisu.style.backgroundColor = '#5E4889';
-    }
-
-    function comentario() {
-        chartCurtida.style.display = 'none';
-        chartComentario.style.display = 'block';
-        chartVisualizacao.style.display = 'none';
-
-        btnCurt.style.backgroundColor = '#211F22';
-        btnCome.style.backgroundColor = '#5E4889';
-        btnVisu.style.backgroundColor = '#211F22';
-    }
-</script>

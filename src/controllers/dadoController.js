@@ -1,9 +1,9 @@
 var dadoModel = require("../models/dadoModel");
 
-function buscarUltimosDadosGraph(req, res) {
+function listarCurtida(req, res) {
     var idUsuario = req.params.idUsuario;
 
-    dadoModel.buscarUltimosDadosGraph(idUsuario).then(function (resultado) {
+    dadoModel.listarCurtida(idUsuario).then(function (resultado) {
         if (resultado.length > 0) {
             res.status(200).json(resultado);
         } else {
@@ -11,18 +11,15 @@ function buscarUltimosDadosGraph(req, res) {
         }
     }).catch(function (erro) {
         console.log(erro);
-        console.log("Houve um erro ao buscar as ultimas dados.", erro.sqlMessage);
+        console.log("Houve um erro ao buscar os dados.", erro.sqlMessage);
         res.status(500).json(erro.sqlMessage);
     });
 }
 
-
-function buscarDadosEmTempoRealGraph(req, res) {
+function listarComentario(req, res) {
     var idUsuario = req.params.idUsuario;
 
-    console.log(`Recuperando dados em tempo real`);
-
-    dadoModel.buscarDadosEmTempoRealGraph(idUsuario).then(function (resultado) {
+    dadoModel.listarComentario(idUsuario).then(function (resultado) {
         if (resultado.length > 0) {
             res.status(200).json(resultado);
         } else {
@@ -30,15 +27,15 @@ function buscarDadosEmTempoRealGraph(req, res) {
         }
     }).catch(function (erro) {
         console.log(erro);
-        console.log("Houve um erro ao buscar as ultimas dados.", erro.sqlMessage);
+        console.log("Houve um erro ao buscar os dados.", erro.sqlMessage);
         res.status(500).json(erro.sqlMessage);
     });
 }
 
-function buscarUltimosDadosKpi(req, res) {
+function listarVisualizacao(req, res) {
     var idUsuario = req.params.idUsuario;
 
-    dadoModel.buscarUltimosDadosKpi(idUsuario).then(function (resultado) {
+    dadoModel.listarVisualizacao(idUsuario).then(function (resultado) {
         if (resultado.length > 0) {
             res.status(200).json(resultado);
         } else {
@@ -46,18 +43,15 @@ function buscarUltimosDadosKpi(req, res) {
         }
     }).catch(function (erro) {
         console.log(erro);
-        console.log("Houve um erro ao buscar as ultimas dados.", erro.sqlMessage);
+        console.log("Houve um erro ao buscar os dados.", erro.sqlMessage);
         res.status(500).json(erro.sqlMessage);
     });
 }
 
-
-function buscarDadosEmTempoRealKpi(req, res) {
+function listarKpi(req, res) {
     var idUsuario = req.params.idUsuario;
 
-    console.log(`Recuperando dados em tempo real`);
-
-    dadoModel.buscarDadosEmTempoRealKpi(idUsuario).then(function (resultado) {
+    dadoModel.listarKpi(idUsuario).then(function (resultado) {
         if (resultado.length > 0) {
             res.status(200).json(resultado);
         } else {
@@ -65,15 +59,14 @@ function buscarDadosEmTempoRealKpi(req, res) {
         }
     }).catch(function (erro) {
         console.log(erro);
-        console.log("Houve um erro ao buscar as ultimas dados.", erro.sqlMessage);
+        console.log("Houve um erro ao buscar as ultimas kpi's.", erro.sqlMessage);
         res.status(500).json(erro.sqlMessage);
     });
 }
 
 module.exports = {
-    buscarUltimosDadosGraph,
-    buscarDadosEmTempoRealGraph,
-    buscarUltimosDadosKpi,
-    buscarDadosEmTempoRealKpi
-
+    listarCurtida,
+    listarComentario,
+    listarVisualizacao,
+    listarKpi,
 }

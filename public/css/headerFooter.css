@@ -4,6 +4,22 @@
     margin: auto;
 }
 
+.dash {
+    background: none;
+}
+
+.dash a {
+    color: #FFF;
+}
+
+.dash .opcaoDrop p {
+    color: #000;
+}
+
+.dash .opcaoDrop i {
+    color: #000;
+}
+
 header {
     width: 100%;
     height: 13vh;

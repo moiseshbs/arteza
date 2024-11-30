@@ -13,7 +13,7 @@ function pesquisar() {
 
     }
 
-    if (textoServer.length > 0) {
+    if (textoServer.length > 2) {
         fetch(`/pesquisas/pesquisar/${textoServer}`)
             .then(function (resposta) {
                 if (resposta.ok) {

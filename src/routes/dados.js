@@ -7,16 +7,20 @@ router.get("/ultimas/:idUsuario", function (req, res) {
     dadoController.buscarUltimosDadosGraph(req, res);
 });
 
-router.get("/tempo-real/:idUsuario", function (req, res) {
-    dadoController.buscarDadosEmTempoRealGraph(req, res);
-})
-
-router.get("/ultimas/:idUsuario", function (req, res) {
-    dadoController.buscarUltimosDadosKpi(req, res);
+router.get("/listarCurtida/:idUsuario", function (req, res) {
+    dadoController.listarCurtida(req, res);
 });
 
-router.get("/tempo-real/:idUsuario", function (req, res) {
-    dadoController.buscarDadosEmTempoRealKpi(req, res);
-})
+router.get("/listarComentario/:idUsuario", function (req, res) {
+    dadoController.listarComentario(req, res);
+});
+
+router.get("/listarVisualizacao/:idUsuario", function (req, res) {
+    dadoController.listarVisualizacao(req, res);
+});
+
+router.get("/listarKpi/:idUsuario", function(req, res) {
+    dadoController.listarKpi(req, res);
+});
 
 module.exports = router;
