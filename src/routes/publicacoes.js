@@ -12,6 +12,10 @@ router.get("/listar/:idUsuario", function (req, res) {
     publicacaoController.listarPorUsuario(req, res);
 });
 
+router.get("/listarTag/:idTag", function (req, res) {
+    publicacaoController.listarPorTag(req, res);
+});
+
 router.get("/listarID/:idPublicacao", function (req, res) {
     publicacaoController.listarPorId(req, res);
 });

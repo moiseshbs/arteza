@@ -100,48 +100,31 @@
 
                         <div class="areaTotal">
                             <div class="interacao">
-                                <p>Interações totais</p>
+                                <p>Interações</p>
                                 <h1 id="numero_interacao">300</h1>
                             </div>
-
-                            <!-- <div class="areaIcon">
-                                <div class="numeros">
-                                    <i class="bi bi-heart-fill icon-size"></i>
-                                    <h1 id="curtidas_publi">100</h1>
-                                </div>
-    
-                                <div class="numeros">
-                                    <i class="bi bi-chat-fill icon-size"></i>
-                                    <h1 id="comentarios_publi">100</h1>
-                                </div>
-    
-                                <div class="numeros">
-                                    <i class="bi bi-eye-fill icon-size"></i>
-                                    <h1 id="visu_publi">100</h1>
-                                </div>
-                            </div> -->
                         </div>
 
                         <div class="areaOutros">
                             <div class="topMenor bordaBaixo">
-                                <div class="areaFotoMenor">
+                                <div class="areaFotoMenor" id="div_arte2">
 
                                 </div>
                                 <div class="interacaoMenor">
-                                    <p>Interações totais</p>
-                                    <h1>300</h1>
+                                    <p>Interações</p>
+                                    <h1 id="interacao_top2">0</h1>
                                 </div>
                                 <div class="posicaoMenor">
                                     <span class="span_top">#2</span>
                                 </div>
                             </div>
                             <div class="topMenor">
-                                <div class="areaFotoMenor">
+                                <div class="areaFotoMenor" id="div_arte3">
 
                                 </div>
                                 <div class="interacaoMenor">
-                                    <p>Interações totais</p>
-                                    <h1>300</h1>
+                                    <p>Interações</p>
+                                    <h1 id="interacao_top3">0</h1>
                                 </div>
                                 <div class="posicaoMenor">
                                     <span class="span_top">#3</span>
@@ -156,17 +139,17 @@
     </section>
 
     <section class="areaTags">
-        <div class="container">
+        <div class="container"> 
             <div class="areaRecomendado">
-                <h2>Top Tags</h2>
-                <div class="areaContas" id="div_tags">
-
+                <h2>Criadores</h2>
+                <div class="areaContas" id="div_usuario">
+                    
                 </div>
             </div>
 
             <div class="areaRecomendado">
-                <h2>Top Contas</h2>
-                <div class="areaContas" id="div_usuario">
+                <h2>Tags</h2>
+                <div class="areaTags" id="div_tags">
 
                 </div>
             </div>
@@ -190,127 +173,5 @@
 
 <script src="../js/navScroll.js"></script>
 <script src="../js/publicacao.js"></script>
-
-<script>
-    function listarTag() {
-        fetch("/tags/listarTop").then(function (resposta) {
-            if (resposta.ok) {
-                if (resposta.status == 204) {
-                    var feed = document.getElementById("feed_teste");
-                    var mensagem = document.createElement("span");
-                    mensagem.innerHTML = "Nenhum resultado encontrado."
-                    feed.appendChild(mensagem);
-                    throw "Nenhum resultado encontrado!!";
-                } else {
-                    resposta.json().then(function (resposta) {
-                        // console.log("Dados recebidos: ", JSON.stringify(resposta));
-
-                        for (let i = 0; i < resposta.length; i++) {
-                            var tag = resposta[i];
-
-                            div_tags.innerHTML += `
-                                <div class="areaConta">
-                                    <div class="areaFotoPerfil">
-                                        <img src="../assets/publicacao/${tag.imgPublicacao}">
-                                    </div>
-                                    <p>${tag.nome}</p>
-                                </div>
-                            `;
-                        }
-                    });
-                }
-            } else {
-                throw ('Houve um erro na API!');
-            }
-        }).catch(function (resposta) {
-            console.error(resposta);
-        });
-    }
-
-    function listarUsuario() {
-        fetch("/usuarios/listar").then(function (resposta) {
-            if (resposta.ok) {
-                if (resposta.status == 204) {
-                    var feed = document.getElementById("feed_teste");
-                    var mensagem = document.createElement("span");
-                    mensagem.innerHTML = "Nenhum resultado encontrado."
-                    feed.appendChild(mensagem);
-                    throw "Nenhum resultado encontrado!!";
-                } else {
-                    resposta.json().then(function (resposta) {
-                        // console.log("Dados recebidos: ", JSON.stringify(resposta));
-
-                        for (let i = 0; i < resposta.length; i++) {
-                            var usuario = resposta[i];
-
-                            div_usuario.innerHTML += `
-                                <div class="areaConta">
-                                    <div class="areaFotoPerfil">
-                                        <img src="../assets/publicacao/${usuario.imgPerfil}">
-                                    </div>
-                                    <p>${usuario.nome}</p>
-                                </div>
-                            `;
-                        }
-                    });
-                }
-            } else {
-                throw ('Houve um erro na API!');
-            }
-        }).catch(function (resposta) {
-            console.error(resposta);
-        });
-    }
-
-    function listarPublicacao() {
-        fetch("/publicacoes/listarTop").then(function (resposta) {
-            if (resposta.ok) {
-                if (resposta.status == 204) {
-                    var feed = document.getElementById("feed_teste");
-                    var mensagem = document.createElement("span");
-                    mensagem.innerHTML = "Nenhum resultado encontrado."
-                    feed.appendChild(mensagem);
-                    throw "Nenhum resultado encontrado!!";
-                } else {
-                    resposta.json().then(function (resposta) {
-                        console.log("Dados recebidos: ", JSON.stringify(resposta));
-
-
-                        var publicacao = resposta[0];
-                        var tituloPublicacao = ''
-                        if ((publicacao.titulo).length > 8) {
-                            for (var i = 0; i < 8; i++) {
-                                tituloPublicacao += publicacao.titulo[i];
-                            }
-
-                            tituloPublicacao += `...`;
-                        } else {
-                            tituloPublicacao = publicacao.titulo;
-                        }
-
-                        titulo_publi.innerText = `${tituloPublicacao}`;
-                        descricao_publi.innerText = `${publicacao.descricao}`;
-                        usernameTop.innerText = `${publicacao.username}`;
-                        fotoPerfilTop.innerHTML = `
-                            <img src="../assets/publicacao/${publicacao.imgPerfil}" alt="Arte">
-                        `;
-                        var total_interacao = Number(publicacao.curtida) + Number(publicacao.comentario) + Number(publicacao.visualizacao); 
-
-                        numero_interacao.innerText = `${total_interacao}`;
-
-                        div_arte.innerHTML = `
-                        <img src="../assets/publicacao/${publicacao.imgPublicacao}" alt="Arte">
-                        `;
-
-                        
-                    });
-                }
-                
-            } else {
-                throw ('Houve um erro na API!');
-            }
-        }).catch(function (resposta) {
-            console.error(resposta);
-        });
-    }
-</script>
+<script src="../js/visualizar.js"></script>
+<script src="../js/explorar.js"></script>

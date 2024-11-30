@@ -34,7 +34,7 @@
                     <a href="../feed/explorar.html">EXPLORAR</a>
                 </div>
 
-                <input type="text" placeholder="Pesquisar" id="input_pesquisa" oninput="pesquisar()">
+                <!-- <input type="text" placeholder="Pesquisar" id="input_pesquisa" oninput="pesquisar()"> -->
             </div>
 
             <div class="perfil">
@@ -74,7 +74,8 @@
     <div class="gambiarra"></div>
 
     <section class="areaCards" id="div_pesquisa">
-        <div id="headerResultado">
+        <div class="headerResultado">
+            <i class="bi bi-arrow-left iconeSair" onclick="history.back()"></i>
             <h1 id="texto_resultado"></h1>
         </div>
         <div class="pin_container" id="feed_teste">
@@ -107,12 +108,15 @@
     var curtida_usuario = [];
 
     function atualizarFeed(curtiu) {
-        fetch("/publicacoes/listar").then(function (resposta) {
+        fetch(`/publicacoes/listarTag/${sessionStorage.ID_TAG}`).then(function (resposta) {
             if (resposta.ok) {
                 if (resposta.status == 204) {
                     var feed = document.getElementById("feed_teste");
-                    var mensagem = document.createElement("span");
-                    mensagem.innerHTML = "Nenhum resultado encontrado."
+                    feed.style.display = 'flex';
+                    feed.style.height = '200px';
+                    feed.style.alignItems = 'center';
+                    var mensagem = document.createElement("h1");
+                    mensagem.innerHTML = "Seja o primeiro a criar nessa categoria!"
                     feed.appendChild(mensagem);
                     throw "Nenhum resultado encontrado!!";
                 } else {
@@ -219,6 +223,7 @@
                                             `;
                         }
 
+                        texto_resultado.innerText = `Resultados para "${publicacao.nomeTag}"`;
                         div_perfil.setAttribute("onclick", `perfil(${sessionStorage.ID_USUARIO})`);
                         div_sair.setAttribute("onclick", `limparSessao()`);
                     });

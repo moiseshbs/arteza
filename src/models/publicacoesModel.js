@@ -63,6 +63,60 @@ function pesquisarDescricao(texto) {
     return database.executar(instrucaoSql);
 }
 
+function listarPorTag(idTag) {
+    console.log("ACESSEI O AVISO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function listarPorTag()");
+    var instrucaoSql = `
+         SELECT
+            p.idPublicacao, 
+            p.fkUsuario, 
+            p.imgPublicacao, 
+            p.descricao, 
+            p.dtPublicacao,
+            p.titulo, 
+            u.idUsuario,
+            u.nome,
+            u.username,
+            u.email,
+            u.senha,
+            u.imgPerfil,
+            t.nome AS nomeTag,
+            COUNT(DISTINCT l.idCurtida) AS curtida,
+            COUNT(DISTINCT c.idComentario) AS comentario,
+            COUNT(DISTINCT v.idVisualizacao) AS visualizacao
+        FROM usuario AS u
+            LEFT JOIN publicacao AS p 
+                ON p.fkUsuario = u.idUsuario AND p.isDeleted = false
+            LEFT JOIN curtida AS l
+                ON l.fkPublicacao = p.idPublicacao
+            LEFT JOIN comentario AS c
+                ON c.fkPublicacao = p.idPublicacao
+            LEFT JOIN visualizacao AS v
+                ON v.fkPublicacao = p.idPublicacao
+			LEFT JOIN tag_publicacao AS tp
+				ON tp.fkPublicacao = p.idPublicacao
+			LEFT JOIN tag AS t
+                ON tp.fkTag = t.idTag
+        WHERE t.idTag = ${idTag}
+        GROUP BY 
+            p.idPublicacao, 
+            p.fkUsuario, 
+            p.imgPublicacao, 
+            p.descricao, 
+            p.dtPublicacao,
+            p.titulo, 
+            u.idUsuario, 
+            u.nome, 
+            u.username, 
+            u.email, 
+            u.senha, 
+            u.imgPerfil,
+            t.nome
+        ORDER BY p.dtPublicacao DESC;
+    `;
+    console.log("Executando a instrução SQL: \n" + instrucaoSql);
+    return database.executar(instrucaoSql);
+}
+
 function listarPorUsuario(idUsuario) {
     console.log("ACESSEI O AVISO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function listarPorUsuario()");
     var instrucaoSql = `
@@ -236,9 +290,10 @@ function listarTop() {
             u.idUsuario, 
             u.username,
             u.imgPerfil,
-            COUNT(DISTINCT l.idCurtida) AS curtida,
-            COUNT(DISTINCT c.idComentario) AS comentario,
-            COUNT(DISTINCT v.idVisualizacao) AS visualizacao
+            (SELECT 
+            COUNT(DISTINCT l.idCurtida)+
+            COUNT(DISTINCT c.idComentario)+
+            COUNT(DISTINCT v.idVisualizacao)) AS interacao
         FROM publicacao AS p
             INNER JOIN usuario AS u 
                 ON p.fkUsuario = u.idUsuario
@@ -258,7 +313,7 @@ function listarTop() {
                 u.idUsuario, 
                 u.username,
                 u.imgPerfil
-                ORDER BY curtida DESC LIMIT 1;
+                ORDER BY interacao DESC LIMIT 3;
     `;
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
     return database.executar(instrucaoSql);
@@ -266,6 +321,7 @@ function listarTop() {
 
 module.exports = {
     listar,
+    listarPorTag,
     listarPorUsuario,
     listarPorId,
     pesquisarDescricao,

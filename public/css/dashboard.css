@@ -69,12 +69,15 @@ section .areaCabecalho {
     align-items: center;
 }
 
-#chartCurtida, #chartComentario, #chartVisualizacao {
+#chartCurtida,
+#chartComentario,
+#chartVisualizacao {
     max-height: 95%;
     max-width: 95%;
 }
 
-#chartComentario, #chartVisualizacao {
+#chartComentario,
+#chartVisualizacao {
     display: none;
 }
 
@@ -84,4 +87,10 @@ section .areaCabecalho {
     top: 15vh;
     font-size: 2rem;
     cursor: pointer;
+}
+
+#span_curtida,
+#span_comentario,
+#span_visualizacao {
+    display: none;
 }

@@ -24,3 +24,30 @@ function removerLike() {
 
     span_like.innerHTML = like;
 }
+
+function publicacao(idPublicacao) {
+    sessionStorage.ID_PUBLICACAO = idPublicacao;
+
+    fetch(`/publicacoes/listarID/${idPublicacao}`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+        }
+    })
+        .then(function (resposta) {
+            console.log("Resposta: ", resposta);
+
+            if (resposta.ok) {
+                console.log("Publicacao encontrado com sucesso!");
+                visualizar(idPublicacao);
+                window.location = "../feed/publicacao.html";
+            } else {
+                throw "Houve um erro ao tentar buscar Publicacao!";
+            }
+        })
+        .catch(function (erro) {
+            console.log(`#ERRO: ${erro}`);
+        });
+
+    return false;
+}

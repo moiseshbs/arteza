@@ -8,6 +8,7 @@ function pesquisar() {
             </div>
         `;
 
+        listarCurtida();
         atualizarFeed(curtida_usuario); // curtida_usuario é uma variavel global que possui as curtidas do usuario
     } else {
 
@@ -56,11 +57,10 @@ function pesquisar() {
                                 }
 
                                 lista_publicacoes.push(publicacao.idPublicacao);
-
                                 var inclui = curtida_usuario.includes(lista_publicacoes[i]);
 
                                 if (inclui) {
-                                    console.log(`inclui? ${lista_publicacoes[i]}. ${inclui}`)
+                                    // console.log(`inclui? ${lista_publicacoes[i]}. ${inclui}`)
                                     botao = `
                                         <div onclick="descurtir(${publicacao.idPublicacao})" id="div_deslike_${publicacao.idPublicacao}" class="deslike" style="display: block">
                                             <i class="bi bi-heart-fill curtida"></i>
@@ -90,8 +90,8 @@ function pesquisar() {
                                     fotoPerfil = publicacao.imgPerfil;
                                 }
 
-                            
-                                    feed_teste.innerHTML += `
+
+                                feed_teste.innerHTML += `
                                                 <div class="card ${estilo}">
                                                     <a class="click" onclick="publicacao(${publicacao.idPublicacao})">
                                                         <img src="../assets/publicacao/${publicacao.imgPublicacao}" alt="Publicação">
