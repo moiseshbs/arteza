@@ -20,7 +20,7 @@ function listarComentario(idUsuario) {
 function listarCurtida(idUsuario) {
     var instrucaoSql = `
         SELECT 
-            COUNT(qtdCurtida) AS curtida,
+            COUNT(idCurtida) AS curtida,
             MONTHNAME(dtCurtida) AS dtCurtida
             FROM curtida AS l
             JOIN publicacao AS p
@@ -58,7 +58,7 @@ function listarKpi(idUsuario) {
             FROM publicacao AS p
             WHERE p.fkUsuario = ${idUsuario}) AS publicacaoKpi,
             
-			(SELECT COUNT(l.qtdCurtida) 
+			(SELECT COUNT(l.idCurtida) 
             FROM curtida AS l
             JOIN publicacao AS p ON l.fkPublicacao = p.idPublicacao
             WHERE p.fkUsuario = ${idUsuario}) AS curtidaKpi,

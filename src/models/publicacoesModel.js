@@ -13,7 +13,7 @@ function listar() {
             u.idUsuario, 
             u.username,
             u.imgPerfil,
-            COUNT(DISTINCT l.qtdCurtida) AS curtida,
+            COUNT(DISTINCT l.idCurtida) AS curtida,
             COUNT(DISTINCT c.idComentario) AS comentario,
             COUNT(DISTINCT v.idVisualizacao) AS visualizacao
         FROM publicacao AS p
@@ -79,7 +79,7 @@ function listarPorUsuario(idUsuario) {
             u.email,
             u.senha,
             u.imgPerfil,
-            COUNT(DISTINCT l.qtdCurtida) AS curtida,
+            COUNT(DISTINCT l.idCurtida) AS curtida,
             COUNT(DISTINCT c.idComentario) AS comentario,
             COUNT(DISTINCT v.idVisualizacao) AS visualizacao
         FROM usuario AS u
@@ -125,7 +125,7 @@ function listarPorId(idPublicacao) {
             u.nome,
             u.username,
             u.imgPerfil,
-            COUNT(DISTINCT l.qtdCurtida) AS curtida,
+            COUNT(DISTINCT l.idCurtida) AS curtida,
             COUNT(DISTINCT c.idComentario) AS comentario,
             COUNT(DISTINCT v.idVisualizacao) AS visualizacao
         FROM publicacao AS p
@@ -236,7 +236,7 @@ function listarTop() {
             u.idUsuario, 
             u.username,
             u.imgPerfil,
-            COUNT(DISTINCT l.qtdCurtida) AS curtida,
+            COUNT(DISTINCT l.idCurtida) AS curtida,
             COUNT(DISTINCT c.idComentario) AS comentario,
             COUNT(DISTINCT v.idVisualizacao) AS visualizacao
         FROM publicacao AS p

@@ -13,7 +13,7 @@ function pesquisar(texto) {
             u.idUsuario, 
             u.username,
             u.imgPerfil,
-            COUNT(DISTINCT l.qtdCurtida) AS curtida,
+            COUNT(DISTINCT l.idCurtida) AS curtida,
             COUNT(DISTINCT c.idComentario) AS comentario,
             COUNT(DISTINCT v.idVisualizacao) AS visualizacao
         FROM publicacao AS p
