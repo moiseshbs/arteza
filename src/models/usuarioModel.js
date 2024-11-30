@@ -12,7 +12,7 @@ function autenticar(username, senha) {
 // Coloque os mesmos parâmetros aqui. Vá para a var instrucaoSql
 function cadastrar(nome, username, email, senha) {
     console.log("ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function cadastrar():", nome, username, email, senha);
-    
+
     // Insira exatamente a query do banco aqui, lembrando da nomenclatura exata nos valores
     //  e na ordem de inserção dos dados.
     var instrucaoSql = `
@@ -25,7 +25,13 @@ function cadastrar(nome, username, email, senha) {
 
 function listar() {
     var instrucaoSql = `
-        SELECT idUsuario, nome, imgPerfil FROM usuario;
+        SELECT DISTINCT
+            idUsuario,
+            nome,
+            imgPerfil 
+        FROM usuario AS u
+        JOIN publicacao AS p
+			ON p.fkUsuario = u.idUsuario;
     `;
 
     console.log("Executando a instrução SQL: \n" + instrucaoSql);

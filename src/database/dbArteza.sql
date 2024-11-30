@@ -120,10 +120,6 @@ INSERT INTO curtida (fkPublicacao, fkUsuario) VALUES
 INSERT INTO comentario (fkPublicacao, fkUsuario, comentario) VALUES 
 	(2, 1, 'Essa arte é fantástica!');
 
--- inserindo resposta para comentario
--- INSERT INTO comentario (fkPublicacao, fkUsuario, comentario, fkResposta) VALUES 
--- 		(1, 2, 'Verdade', 2);
-
 -- inserindo visualizacoes
 INSERT INTO visualizacao (fkPublicacao, fkUsuario) VALUES 
 	(1, 1),
