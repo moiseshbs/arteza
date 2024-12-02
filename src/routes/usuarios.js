@@ -17,6 +17,10 @@ router.get("/listar", function (req, res) {
     usuarioController.listar(req, res);
 });
 
+router.get("/listarUsername/:username", function (req, res) {
+    usuarioController.listarUsername(req, res);
+});
+
 router.get("/listarID/:idUsuario", function (req, res) {
     usuarioController.listarID(req, res);
 });

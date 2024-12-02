@@ -41,7 +41,7 @@
 
                     <div>
                         <p>Username</p>
-                        <input type="text" id="input_username">
+                        <input type="text" id="input_username" oninput="validarUsername()">
                     </div>
                 </div>
 
@@ -50,9 +50,16 @@
                     <input type="email" id="input_email">
                 </div>
 
-                <div>
+                <div style="position: relative;">
                     <p>Senha</p>
-                    <input type="password" id="input_senha">
+                    <input type="password" id="input_senha" oninput="validarSenha()">
+                    <div id="cardSenha">
+                        <span id="span_maiuscula">Letras maiúsculas (A-Z)</span>
+                        <span id="span_minuscula">Letras minúsculas (a-z)</span>
+                        <span id="span_numero">Números (0-9)</span>
+                        <span id="span_especial">Caracteres especiais (!, @, #, etc.)</span>
+                        <span id="span_tamanho">Pelo menos 8 caracteres</span>
+                    </div>
                 </div>
 
                 <button onclick="cadastrar()" id="btnAvancar">Criar conta</button>

@@ -38,6 +38,18 @@ function listar() {
     return database.executar(instrucaoSql);
 }
 
+function listarUsername(username) {
+    var instrucaoSql = `
+        SELECT
+            username
+        FROM usuario
+            WHERE username = '${username}';
+    `;
+
+    console.log("Executando a instrução SQL: \n" + instrucaoSql);
+    return database.executar(instrucaoSql);
+}
+
 function listarID(idUsuario) {
     var instrucaoSql = `
         SELECT 
@@ -74,6 +86,7 @@ module.exports = {
     autenticar,
     cadastrar,
     listar,
+    listarUsername,
     listarID,
     atualizar
 };

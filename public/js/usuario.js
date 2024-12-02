@@ -1,3 +1,98 @@
+var senha_valida = false;
+var username_valido = false;
+
+function validarUsername() {
+    usernameVar = input_username.value;
+
+    fetch(`/usuarios/listarUsername/${usernameVar}`).then(function (resposta) {
+        if (resposta.ok) {
+            if (resposta.status == 204) {
+                username_valido = true;
+            } else {
+                username_valido = false;
+            }
+        } else {
+            throw ('Houve um erro na API!');
+        }
+    });
+}
+
+function validarSenha() {
+    senhaVar = input_senha.value;
+
+    cardSenha.style.display = 'flex';
+
+    var senha_especial = false;
+    var senha_tamanho = false;
+    var senha_temNumero = false;
+    var senha_minu = false;
+    var senha_maiu = false;
+
+    var senha_excla = senhaVar.includes('!');
+    var senha_arroba = senhaVar.includes('@');
+    var senha_hash = senhaVar.includes('#');
+    var senha_sif = senhaVar.includes('$');
+    var senha_porc = senhaVar.includes('%');
+    var senha_comer = senhaVar.includes('&');
+
+    if (senhaVar.length > 7) {
+        senha_tamanho = true;
+        span_tamanho.style.color = 'green';
+    } else {
+        senha_tamanho = false;
+        span_tamanho.style.color = 'red';
+    }
+
+    if (senhaVar != '' && (senha_excla || senha_arroba || senha_hash || senha_sif || senha_porc || senha_comer)) {
+        senha_especial = true;
+        span_especial.style.color = 'green';
+    } else {
+        senha_especial = false;
+        span_especial.style.color = 'red';
+    }
+
+    for (var num = 0; num < 10; num++) {
+        senha_numero = senhaVar.includes(num);
+
+        if (senha_numero) {
+            break
+        }
+    }
+
+    if (senhaVar != '' && senha_numero) {
+        senha_temNumero = true;
+        span_numero.style.color = 'green';
+    } else {
+        senha_temNumero = false;
+        span_numero.style.color = 'red';
+    }
+
+    var senha_minusculo = senhaVar.toLowerCase();
+    var senha_maiusculo = senhaVar.toUpperCase();
+
+    if (senhaVar != senha_maiusculo) {
+        senha_minu = true;
+        span_minuscula.style.color = 'green';
+    } else {
+        senha_minu = false;
+        span_minuscula.style.color = 'red';
+    }
+
+    if (senhaVar != senha_minusculo) {
+        senha_maiu = true;
+        span_maiuscula.style.color = 'green';
+    } else {
+        senha_maiu = false;
+        span_maiuscula.style.color = 'red';
+    }
+
+    if (senha_especial && senha_temNumero && senha_numero && senha_maiu && senha_minu) {
+        senha_valida = true;
+    } else {
+        senha_valida = false;
+    }
+}
+
 function cadastrar() {
     // variaveis vindo do formulario de cadastro
     var nomeVar = input_nome.value;
@@ -17,7 +112,6 @@ function cadastrar() {
     var emailArroba = emailVar.includes('@');
     var tamNome = nomeVar.length;
     var tamUsername = usernameVar.length;
-    var tamSenha = senhaVar.length;
 
     if (nomeVar == '') {
         input_nome.style.border = bordaVermelha;
@@ -26,7 +120,7 @@ function cadastrar() {
         input_nome.style.border = bordaVerde;
     }
 
-    if (emailVar == ''){
+    if (emailVar == '') {
         input_email.style.border = bordaVermelha;
         alerta(`Preencha o email corretamente!`, 'erro');
     } else {
@@ -36,14 +130,14 @@ function cadastrar() {
     if (senhaVar == '') {
         input_senha.style.border = bordaVermelha;
         alerta(`Preencha a senha corretamente!`, 'erro');
-    } else {
+    } else if (senha_valida) {
         input_senha.style.border = bordaVerde;
     }
 
-    if (usernameVar == '') {
+    if (!username_valido) {
         input_username.style.border = bordaVermelha;
-        alerta(`Preencha o username corretamente!`, 'erro');
-    } else {
+        alerta(`Username em uso!`, 'erro');
+    } else if(username_valido) {
         input_username.style.border = bordaVerde;
     }
 
@@ -53,6 +147,7 @@ function cadastrar() {
         usernameVar == "" ||
         senhaVar == ""
     ) {
+        alerta(`Preencha os campos!`, 'erro');
         return false;
     } else if (!emailArroba) {
         input_email.style.border = bordaVermelha;
@@ -61,12 +156,12 @@ function cadastrar() {
     } else if (tamNome <= 0) {
         input_nome.style.border = bordaVermelha;
         return false;
-    } else if (tamUsername <= 0) {
+    } else if (tamUsername <= 0 || !username_valido) {
         input_username.style.border = bordaVermelha;
         return false;
-    } else if (tamSenha < 8) {
+    } else if (!senha_valida) {
         input_senha.style.border = bordaVermelha;
-        alerta(`Senha muito curta!`, 'erro');
+        alerta(`Senha não segue as regras!`, 'erro');
         return false;
     } else {
         input_senha.style.border = bordaVerde;
@@ -97,7 +192,7 @@ function cadastrar() {
                 input_senha.style.border = bordaVerde;
 
                 // console.log("Cadastro realizado com sucesso! Redirecionando para tela de Login...");
-                
+
                 alerta(`Cadastrado com sucesso!`, 'sucesso');
 
                 setTimeout(() => {
@@ -222,14 +317,14 @@ function listarUsuario() {
                     input_username.value = usuario.username;
                     input_email.value = usuario.email;
                     input_senha.value = usuario.senha;
-                    
+
                     // input_foto.value = usuario.
                     // imagemPerfil.innerHTML = `
                     //     <img id="preview" src="../assets/publicacao/${usuario.imgPerfil}" alt="Prévia da Imagem" class="imgPrevia">
                     // `;
 
-                    
-                    sessionStorage.FOTO_USUARIO = usuario.imgPerfil 
+
+                    sessionStorage.FOTO_USUARIO = usuario.imgPerfil
                 });
             }
         } else {
