@@ -21,12 +21,20 @@ router.get("/listarUsername/:username", function (req, res) {
     usuarioController.listarUsername(req, res);
 });
 
+router.get("/listarEmail/:email", function (req, res) {
+    usuarioController.listarEmail(req, res);
+});
+
 router.get("/listarID/:idUsuario", function (req, res) {
     usuarioController.listarID(req, res);
 });
 
-router.put("/atualizar/:idUsuario", upload.single('foto'), function (req, res) {
+router.put("/atualizar/:idUsuario", function (req, res) {
     usuarioController.atualizar(req, res);
+});
+
+router.put("/atualizarFoto/:idUsuario", upload.single('foto'),  function (req, res) {
+    usuarioController.atualizarFoto(req, res);
 });
 
 module.exports = router;

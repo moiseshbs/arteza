@@ -53,7 +53,7 @@
             </div>
 
             <div id="dropDownPerfil">
-                <div class="opcaoDrop"  id="div_perfil" onclick="perfil(sessionStorage.ID_USUARIO)">
+                <div class="opcaoDrop" id="div_perfil" onclick="perfil(sessionStorage.ID_USUARIO)">
                     <div>
                         <i class="bi bi-person-fill"></i>
                         <p>Perfil</p>
@@ -77,19 +77,20 @@
         <div class="gambiarra"></div>
 
         <section class="areaEditar">
-            <form method="PUT" onsubmit="return atualizar()">
-                <div class="areaEsq">
-                    <div class="areaImagem" id="areaImagem">
-                        <img id="preview" src="" alt="Prévia da Imagem" class="imgPrevia">
-                    </div>
-
-                    <label for="foto" class="custom-file-upload" id="btnEscolherImg">
-                        <i class="bi bi-upload"></i>
-                    </label>
-                    <input id="foto" name="foto" type="file" accept="image/*" />
+            <div class="areaEsq">
+                <div class="areaImagem" id="areaImagem">
+                    <img id="preview" src="" alt="Prévia da Imagem" class="imgPrevia">
                 </div>
-
-                <div class="areaDir">
+                
+                <label for="foto" class="custom-file-upload" id="btnEscolherImg">
+                    <i class="bi bi-upload"></i>
+                </label>
+                <input id="foto" name="foto" type="file" accept="image/*" />
+            </div>
+            
+            
+            <div class="areaDir">
+                    <form method="PUT" onsubmit="return atualizar()">
                     <div class="formulario">
                         <h1>Editar informações</h1>
 
@@ -100,14 +101,9 @@
                             </div>
 
                             <div>
-                                <p>Username</p>
-                                <input type="text" name="username" id="input_username">
+                                <p>Email</p>
+                                <input type="text" name="email" id="input_email">
                             </div>
-                        </div>
-
-                        <div>
-                            <p>Email</p>
-                            <input type="text" name="email" id="input_email">
                         </div>
 
                         <div>
@@ -115,10 +111,13 @@
                             <input type="text" name="senha" id="input_senha">
                         </div>
 
-                        <button id="btnAvancar" class="btnSalvar">Salvar</button>
+                        <div class="botoesForm">
+                            <button onclick="history.back()" class="btnCancelar">Cancelar</button>
+                            <button id="btnAvancar" class="btnSalvar">Salvar</button>
+                        </div>
                     </div>
+                </form>
                 </div>
-            </form>
         </section>
     </main>
 </body>
@@ -140,6 +139,8 @@
                 preview.style.display = 'block';
             };
             reader.readAsDataURL(file); // le o arquivo como URL de dados
+
+            atualizarFoto();
         } else {
             // se nenhum arquivo for selecionado
             preview.src = `../assets/publicacao/${sessionStorage.FOTO_USUARIO}`;

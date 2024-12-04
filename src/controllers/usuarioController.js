@@ -109,6 +109,21 @@ function listarUsername(req, res) {
     });
 }
 
+function listarEmail(req, res) {
+    var email = req.params.email;
+    usuarioModel.listarEmail(email).then(function (resultado) {
+        if (resultado.length > 0) {
+            res.status(200).json(resultado);
+        } else {
+            res.status(204).send("Nenhum resultado encontrado!")
+        }
+    }).catch(function (erro) {
+        console.log(erro);
+        console.log("Houve um erro ao buscar as ultimas tags.", erro.sqlMessage);
+        res.status(500).json(erro.sqlMessage);
+    });
+}
+
 function listarID(req, res) {
     var idUsuario = req.params.idUsuario;
 
@@ -127,13 +142,13 @@ function listarID(req, res) {
 
 function atualizar(req, res) {
     var idUsuario = req.params.idUsuario;
-    var nome = req.body.nome;
-    var username = req.body.username;
-    var email = req.body.email;
-    var senha = req.body.senha;
-    var imagem = req.file.filename;
-
-    usuarioModel.atualizar(idUsuario, nome, username, email, senha, imagem).then(function (resultado) {
+    var nome = req.body.nomeServer;
+    // var username = req.body.usernameServer;
+    var email = req.body.emailServer;
+    var senha = req.body.senhaServer;
+    // var imagem = req.file.filename;
+    console.log(nome + 'aquiiiiiiiiiiiiiii')
+    usuarioModel.atualizar(idUsuario, nome, email, senha).then(function (resultado) {
         if (resultado.length > 0) {
             res.status(200).json(resultado);
         } else {
@@ -146,12 +161,30 @@ function atualizar(req, res) {
     });
 }
 
+function atualizarFoto(req, res) {
+    var idUsuario = req.params.idUsuario;
+    var imagem = req.file.filename;
+
+    usuarioModel.atualizarFoto(idUsuario, imagem).then(function (resultado) {
+        if (resultado.length > 0) {
+            res.status(200).json(resultado);
+        } else {
+            res.status(204).send("Nenhum resultado encontrado!")
+        }
+    }).catch(function (erro) {
+        console.log(erro);
+        console.log("Houve um erro ao atualizar.", erro.sqlMessage);
+        res.status(500).json(erro.sqlMessage);
+    });
+}
 
 module.exports = {
     autenticar,
     cadastrar,
     listar,
     listarUsername,
+    listarEmail,
     listarID,
-    atualizar
+    atualizar,
+    atualizarFoto
 }

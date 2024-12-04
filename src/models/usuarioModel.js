@@ -50,6 +50,18 @@ function listarUsername(username) {
     return database.executar(instrucaoSql);
 }
 
+function listarEmail(email) {
+    var instrucaoSql = `
+        SELECT
+            email
+        FROM usuario
+            WHERE email = '${email}';
+    `;
+
+    console.log("Executando a instrução SQL: \n" + instrucaoSql);
+    return database.executar(instrucaoSql);
+}
+
 function listarID(idUsuario) {
     var instrucaoSql = `
         SELECT 
@@ -67,13 +79,22 @@ function listarID(idUsuario) {
     return database.executar(instrucaoSql);
 }
 
-function atualizar(idUsuario, nome, username, email, senha, imagem) {
+function atualizar(idUsuario, nome, email, senha) {
     var instrucaoSql = `
         UPDATE usuario SET 
             nome = '${nome}', 
-            username = '${username}', 
             email = '${email}',
-            senha = '${senha}',
+            senha = '${senha}'
+        WHERE idUsuario = ${idUsuario};
+    `;
+
+    console.log("Executando a instrução SQL: \n" + instrucaoSql);
+    return database.executar(instrucaoSql);
+}
+
+function atualizarFoto(idUsuario, imagem) {
+    var instrucaoSql = `
+        UPDATE usuario SET 
             imgPerfil = '${imagem}'
         WHERE idUsuario = ${idUsuario};
     `;
@@ -87,6 +108,8 @@ module.exports = {
     cadastrar,
     listar,
     listarUsername,
+    listarEmail,
     listarID,
-    atualizar
+    atualizar,
+    atualizarFoto
 };

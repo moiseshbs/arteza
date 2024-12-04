@@ -29,12 +29,14 @@ function pesquisar(texto) {
                 ON tp.fkPublicacao = p.idPublicacao
 			LEFT JOIN tag AS t
 				ON tp.fkTag = t.idTag
-            WHERE u.nome LIKE '%${texto}%'
-                OR u.username LIKE '%${texto}%'
-                OR p.titulo LIKE '%${texto}%'
-                OR p.descricao LIKE '%${texto}%'
-                OR t.nome LIKE '%${texto}%'
-                AND p.isDeleted = false
+            WHERE 
+                    (p.isDeleted = false)
+                AND 
+                    (u.nome LIKE '%${texto}%'
+                    OR u.username LIKE '%${texto}%'
+                    OR p.titulo LIKE '%${texto}%'
+                    OR p.descricao LIKE '%${texto}%'
+                    OR t.nome LIKE '%${texto}%')
             GROUP BY 
                 p.idPublicacao, 
                 p.fkUsuario, 

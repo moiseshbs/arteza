@@ -1,5 +1,6 @@
 var senha_valida = false;
 var username_valido = false;
+var email_valido = false;
 
 function validarUsername() {
     usernameVar = input_username.value;
@@ -10,6 +11,22 @@ function validarUsername() {
                 username_valido = true;
             } else {
                 username_valido = false;
+            }
+        } else {
+            throw ('Houve um erro na API!');
+        }
+    });
+}
+
+function validarEmail() {
+    emailVar = input_email.value;
+
+    fetch(`/usuarios/listarEmail/${emailVar}`).then(function (resposta) {
+        if (resposta.ok) {
+            if (resposta.status == 204) {
+                email_valido = true;
+            } else {
+                email_valido = false;
             }
         } else {
             throw ('Houve um erro na API!');
@@ -139,6 +156,14 @@ function cadastrar() {
         alerta(`Username em uso!`, 'erro');
     } else if(username_valido) {
         input_username.style.border = bordaVerde;
+    }
+
+    if (!email_valido) {
+        input_email.style.border = bordaVermelha;
+        alerta(`Email em uso!`, 'erro');
+        return false;
+    } else if(email_valido) {
+        input_email.style.border = bordaVerde;
     }
 
     if (
@@ -314,7 +339,7 @@ function listarUsuario() {
                     var usuario = resposta[0];
 
                     input_nome.value = usuario.nome;
-                    input_username.value = usuario.username;
+                    // input_username.value = usuario.username;
                     input_email.value = usuario.email;
                     input_senha.value = usuario.senha;
 
@@ -338,25 +363,23 @@ function listarUsuario() {
 }
 
 function atualizar() {
-    const foto = document.getElementById('foto');
     var nomeVar = input_nome.value;
-    var usernameVar = input_username.value;
+    // var usernameVar = input_username.value;
     var emailVar = input_email.value;
     var senhaVar = input_senha.value;
 
-    const formData = new FormData();
-    formData.append('foto', foto.files[0]);
-    formData.append('nome', nomeVar);
-    formData.append('username', usernameVar);
-    formData.append('email', emailVar);
-    formData.append('senha', senhaVar);
-
     var idUsuario = sessionStorage.ID_USUARIO;
-
 
     fetch(`/usuarios/atualizar/${idUsuario}`, {
         method: "PUT",
-        body: formData,
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            nomeServer: nomeVar,
+            emailServer: emailVar,
+            senhaServer: senhaVar
+        })
     }).then(function (resposta) {
         console.log("resposta: ", resposta);
 
@@ -377,6 +400,35 @@ function atualizar() {
     })
         .catch(function (resposta) {
             alerta(`${resposta}: Houve um erro interno ao atualizar informações!`, 'erro');
+            console.log(`#ERRO: ${resposta}`);
+        });
+
+    return false;
+}
+
+function atualizarFoto() {
+    console.log(foto)
+    const formData = new FormData();
+    formData.append('foto', foto.files[0]);
+
+    var idUsuario = sessionStorage.ID_USUARIO;
+
+    fetch(`/usuarios/atualizarFoto/${idUsuario}`, {
+        method: "PUT",
+        body: formData,
+    }).then(function (resposta) {
+        // console.log("resposta: ", resposta);
+
+        if (resposta.ok) {
+            // console.log("Atualização realizado com sucesso! Redirecionando para tela anterior...");
+            alerta(`Foto de perfil atualizada!`, 'sucesso');
+        } else {
+            alerta(`Houve um erro ao tentar atualizar imagem de perfil!`, 'erro');
+            throw "Houve um erro ao tentar realizar a atualização!";
+        }
+    })
+        .catch(function (resposta) {
+            alerta(`${resposta}: Houve um erro interno ao atualizar imagem de perfil!`, 'erro');
             console.log(`#ERRO: ${resposta}`);
         });
 
